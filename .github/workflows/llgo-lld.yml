@@ -1,0 +1,104 @@
+name: LLGo LLD
+
+on:
+  push:
+    branches: [lld-22]
+  pull_request:
+    branches: [lld-22]
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish a new immutable-version LLD release after validation
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: llgo-lld-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    if: github.repository == 'xgo-dev/llvm-project'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15
+            arch: arm64
+          - runner: macos-15-intel
+            arch: amd64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install build tools
+        run: brew install cmake ninja
+      - name: Build and test LLVM 22 LLD
+        run: bash llgo-lld/build.sh "$RUNNER_TEMP/lld-build" "$RUNNER_TEMP/lld-output"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: lld-${{ matrix.arch }}
+          path: |
+            ${{ runner.temp }}/lld-output/*.tar.gz
+            ${{ runner.temp }}/lld-output/*.sha256
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v7
+        if: matrix.arch == 'arm64'
+        with:
+          name: sdk27-test-inputs
+          path: ${{ runner.temp }}/lld-output/test-inputs-arm64
+          if-no-files-found: error
+
+  sdk27:
+    needs: build
+    runs-on: xcode-27
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          name: lld-arm64
+          path: dist
+      - uses: actions/download-artifact@v8
+        with:
+          name: sdk27-test-inputs
+          path: test-inputs
+      - name: Validate the packaged linker with the actual SDK 27
+        env:
+          LLD_REQUIRE_SDK27: '1'
+        run: |
+          version=$(cat llgo-lld/version.txt)
+          (cd dist && shasum -a 256 -c "lld-$version-darwin-arm64.tar.gz.sha256")
+          tar -xzf "dist/lld-$version-darwin-arm64.tar.gz" -C dist
+          bash llgo-lld/test.sh "dist/lld-$version-darwin-arm64/bin/ld64.lld" test-inputs
+
+  release:
+    needs: [build, sdk27]
+    if: github.event_name == 'workflow_dispatch' && inputs.publish && github.ref == 'refs/heads/lld-22'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: lld-*
+          merge-multiple: true
+          path: dist
+      - name: Publish verified binaries
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          version=$(cat llgo-lld/version.txt)
+          for arch in arm64 amd64; do
+            (cd dist && sha256sum -c "lld-$version-darwin-$arch.tar.gz.sha256")
+          done
+          cat dist/*.sha256 > dist/SHA256SUMS
+          gh release create "lld-$version" \
+            --target "$GITHUB_SHA" --title "LLD $version for macOS" \
+            --notes-file llgo-lld/README.md \
+            dist/*.tar.gz dist/SHA256SUMS
