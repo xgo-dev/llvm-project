@@ -22,15 +22,7 @@ concurrency:
 jobs:
   build:
     if: github.repository == 'xgo-dev/llvm-project'
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - runner: macos-15
-            arch: arm64
-          - runner: macos-15-intel
-            arch: amd64
-    runs-on: ${{ matrix.runner }}
+    runs-on: macos-15
     timeout-minutes: 180
     steps:
       - uses: actions/checkout@v7
@@ -40,13 +32,12 @@ jobs:
         run: bash llgo-lld/build.sh "$RUNNER_TEMP/lld-build" "$RUNNER_TEMP/lld-output"
       - uses: actions/upload-artifact@v7
         with:
-          name: lld-${{ matrix.arch }}
+          name: lld-arm64
           path: |
             ${{ runner.temp }}/lld-output/*.tar.gz
             ${{ runner.temp }}/lld-output/*.sha256
           if-no-files-found: error
       - uses: actions/upload-artifact@v7
-        if: matrix.arch == 'arm64'
         with:
           name: sdk27-test-inputs
           path: ${{ runner.temp }}/lld-output/test-inputs-arm64
@@ -94,11 +85,9 @@ jobs:
         run: |
           set -euo pipefail
           version=$(cat llgo-lld/version.txt)
-          for arch in arm64 amd64; do
-            (cd dist && sha256sum -c "lld-$version-darwin-$arch.tar.gz.sha256")
-          done
+          (cd dist && sha256sum -c "lld-$version-darwin-arm64.tar.gz.sha256")
           cat dist/*.sha256 > dist/SHA256SUMS
           gh release create "lld-$version" \
-            --target "$GITHUB_SHA" --title "LLD $version for macOS" \
+            --target "$GITHUB_SHA" --title "LLD $version for macOS arm64" \
             --notes-file llgo-lld/README.md \
             dist/*.tar.gz dist/SHA256SUMS
