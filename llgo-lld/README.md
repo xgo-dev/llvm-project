@@ -27,5 +27,5 @@ bash llgo-lld/build.sh /tmp/llgo-lld-build /tmp/llgo-lld-output
 The compiler used to build LLD is the selected Xcode/CLT compiler. Programs
 linked by the resulting LLD use its own LLVM 22 LTO implementation.
 No ESP toolchain is modified. LLGo can keep its existing compiler selection
-and pass `--ld-path` for native Darwin links only. Remove this temporary
+and pass `-fuse-ld=/path/to/ld64.lld` for native Darwin links only. Remove this temporary
 component when LLGo upgrades to an LLVM release containing the upstream fix.
