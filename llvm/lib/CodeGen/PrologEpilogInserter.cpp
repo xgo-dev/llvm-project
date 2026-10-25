@@ -1305,11 +1305,9 @@ void PEIImpl::insertZeroCallUsedRegs(MachineFunction &MF) {
         if (!Reg)
           continue;
 
-        // This picks up sibling registers (e.q. %al -> %ah).
-        // FIXME: Mixing physical registers and register units is likely a bug.
-        for (MCRegUnit Unit : TRI.regunits(Reg))
-          RegsToZero.reset(static_cast<unsigned>(Unit));
-
+        // This bit vector is indexed by physical registers, not register
+        // units. Targets that widen a clearing operation must also exclude
+        // aliases of the widened register before emitting that operation.
         for (MCPhysReg SReg : TRI.sub_and_superregs_inclusive(Reg))
           RegsToZero.reset(SReg);
       }
