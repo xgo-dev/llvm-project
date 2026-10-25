@@ -9,6 +9,8 @@
 ; CHECK-NEXT:   andes45                          - Andes 45-Series processors.
 ; CHECK-NEXT:   b                                - 'B' (the collection of the Zba, Zbb, Zbs extensions).
 ; CHECK-NEXT:   c                                - 'C' (Compressed Instructions).
+; CHECK-NEXT:   cm-popret                        - Enable workaround for cm.popret/cm.popretz.
+; CHECK-NEXT:   cm-push-reverse                  - Enable workaround for cm.push/cm.pop register order.
 ; CHECK-NEXT:   conditional-cmv-fusion           - Enable branch+c.mv fusion.
 ; CHECK-NEXT:   d                                - 'D' (Double-Precision Floating-Point).
 ; CHECK-NEXT:   disable-latency-sched-heuristic  - Disable latency scheduling heuristic.
@@ -20,6 +22,7 @@
 ; CHECK-NEXT:   e                                - 'E' (Embedded Instruction Set with 16 GPRs).
 ; CHECK-NEXT:   enable-select-opt                - Enable the select optimize pass for select loop heuristics.
 ; CHECK-NEXT:   enable-vsetvli-sched-heuristic   - Enable vsetvli-based scheduling heuristic.
+; CHECK-NEXT:   espv-lowering                     - Enable Espressif ESPV target lowering (DAG/instruction selection).
 ; CHECK-NEXT:   exact-asm                        - Enable Exact Assembly (Disables Compression and Relaxation).
 ; CHECK-NEXT:   experimental                     - Experimental intrinsics.
 ; CHECK-NEXT:   experimental-p                   - 'P' ('Base P' (Packed SIMD)).
@@ -217,6 +220,11 @@
 ; CHECK-NEXT:   xcvmac                           - 'XCVmac' (CORE-V Multiply-Accumulate).
 ; CHECK-NEXT:   xcvmem                           - 'XCVmem' (CORE-V Post-incrementing Load & Store).
 ; CHECK-NEXT:   xcvsimd                          - 'XCVsimd' (CORE-V SIMD ALU).
+; CHECK-NEXT:   xespdsp                          - 'Xespdsp' ('Espressif ESPDSP').
+; CHECK-NEXT:   xesploop                         - 'Xesploop' ('Espressif ESPLOOP').
+; CHECK-NEXT:   xespv                            - 'Xespv' ('Espressif ESPV 2.2').
+; CHECK-NEXT:   xespv2p1                         - 'Espressif ESPV 2.1'.
+; CHECK-NEXT:   xespv2p2                         - 'Espressif ESPV 2.2'.
 ; CHECK-NEXT:   xmipscbop                        - 'XMIPSCBOP' (MIPS Software Prefetch).
 ; CHECK-NEXT:   xmipscmov                        - 'XMIPSCMov' (MIPS conditional move instruction (mips.ccmov)).
 ; CHECK-NEXT:   xmipsexectl                      - 'XMIPSEXECTL' (MIPS execution control).

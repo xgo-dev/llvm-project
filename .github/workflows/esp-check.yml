@@ -1,0 +1,49 @@
+name: ESP LLVM 23 regression tests
+
+on:
+  pull_request:
+    branches: [esp-23]
+  push:
+    branches: [esp-23]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: esp-check-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-14]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build tools
+        shell: bash
+        run: |
+          if [[ "$RUNNER_OS" == Linux ]]; then
+            sudo apt-get update
+            sudo apt-get install -y ninja-build ccache
+          else
+            brew install ninja ccache
+          fi
+      - name: Configure
+        shell: bash
+        run: |
+          cmake -S llvm -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DLLVM_ENABLE_ASSERTIONS=ON \
+            -DLLVM_ENABLE_PROJECTS='clang;lld' \
+            -DLLVM_TARGETS_TO_BUILD='X86;AArch64;RISCV;ARM;AVR;Mips;WebAssembly' \
+            -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=Xtensa \
+            -DLLVM_PARALLEL_LINK_JOBS=1
+      - name: Build and test
+        run: bash esp/check.sh build 3

@@ -13,8 +13,20 @@
 #include "RISCVTargetMachine.h"
 #include "MCTargetDesc/RISCVBaseInfo.h"
 #include "RISCV.h"
+#include "RISCVCustomLICM.h"
+#include "RISCVDotprodSplitter.h"
+#include "RISCVESP32P4ConditionSplit.h"
+#include "RISCVESP32P4FunctionSpecialization.h"
+#include "RISCVESP32P4LoopPatternToIntrinsic.h"
+#include "RISCVESP32P4LoopVectorizeExtractor.h"
+#include "RISCVESP32P4LoopVersioning.h"
+#include "RISCVESP32P4Memmove.h"
+#include "RISCVEsp32P4MemIntrin.h"
+#include "RISCVIntLoopUnrollAndRemainder.h"
+#include "RISCVLoopUnrollAndRemainder.h"
 #include "RISCVMachineFunctionInfo.h"
 #include "RISCVMachineScheduler.h"
+#include "RISCVSplitLoopByLength.h"
 #include "RISCVTargetObjectFile.h"
 #include "RISCVTargetTransformInfo.h"
 #include "TargetInfo/RISCVTargetInfo.h"
@@ -42,6 +54,10 @@
 #include "llvm/Transforms/Vectorize/LoopIdiomVectorize.h"
 #include <optional>
 using namespace llvm;
+
+static cl::opt<bool>
+    EnableEsp32P4Optimize("enable-esp32-p4-optimize", cl::init(false),
+                          cl::Hidden, cl::desc("enable esp32 p4 optimize"));
 
 static cl::opt<bool> EnableRedundantCopyElimination(
     "riscv-enable-copyelim",
@@ -681,6 +697,93 @@ void RISCVTargetMachine::registerPassBuilderCallbacks(PassBuilder &PB) {
                                                  OptimizationLevel Level) {
     if (Level != OptimizationLevel::O0)
       LPM.addPass(LoopIdiomVectorizePass(LoopIdiomVectorizeStyle::Predicated));
+  });
+
+  PB.registerPipelineParsingCallback(
+      [](StringRef Name, FunctionPassManager &FPM,
+         ArrayRef<PassBuilder::PipelineElement>) {
+        if (Name == "riscv-split-loop-by-length") {
+          FPM.addPass(RISCVSplitLoopByLengthPass());
+          return true;
+        }
+        if (Name == "riscv-custom-licm") {
+          FPM.addPass(RISCVCustomLICMPass());
+          return true;
+        }
+        if (Name == "riscv-loop-unroll-and-remainder") {
+          FPM.addPass(RISCVLoopUnrollAndRemainderPass());
+          return true;
+        }
+        if (Name == "riscv-esp32p4-function-specialization") {
+          FPM.addPass(RISCVESP32P4FunctionSpecializationPass());
+          return true;
+        }
+        if (Name == "riscv-esp32-p4-memmove") {
+          FPM.addPass(RISCVESP32P4MemmovePass());
+          return true;
+        }
+        if (Name == "riscv-esp32-p4-mem-intrin") {
+          FPM.addPass(RISCVEsp32P4MemIntrinPass());
+          return true;
+        }
+        if (Name == "riscv-int-loop-unroll-and-remainder") {
+          FPM.addPass(RISCVIntLoopUnrollAndRemainderPass());
+          return true;
+        }
+        if (Name == "riscv-dotprod-splitter") {
+          FPM.addPass(RISCVDotprodSplitterPass());
+          return true;
+        }
+        if (Name == "riscv-esp32p4-loop-versioning") {
+          FPM.addPass(RISCVESP32P4LoopVersioningPass());
+          return true;
+        }
+        if (Name == "riscv-esp32p4-loop-vectorize-extractor") {
+          FPM.addPass(RISCVESP32P4LoopVectorizeExtractorPass());
+          return true;
+        }
+        if (Name == "riscv-esp32p4-condition-split") {
+          FPM.addPass(RISCVESP32P4ConditionSplitPass());
+          return true;
+        }
+        if (Name == "riscv-esp32p4-loop-pattern-to-intrinsic") {
+          FPM.addPass(RISCVESP32P4LoopPatternToIntrinsicPass());
+          return true;
+        }
+        return false;
+      });
+  PB.registerPipelineParsingCallback(
+      [](StringRef Name, ModulePassManager &MPM,
+         ArrayRef<PassBuilder::PipelineElement>) {
+        if (Name == "riscv-dotprod-conditional-loop-extractor") {
+          MPM.addPass(RISCVConditionalLoopExtractorPass());
+          return true;
+        }
+        return false;
+      });
+  PB.registerOptimizerLastEPCallback([](ModulePassManager &PM,
+                                        OptimizationLevel Level,
+                                        ThinOrFullLTOPhase Phase) {
+    if (EnableEsp32P4Optimize &&
+        (Level == OptimizationLevel::O3 || Level == OptimizationLevel::O2)) {
+      EnableRISCVSplitLoopByLength = true;
+      EnableRISCVCustomLICM = true;
+      EnableRISCVLoopUnrollAndRemainder = true;
+      FunctionPassManager FPM;
+      FPM.addPass(RISCVSplitLoopByLengthPass());
+      FPM.addPass(RISCVCustomLICMPass());
+      FPM.addPass(RISCVLoopUnrollAndRemainderPass());
+      PM.addPass(createModuleToFunctionPassAdaptor(std::move(FPM)));
+    }
+    if ((EnableRISCVESP32P4Memmove || EnableRISCVEsp32P4MemIntrin) &&
+        (Level == OptimizationLevel::O3 || Level == OptimizationLevel::O2)) {
+      FunctionPassManager FPM;
+      if (EnableRISCVESP32P4Memmove)
+        FPM.addPass(RISCVESP32P4MemmovePass());
+      if (EnableRISCVEsp32P4MemIntrin)
+        FPM.addPass(RISCVEsp32P4MemIntrinPass());
+      PM.addPass(createModuleToFunctionPassAdaptor(std::move(FPM)));
+    }
   });
 }
 

@@ -134,6 +134,7 @@ add_clang_library(clangCodeGen
   TargetBuiltins/SystemZ.cpp
   TargetBuiltins/WebAssembly.cpp
   TargetBuiltins/X86.cpp
+  TargetBuiltins/Xtensa.cpp
   TargetInfo.cpp
   Targets/AArch64.cpp
   Targets/AMDGPU.cpp
@@ -160,6 +161,7 @@ add_clang_library(clangCodeGen
   Targets/WebAssembly.cpp
   Targets/X86.cpp
   Targets/XCore.cpp
+  Targets/Xtensa.cpp
   TrapReasonBuilder.cpp
   VarBypassDetector.cpp
 

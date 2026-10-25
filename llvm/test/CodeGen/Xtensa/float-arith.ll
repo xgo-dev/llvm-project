@@ -166,12 +166,11 @@ define float @fnmadd_s(float %a, float %b, float %c) nounwind {
 ; XTENSA-NEXT:    wfr f8, a8
 ; XTENSA-NEXT:    wfr f9, a2
 ; XTENSA-NEXT:    add.s f9, f9, f8
-; XTENSA-NEXT:    neg.s f9, f9
 ; XTENSA-NEXT:    wfr f10, a4
 ; XTENSA-NEXT:    add.s f8, f10, f8
 ; XTENSA-NEXT:    neg.s f8, f8
 ; XTENSA-NEXT:    wfr f10, a3
-; XTENSA-NEXT:    madd.s f8, f9, f10
+; XTENSA-NEXT:    msub.s f8, f9, f10
 ; XTENSA-NEXT:    rfr a2, f8
 ; XTENSA-NEXT:    ret
   %a_ = fadd float 0.0, %a
@@ -189,12 +188,11 @@ define float @fnmadd_s_2(float %a, float %b, float %c) nounwind {
 ; XTENSA-NEXT:    wfr f8, a8
 ; XTENSA-NEXT:    wfr f9, a3
 ; XTENSA-NEXT:    add.s f9, f9, f8
-; XTENSA-NEXT:    neg.s f9, f9
 ; XTENSA-NEXT:    wfr f10, a4
 ; XTENSA-NEXT:    add.s f8, f10, f8
 ; XTENSA-NEXT:    neg.s f8, f8
 ; XTENSA-NEXT:    wfr f10, a2
-; XTENSA-NEXT:    madd.s f8, f10, f9
+; XTENSA-NEXT:    msub.s f8, f9, f10
 ; XTENSA-NEXT:    rfr a2, f8
 ; XTENSA-NEXT:    ret
   %b_ = fadd float 0.0, %b
@@ -244,10 +242,9 @@ define float @fnmsub_s(float %a, float %b, float %c) nounwind {
 ; XTENSA-NEXT:    wfr f8, a8
 ; XTENSA-NEXT:    wfr f9, a2
 ; XTENSA-NEXT:    add.s f8, f9, f8
-; XTENSA-NEXT:    neg.s f8, f8
 ; XTENSA-NEXT:    wfr f9, a3
 ; XTENSA-NEXT:    wfr f10, a4
-; XTENSA-NEXT:    madd.s f10, f8, f9
+; XTENSA-NEXT:    msub.s f10, f8, f9
 ; XTENSA-NEXT:    rfr a2, f10
 ; XTENSA-NEXT:    ret
   %a_ = fadd float 0.0, %a
@@ -263,10 +260,9 @@ define float @fnmsub_s_2(float %a, float %b, float %c) nounwind {
 ; XTENSA-NEXT:    wfr f8, a8
 ; XTENSA-NEXT:    wfr f9, a3
 ; XTENSA-NEXT:    add.s f8, f9, f8
-; XTENSA-NEXT:    neg.s f8, f8
 ; XTENSA-NEXT:    wfr f9, a2
 ; XTENSA-NEXT:    wfr f10, a4
-; XTENSA-NEXT:    madd.s f10, f9, f8
+; XTENSA-NEXT:    msub.s f10, f8, f9
 ; XTENSA-NEXT:    rfr a2, f10
 ; XTENSA-NEXT:    ret
   %b_ = fadd float 0.0, %b
@@ -280,10 +276,9 @@ define float @fmadd_s_contract(float %a, float %b, float %c) nounwind {
 ; XTENSA:       # %bb.0:
 ; XTENSA-NEXT:    wfr f8, a3
 ; XTENSA-NEXT:    wfr f9, a2
-; XTENSA-NEXT:    mul.s f8, f9, f8
-; XTENSA-NEXT:    wfr f9, a4
-; XTENSA-NEXT:    add.s f8, f8, f9
-; XTENSA-NEXT:    rfr a2, f8
+; XTENSA-NEXT:    wfr f10, a4
+; XTENSA-NEXT:    madd.s f10, f9, f8
+; XTENSA-NEXT:    rfr a2, f10
 ; XTENSA-NEXT:    ret
   %fm = fmul contract float %a, %b
   %res = fadd contract float %fm, %c
@@ -297,10 +292,10 @@ define float @fmsub_s_contract(float %a, float %b, float %c) nounwind {
 ; XTENSA-NEXT:    wfr f8, a8
 ; XTENSA-NEXT:    wfr f9, a4
 ; XTENSA-NEXT:    add.s f8, f9, f8
+; XTENSA-NEXT:    neg.s f8, f8
 ; XTENSA-NEXT:    wfr f9, a3
 ; XTENSA-NEXT:    wfr f10, a2
-; XTENSA-NEXT:    mul.s f9, f10, f9
-; XTENSA-NEXT:    sub.s f8, f9, f8
+; XTENSA-NEXT:    madd.s f8, f10, f9
 ; XTENSA-NEXT:    rfr a2, f8
 ; XTENSA-NEXT:    ret
   %c_ = fadd float 0.0, %c ; avoid negation using xor
@@ -318,11 +313,10 @@ define float @fnmadd_s_contract(float %a, float %b, float %c) nounwind {
 ; XTENSA-NEXT:    add.s f9, f9, f8
 ; XTENSA-NEXT:    wfr f10, a2
 ; XTENSA-NEXT:    add.s f10, f10, f8
-; XTENSA-NEXT:    mul.s f9, f10, f9
-; XTENSA-NEXT:    neg.s f9, f9
-; XTENSA-NEXT:    wfr f10, a4
-; XTENSA-NEXT:    add.s f8, f10, f8
-; XTENSA-NEXT:    sub.s f8, f9, f8
+; XTENSA-NEXT:    wfr f11, a4
+; XTENSA-NEXT:    add.s f8, f11, f8
+; XTENSA-NEXT:    neg.s f8, f8
+; XTENSA-NEXT:    msub.s f8, f10, f9
 ; XTENSA-NEXT:    rfr a2, f8
 ; XTENSA-NEXT:    ret
   %a_ = fadd float 0.0, %a ; avoid negation using xor
@@ -343,10 +337,9 @@ define float @fnmsub_s_contract(float %a, float %b, float %c) nounwind {
 ; XTENSA-NEXT:    add.s f9, f9, f8
 ; XTENSA-NEXT:    wfr f10, a2
 ; XTENSA-NEXT:    add.s f8, f10, f8
-; XTENSA-NEXT:    mul.s f8, f8, f9
-; XTENSA-NEXT:    wfr f9, a4
-; XTENSA-NEXT:    sub.s f8, f9, f8
-; XTENSA-NEXT:    rfr a2, f8
+; XTENSA-NEXT:    wfr f10, a4
+; XTENSA-NEXT:    msub.s f10, f8, f9
+; XTENSA-NEXT:    rfr a2, f10
 ; XTENSA-NEXT:    ret
   %a_ = fadd float 0.0, %a ; avoid negation using xor
   %b_ = fadd float 0.0, %b ; avoid negation using xor
@@ -580,8 +573,7 @@ define float @fneg_s(float %a) nounwind {
 
 define i32 @fptosi(float %f) {
 ; XTENSA-LABEL: fptosi:
-; XTENSA:         .cfi_startproc
-; XTENSA-NEXT:  # %bb.0:
+; XTENSA:       # %bb.0:
 ; XTENSA-NEXT:    wfr f8, a2
 ; XTENSA-NEXT:    trunc.s a2, f8, 0
 ; XTENSA-NEXT:    ret
@@ -591,8 +583,7 @@ define i32 @fptosi(float %f) {
 
 define i32 @fptoui(float %f) {
 ; XTENSA-LABEL: fptoui:
-; XTENSA:         .cfi_startproc
-; XTENSA-NEXT:  # %bb.0:
+; XTENSA:       # %bb.0:
 ; XTENSA-NEXT:    wfr f8, a2
 ; XTENSA-NEXT:    utrunc.s a2, f8, 0
 ; XTENSA-NEXT:    ret
@@ -602,8 +593,7 @@ define i32 @fptoui(float %f) {
 
 define float @copysign_f32(float %a, float %b) {
 ; XTENSA-LABEL: copysign_f32:
-; XTENSA:         .cfi_startproc
-; XTENSA-NEXT:  # %bb.0: # %entry
+; XTENSA:       # %bb.0: # %entry
 ; XTENSA-NEXT:    l32r a8, .LCPI35_0
 ; XTENSA-NEXT:    and a8, a3, a8
 ; XTENSA-NEXT:    l32r a9, .LCPI35_1

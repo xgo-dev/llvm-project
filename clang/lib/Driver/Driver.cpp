@@ -19,6 +19,7 @@
 #include "ToolChains/Cygwin.h"
 #include "ToolChains/Darwin.h"
 #include "ToolChains/DragonFly.h"
+#include "ToolChains/EspBareMetal.h"
 #include "ToolChains/FreeBSD.h"
 #include "ToolChains/Fuchsia.h"
 #include "ToolChains/Gnu.h"
@@ -7291,7 +7292,10 @@ const ToolChain &Driver::getToolChain(const ArgList &Args,
       case llvm::Triple::riscv64:
       case llvm::Triple::riscv32be:
       case llvm::Triple::riscv64be:
-        TC = std::make_unique<toolchains::BareMetal>(*this, Target, Args);
+        if (Target.getVendor() == llvm::Triple::Espressif)
+          TC = std::make_unique<toolchains::EspBareMetal>(*this, Target, Args);
+        else
+          TC = std::make_unique<toolchains::BareMetal>(*this, Target, Args);
         break;
       case llvm::Triple::ve:
         TC = std::make_unique<toolchains::VEToolChain>(*this, Target, Args);
@@ -7306,6 +7310,12 @@ const ToolChain &Driver::getToolChain(const ArgList &Args,
       case llvm::Triple::amdgpu:
       case llvm::Triple::r600:
         TC = std::make_unique<toolchains::AMDGPUToolChain>(*this, Target, Args);
+        break;
+      case llvm::Triple::xtensa:
+        if (Target.getVendor() == llvm::Triple::Espressif)
+          TC = std::make_unique<toolchains::EspBareMetal>(*this, Target, Args);
+        else
+          TC = std::make_unique<toolchains::BareMetal>(*this, Target, Args);
         break;
       default:
         if (toolchains::BareMetal::handlesTarget(Target))

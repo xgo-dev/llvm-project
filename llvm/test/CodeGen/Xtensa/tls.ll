@@ -15,8 +15,8 @@
 ; XTENSA-CHECK-ASM-NEXT:  .cfi_def_cfa_offset 32
 ; XTENSA-CHECK-ASM-NEXT:  l32r	a8, .LCPI0_0
 ; XTENSA-CHECK-ASM-NEXT:  rur	a9, threadptr
-; XTENSA-CHECK-ASM-NEXT:  add	a8, a9, a8
-; XTENSA-CHECK-ASM-NEXT:  l32i	a2, a8, 0
+; XTENSA-CHECK-ASM-NEXT:  add.n	a8, a9, a8
+; XTENSA-CHECK-ASM-NEXT:  l32i.n	a2, a8, 0
 ; XTENSA-CHECK-ASM-NEXT:  retw.n
 
 

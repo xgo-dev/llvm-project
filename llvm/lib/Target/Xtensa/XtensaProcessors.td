@@ -20,7 +20,7 @@ def : Proc<"esp32", [FeatureDensity, FeatureSingleFloat, FeatureLoop, FeatureMAC
                      FeatureNSA, FeatureMul16, FeatureMul32, FeatureMul32High, FeatureDFPAccel, FeatureS32C1I, FeatureTHREADPTR, FeatureDiv32,
                      FeatureDebug, FeatureException, FeatureHighPriInterrupts, FeatureHighPriInterruptsLevel7, FeatureCoprocessor,
                      FeatureInterrupt, FeatureDataCache, FeatureRelocatableVector, FeatureTimers3, FeaturePRID, FeatureRegionProtection, FeatureMiscSR,
-                     FeatureMINMAX, FeatureCLAMPS]>;
+                     FeatureMINMAX, FeatureCLAMPS, FeatureEXPSTATE]>;
 
 def : Proc<"esp8266", [FeatureDensity, FeatureNSA, FeatureMul16, FeatureMul32, FeatureExtendedL32R, FeatureDebug, FeatureException,
                        FeatureHighPriInterrupts, FeatureHighPriInterruptsLevel3, FeatureInterrupt, FeatureRelocatableVector, FeatureTimers1,
@@ -30,3 +30,16 @@ def : Proc<"esp32s2", [FeatureDensity, FeatureWindowed, FeatureSEXT, FeatureNSA,
                        FeatureDiv32, FeatureDataCache, FeatureDebug, FeatureException, FeatureHighPriInterrupts, FeatureHighPriInterruptsLevel7,
                        FeatureCoprocessor, FeatureInterrupt, FeatureRelocatableVector,	FeatureTimers3, FeaturePRID, FeatureRegionProtection,
                        FeatureMiscSR, FeatureMINMAX, FeatureCLAMPS, FeatureESP32S2Ops]>;
+
+def : Proc<"esp32s3", [FeatureDensity, FeatureSingleFloat, FeatureLoop, FeatureMAC16, FeatureWindowed, FeatureBoolean, FeatureSEXT,
+                       FeatureNSA, FeatureMul16, FeatureMul32, FeatureMul32High, FeatureS32C1I, FeatureTHREADPTR, FeatureDiv32,
+                       FeatureDataCache, FeatureDebug, FeatureException, FeatureHighPriInterrupts, FeatureHighPriInterruptsLevel7, FeatureCoprocessor,
+                       FeatureInterrupt, FeatureRelocatableVector, FeatureTimers3, FeaturePRID, FeatureRegionProtection, FeatureMiscSR,
+                       FeatureMINMAX, FeatureCLAMPS, FeatureESP32S3Ops]>;
+
+def : Proc<"cnl", [FeatureDensity, FeatureSingleFloat, FeatureLoop,  FeatureWindowed, FeatureBoolean,
+                    FeatureSEXT, FeatureNSA, FeatureMul32, FeatureMul32High,  FeatureS32C1I,
+                    FeatureTHREADPTR, FeatureDiv32, FeatureDataCache, FeatureDebug,
+                    FeatureException, FeatureHighPriInterrupts, FeatureCoprocessor,
+                    FeatureInterrupt, FeatureRelocatableVector, FeatureTimers1, FeaturePRID,
+                    FeatureRegionProtection, FeatureMiscSR, FeatureHIFI3]>;

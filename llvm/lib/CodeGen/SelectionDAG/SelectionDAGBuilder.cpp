@@ -5565,6 +5565,8 @@ SDValue SelectionDAGBuilder::handleTargetIntrinsicRet(const CallBase &I,
 void SelectionDAGBuilder::visitTargetIntrinsic(const CallInst &I,
                                                unsigned Intrinsic) {
   auto [HasChain, OnlyLoad] = getTargetIntrinsicCallProperties(I);
+  // A void IntrNoMem intrinsic still needs a chain result in SelectionDAG.
+  HasChain |= I.getType()->isVoidTy();
   Intrinsic::ID IntrinsicID = static_cast<Intrinsic::ID>(Intrinsic);
 
   if (!DAG.getMachineFunction().getSubtarget().isIntrinsicSupported(

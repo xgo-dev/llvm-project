@@ -1,0 +1,29948 @@
+//===- RISCVInstrInfoESPV.td - RISCV Target Description -*- tablegen -*----===//
+//
+//                     The LLVM Compiler Infrastructure
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+//
+// This file describes the RISCV ESPV instructions in TableGen format.
+//
+// These definitions are generated
+// This file is generated
+//
+//===----------------------------------------------------------------------===//
+
+include "RISCVESPOperands.td"
+include "RISCVInstrFormatsESP.td"
+include "RISCVInstrInfoESPLOOP.td"
+include "RISCVInstrInfoESPVNode.td"
+
+// ESP_VCMULAS_S16_QACC_H: Complex multiply-accumulate to QACC_H with explicit passthru
+// QACC_H_LOW:$qacc_h_l_in and QACC_H_HIGH:$qacc_h_h_in are phantom operands (not shown in assembly string)
+// for data flow tracking. They are explicit operands but hidden in assembly output.
+class ESP_VCMULAS_S16_QACC_H_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vcmulas.s16.qacc.h\t $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 1;
+  let Inst{16} = 1;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_VCMULAS_S16_QACC_H: ESP_VCMULAS_S16_QACC_H_Base<(outs QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy),
+                   []> {
+  let Constraints = "$qacc_h_l = $qacc_h_l_in, $qacc_h_h = $qacc_h_h_in";
+}
+
+def ESP_VCMULAS_S16_QACC_H_MC: ESP_VCMULAS_S16_QACC_H_Base<(outs), (ins QR:$qx, QR:$qy), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_VCMULAS_S16_QACC_H_LD_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vcmulas.s16.qacc.h.ld.ip\t $qu, $rs1, $off1616, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22-19} = off1616{3-0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VCMULAS_S16_QACC_H_LD_IP: ESP_VCMULAS_S16_QACC_H_LD_IP_Base<(outs QR:$qu, GPRPIE:$rs1r, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_h_l = $qacc_h_l_in, $qacc_h_h = $qacc_h_h_in";
+}
+
+def ESP_VCMULAS_S16_QACC_H_LD_IP_MC: ESP_VCMULAS_S16_QACC_H_LD_IP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VCMULAS_S16_QACC_H_LD_XP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vcmulas.s16.qacc.h.ld.xp\t $qu, $rs1, $rs2, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VCMULAS_S16_QACC_H_LD_XP: ESP_VCMULAS_S16_QACC_H_LD_XP_Base<(outs QR:$qu, GPRPIE:$rs1r, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy, GPRPIE:$rs1, GPRPIE:$rs2),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_h_l = $qacc_h_l_in, $qacc_h_h = $qacc_h_h_in";
+}
+
+def ESP_VCMULAS_S16_QACC_H_LD_XP_MC: ESP_VCMULAS_S16_QACC_H_LD_XP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, GPRPIE:$rs2), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VCMULAS_S16_QACC_L_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vcmulas.s16.qacc.l\t $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 1;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_VCMULAS_S16_QACC_L: ESP_VCMULAS_S16_QACC_L_Base<(outs QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QR:$qx, QR:$qy),
+                   []> {
+  let Constraints = "$qacc_l_l = $qacc_l_l_in, $qacc_l_h = $qacc_l_h_in";
+}
+
+def ESP_VCMULAS_S16_QACC_L_MC: ESP_VCMULAS_S16_QACC_L_Base<(outs), (ins QR:$qx, QR:$qy), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_VCMULAS_S16_QACC_L_LD_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vcmulas.s16.qacc.l.ld.ip\t $qu, $rs1, $off1616, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22-19} = off1616{3-0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VCMULAS_S16_QACC_L_LD_IP: ESP_VCMULAS_S16_QACC_L_LD_IP_Base<(outs QR:$qu, GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_l_l = $qacc_l_l_in, $qacc_l_h = $qacc_l_h_in";
+}
+
+def ESP_VCMULAS_S16_QACC_L_LD_IP_MC: ESP_VCMULAS_S16_QACC_L_LD_IP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VCMULAS_S16_QACC_L_LD_XP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vcmulas.s16.qacc.l.ld.xp\t $qu, $rs1, $rs2, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VCMULAS_S16_QACC_L_LD_XP: ESP_VCMULAS_S16_QACC_L_LD_XP_Base<(outs QR:$qu, GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QR:$qx, QR:$qy, GPRPIE:$rs1, GPRPIE:$rs2),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_l_l = $qacc_l_l_in, $qacc_l_h = $qacc_l_h_in";
+}
+
+def ESP_VCMULAS_S16_QACC_L_LD_XP_MC: ESP_VCMULAS_S16_QACC_L_LD_XP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, GPRPIE:$rs2), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VCMULAS_S8_QACC_H_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vcmulas.s8.qacc.h\t $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_VCMULAS_S8_QACC_H: ESP_VCMULAS_S8_QACC_H_Base<(outs QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy),
+                   []>;
+
+def ESP_VCMULAS_S8_QACC_H_MC: ESP_VCMULAS_S8_QACC_H_Base<(outs), (ins QR:$qx, QR:$qy), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_VCMULAS_S8_QACC_H_LD_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vcmulas.s8.qacc.h.ld.ip\t $qu, $rs1, $off1616, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-19} = off1616{3-0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VCMULAS_S8_QACC_H_LD_IP: ESP_VCMULAS_S8_QACC_H_LD_IP_Base<(outs QR:$qu, GPRPIE:$rs1r, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_h_l = $qacc_h_l_in, $qacc_h_h = $qacc_h_h_in";
+}
+
+def ESP_VCMULAS_S8_QACC_H_LD_IP_MC: ESP_VCMULAS_S8_QACC_H_LD_IP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VCMULAS_S8_QACC_H_LD_XP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vcmulas.s8.qacc.h.ld.xp\t $qu, $rs1, $rs2, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VCMULAS_S8_QACC_H_LD_XP: ESP_VCMULAS_S8_QACC_H_LD_XP_Base<(outs QR:$qu, GPRPIE:$rs1r, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy, GPRPIE:$rs1, GPRPIE:$rs2),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_h_l = $qacc_h_l_in, $qacc_h_h = $qacc_h_h_in";
+}
+
+def ESP_VCMULAS_S8_QACC_H_LD_XP_MC: ESP_VCMULAS_S8_QACC_H_LD_XP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, GPRPIE:$rs2), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VCMULAS_S8_QACC_L_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vcmulas.s8.qacc.l\t $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_VCMULAS_S8_QACC_L: ESP_VCMULAS_S8_QACC_L_Base<(outs QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QR:$qx, QR:$qy),
+                   []>;
+
+def ESP_VCMULAS_S8_QACC_L_MC: ESP_VCMULAS_S8_QACC_L_Base<(outs), (ins QR:$qx, QR:$qy), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_VCMULAS_S8_QACC_L_LD_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vcmulas.s8.qacc.l.ld.ip\t $qu, $rs1, $off1616, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-19} = off1616{3-0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VCMULAS_S8_QACC_L_LD_IP: ESP_VCMULAS_S8_QACC_L_LD_IP_Base<(outs QR:$qu, GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_l_l = $qacc_l_l_in, $qacc_l_h = $qacc_l_h_in";
+}
+
+def ESP_VCMULAS_S8_QACC_L_LD_IP_MC: ESP_VCMULAS_S8_QACC_L_LD_IP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VCMULAS_S8_QACC_L_LD_XP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vcmulas.s8.qacc.l.ld.xp\t $qu, $rs1, $rs2, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VCMULAS_S8_QACC_L_LD_XP: ESP_VCMULAS_S8_QACC_L_LD_XP_Base<(outs QR:$qu, GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QR:$qx, QR:$qy, GPRPIE:$rs1, GPRPIE:$rs2),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_l_l = $qacc_l_l_in, $qacc_l_h = $qacc_l_h_in";
+}
+
+def ESP_VCMULAS_S8_QACC_L_LD_XP_MC: ESP_VCMULAS_S8_QACC_L_LD_XP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, GPRPIE:$rs2), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_S16_QACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.s16.qacc\t $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 1;
+  let Inst{16} = 1;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_VMULAS_S16_QACC: ESP_VMULAS_S16_QACC_Base<(outs QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy),
+                   []>;
+
+def ESP_VMULAS_S16_QACC_MC: ESP_VMULAS_S16_QACC_Base<(outs), (ins QR:$qx, QR:$qy), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_VMULAS_S16_QACC_LD_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.s16.qacc.ld.ip\t $qu, $rs1, $off1616, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21-19} = off1616{3-1};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off1616{0};
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VMULAS_S16_QACC_LD_IP: ESP_VMULAS_S16_QACC_LD_IP_Base<(outs QR:$qu, GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_l_l = $qacc_l_l_in, $qacc_l_h = $qacc_l_h_in, $qacc_h_l = $qacc_h_l_in, $qacc_h_h = $qacc_h_h_in";
+}
+
+def ESP_VMULAS_S16_QACC_LD_IP_MC: ESP_VMULAS_S16_QACC_LD_IP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_S16_QACC_LD_XP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.s16.qacc.ld.xp\t $qu, $rs1, $rs2, $qx, $qy", pat> {
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VMULAS_S16_QACC_LD_XP: ESP_VMULAS_S16_QACC_LD_XP_Base<(outs QR:$qu, GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_l_l = $qacc_l_l_in, $qacc_l_h = $qacc_l_h_in, $qacc_h_l = $qacc_h_l_in, $qacc_h_h = $qacc_h_h_in";
+}
+
+def ESP_VMULAS_S16_QACC_LD_XP_MC: ESP_VMULAS_S16_QACC_LD_XP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_S16_QACC_ST_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.s16.qacc.st.ip\t $qu, $rs1, $off1616, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21-19} = off1616{3-1};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off1616{0};
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register>, Uses = []<Register> , isCodeGenOnly = 1 in
+def ESP_VMULAS_S16_QACC_ST_IP: ESP_VMULAS_S16_QACC_ST_IP_Base<(outs GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qu, QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_l_l = $qacc_l_l_in, $qacc_l_h = $qacc_l_h_in, $qacc_h_l = $qacc_h_l_in, $qacc_h_h = $qacc_h_h_in";
+}
+
+def ESP_VMULAS_S16_QACC_ST_IP_MC: ESP_VMULAS_S16_QACC_ST_IP_Base<(outs GPRPIE:$rs1r), (ins QR:$qu, QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_S16_QACC_ST_XP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.s16.qacc.st.xp\t $qu, $rs1, $rs2, $qx, $qy", pat> {
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register>, Uses = []<Register> , isCodeGenOnly = 1 in
+def ESP_VMULAS_S16_QACC_ST_XP: ESP_VMULAS_S16_QACC_ST_XP_Base<(outs GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qu, QR:$qx, QR:$qy, GPRPIE:$rs1, GPRPIE:$rs2),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_l_l = $qacc_l_l_in, $qacc_l_h = $qacc_l_h_in, $qacc_h_l = $qacc_h_l_in, $qacc_h_h = $qacc_h_h_in";
+}
+
+def ESP_VMULAS_S16_QACC_ST_XP_MC: ESP_VMULAS_S16_QACC_ST_XP_Base<(outs GPRPIE:$rs1r), (ins QR:$qu, QR:$qx, QR:$qy, GPRPIE:$rs1, GPRPIE:$rs2), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_S16_XACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.s16.xacc\t $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 1;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VMULAS_S16_XACC: ESP_VMULAS_S16_XACC_Base<(outs XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out), (ins XACC_LOW:$xacc_low_in, XACC_HIGH:$xacc_high_in, QR:$qx, QR:$qy),
+                   []> {
+  let Constraints = "$xacc_low_out = $xacc_low_in, $xacc_high_out = $xacc_high_in";
+}
+
+def ESP_VMULAS_S16_XACC_MC: ESP_VMULAS_S16_XACC_Base<(outs), (ins QR:$qx, QR:$qy), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_VMULAS_S16_XACC_LD_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.s16.xacc.ld.ip\t $qu, $rs1, $off1616, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21-19} = off1616{3-1};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off1616{0};
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VMULAS_S16_XACC_LD_IP: ESP_VMULAS_S16_XACC_LD_IP_Base<(outs QR:$qu, GPRPIE:$rs1r, XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out), (ins XACC_LOW:$xacc_low_in, XACC_HIGH:$xacc_high_in, QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616),
+                   // Lowering code handles XACC via CopyToReg/CopyFromReg
+                   []> {
+  let Constraints = "$rs1r = $rs1, $xacc_low_out = $xacc_low_in, $xacc_high_out = $xacc_high_in";
+}
+
+def ESP_VMULAS_S16_XACC_LD_IP_MC: ESP_VMULAS_S16_XACC_LD_IP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_S16_XACC_LD_XP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.s16.xacc.ld.xp\t $qu, $rs1, $rs2, $qx, $qy", pat> {
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VMULAS_S16_XACC_LD_XP: ESP_VMULAS_S16_XACC_LD_XP_Base<(outs QR:$qu, GPRPIE:$rs1r, XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out), (ins XACC_LOW:$xacc_low_in, XACC_HIGH:$xacc_high_in, GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   // Lowering code handles XACC via CopyToReg/CopyFromReg
+                   []> {
+  let Constraints = "$rs1r = $rs1, $xacc_low_out = $xacc_low_in, $xacc_high_out = $xacc_high_in";
+}
+
+def ESP_VMULAS_S16_XACC_LD_XP_MC: ESP_VMULAS_S16_XACC_LD_XP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_S16_XACC_ST_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.s16.xacc.st.ip\t $qu, $rs1, $off1616, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21-19} = off1616{3-1};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off1616{0};
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VMULAS_S16_XACC_ST_IP: ESP_VMULAS_S16_XACC_ST_IP_Base<(outs GPRPIE:$rs1r, XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out), (ins XACC_LOW:$xacc_low_in, XACC_HIGH:$xacc_high_in, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, offset_16_16:$off1616),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $xacc_low_out = $xacc_low_in, $xacc_high_out = $xacc_high_in";
+}
+
+def ESP_VMULAS_S16_XACC_ST_IP_MC: ESP_VMULAS_S16_XACC_ST_IP_Base<(outs GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, offset_16_16:$off1616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_S16_XACC_ST_XP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.s16.xacc.st.xp\t $qu, $rs1, $rs2, $qx, $qy", pat> {
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VMULAS_S16_XACC_ST_XP: ESP_VMULAS_S16_XACC_ST_XP_Base<(outs GPRPIE:$rs1r, XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out), (ins XACC_LOW:$xacc_low_in, XACC_HIGH:$xacc_high_in, GPRPIE:$rs2, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $xacc_low_out = $xacc_low_in, $xacc_high_out = $xacc_high_in";
+}
+
+def ESP_VMULAS_S16_XACC_ST_XP_MC: ESP_VMULAS_S16_XACC_ST_XP_Base<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_S8_QACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.s8.qacc\t $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_VMULAS_S8_QACC: ESP_VMULAS_S8_QACC_Base<(outs QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy),
+                   []>;
+
+def ESP_VMULAS_S8_QACC_MC: ESP_VMULAS_S8_QACC_Base<(outs), (ins QR:$qx, QR:$qy), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_VMULAS_S8_QACC_LD_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.s8.qacc.ld.ip\t $qu, $rs1, $off1616, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21-19} = off1616{3-1};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off1616{0};
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register>, Uses = []<Register> , isCodeGenOnly = 1 in
+def ESP_VMULAS_S8_QACC_LD_IP: ESP_VMULAS_S8_QACC_LD_IP_Base<(outs QR:$qu, GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_l_l = $qacc_l_l_in, $qacc_l_h = $qacc_l_h_in, $qacc_h_l = $qacc_h_l_in, $qacc_h_h = $qacc_h_h_in";
+}
+
+def ESP_VMULAS_S8_QACC_LD_IP_MC: ESP_VMULAS_S8_QACC_LD_IP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_S8_QACC_LD_XP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.s8.qacc.ld.xp\t $qu, $rs1, $rs2, $qx, $qy", pat> {
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VMULAS_S8_QACC_LD_XP: ESP_VMULAS_S8_QACC_LD_XP_Base<(outs QR:$qu, GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_l_l = $qacc_l_l_in, $qacc_l_h = $qacc_l_h_in, $qacc_h_l = $qacc_h_l_in, $qacc_h_h = $qacc_h_h_in";
+}
+
+def ESP_VMULAS_S8_QACC_LD_XP_MC: ESP_VMULAS_S8_QACC_LD_XP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_S8_QACC_ST_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.s8.qacc.st.ip\t $qu, $rs1, $off1616, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21-19} = off1616{3-1};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off1616{0};
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register>, Uses = []<Register> , isCodeGenOnly = 1 in
+def ESP_VMULAS_S8_QACC_ST_IP: ESP_VMULAS_S8_QACC_ST_IP_Base<(outs GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qu, QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_l_l = $qacc_l_l_in, $qacc_l_h = $qacc_l_h_in, $qacc_h_l = $qacc_h_l_in, $qacc_h_h = $qacc_h_h_in";
+}
+
+def ESP_VMULAS_S8_QACC_ST_IP_MC: ESP_VMULAS_S8_QACC_ST_IP_Base<(outs GPRPIE:$rs1r), (ins QR:$qu, QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_S8_QACC_ST_XP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.s8.qacc.st.xp\t $qu, $rs1, $rs2, $qx, $qy", pat> {
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register>, Uses = []<Register> , isCodeGenOnly = 1 in
+def ESP_VMULAS_S8_QACC_ST_XP: ESP_VMULAS_S8_QACC_ST_XP_Base<(outs GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qu, QR:$qx, QR:$qy, GPRPIE:$rs1, GPRPIE:$rs2),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_l_l = $qacc_l_l_in, $qacc_l_h = $qacc_l_h_in, $qacc_h_l = $qacc_h_l_in, $qacc_h_h = $qacc_h_h_in";
+}
+
+def ESP_VMULAS_S8_QACC_ST_XP_MC: ESP_VMULAS_S8_QACC_ST_XP_Base<(outs GPRPIE:$rs1r), (ins QR:$qu, QR:$qx, QR:$qy, GPRPIE:$rs1, GPRPIE:$rs2), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_S8_XACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.s8.xacc\t $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VMULAS_S8_XACC: ESP_VMULAS_S8_XACC_Base<(outs XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out), (ins XACC_LOW:$xacc_low_in, XACC_HIGH:$xacc_high_in, QR:$qx, QR:$qy),
+                   []> {
+  let Constraints = "$xacc_low_out = $xacc_low_in, $xacc_high_out = $xacc_high_in";
+}
+
+def ESP_VMULAS_S8_XACC_MC: ESP_VMULAS_S8_XACC_Base<(outs), (ins QR:$qx, QR:$qy), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_VMULAS_S8_XACC_LD_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.s8.xacc.ld.ip\t $qu, $rs1, $off1616, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21-19} = off1616{3-1};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off1616{0};
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VMULAS_S8_XACC_LD_IP: ESP_VMULAS_S8_XACC_LD_IP_Base<(outs QR:$qu, GPRPIE:$rs1r, XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out), (ins XACC_LOW:$xacc_low_in, XACC_HIGH:$xacc_high_in, QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616),
+                   // Lowering code handles XACC via CopyToReg/CopyFromReg
+                   []> {
+  let Constraints = "$rs1r = $rs1, $xacc_low_out = $xacc_low_in, $xacc_high_out = $xacc_high_in";
+}
+
+def ESP_VMULAS_S8_XACC_LD_IP_MC: ESP_VMULAS_S8_XACC_LD_IP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_S8_XACC_LD_XP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.s8.xacc.ld.xp\t $qu, $rs1, $rs2, $qx, $qy", pat> {
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VMULAS_S8_XACC_LD_XP: ESP_VMULAS_S8_XACC_LD_XP_Base<(outs QR:$qu, GPRPIE:$rs1r, XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out), (ins XACC_LOW:$xacc_low_in, XACC_HIGH:$xacc_high_in, GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   // Lowering code handles XACC via CopyToReg/CopyFromReg
+                   []> {
+  let Constraints = "$rs1r = $rs1, $xacc_low_out = $xacc_low_in, $xacc_high_out = $xacc_high_in";
+}
+
+def ESP_VMULAS_S8_XACC_LD_XP_MC: ESP_VMULAS_S8_XACC_LD_XP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_S8_XACC_ST_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.s8.xacc.st.ip\t $qu, $rs1, $off1616, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21-19} = off1616{3-1};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off1616{0};
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VMULAS_S8_XACC_ST_IP: ESP_VMULAS_S8_XACC_ST_IP_Base<(outs GPRPIE:$rs1r, XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out), (ins XACC_LOW:$xacc_low_in, XACC_HIGH:$xacc_high_in, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, offset_16_16:$off1616),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $xacc_low_out = $xacc_low_in, $xacc_high_out = $xacc_high_in";
+}
+
+def ESP_VMULAS_S8_XACC_ST_IP_MC: ESP_VMULAS_S8_XACC_ST_IP_Base<(outs GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, offset_16_16:$off1616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_S8_XACC_ST_XP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.s8.xacc.st.xp\t $qu, $rs1, $rs2, $qx, $qy", pat> {
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VMULAS_S8_XACC_ST_XP: ESP_VMULAS_S8_XACC_ST_XP_Base<(outs GPRPIE:$rs1r, XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out), (ins XACC_LOW:$xacc_low_in, XACC_HIGH:$xacc_high_in, GPRPIE:$rs2, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $xacc_low_out = $xacc_low_in, $xacc_high_out = $xacc_high_in";
+}
+
+def ESP_VMULAS_S8_XACC_ST_XP_MC: ESP_VMULAS_S8_XACC_ST_XP_Base<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_U16_QACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.u16.qacc\t $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_VMULAS_U16_QACC: ESP_VMULAS_U16_QACC_Base<(outs QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy),
+                   []>;
+
+def ESP_VMULAS_U16_QACC_MC: ESP_VMULAS_U16_QACC_Base<(outs), (ins QR:$qx, QR:$qy), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_VMULAS_U16_QACC_LD_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.u16.qacc.ld.ip\t $qu, $rs1, $off1616, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21-19} = off1616{3-1};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off1616{0};
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register>, Uses = []<Register> , isCodeGenOnly = 1 in
+def ESP_VMULAS_U16_QACC_LD_IP: ESP_VMULAS_U16_QACC_LD_IP_Base<(outs QR:$qu, GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_l_l = $qacc_l_l_in, $qacc_l_h = $qacc_l_h_in, $qacc_h_l = $qacc_h_l_in, $qacc_h_h = $qacc_h_h_in";
+}
+
+def ESP_VMULAS_U16_QACC_LD_IP_MC: ESP_VMULAS_U16_QACC_LD_IP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_U16_QACC_LD_XP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.u16.qacc.ld.xp\t $qu, $rs1, $rs2, $qx, $qy", pat> {
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VMULAS_U16_QACC_LD_XP: ESP_VMULAS_U16_QACC_LD_XP_Base<(outs QR:$qu, GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_l_l = $qacc_l_l_in, $qacc_l_h = $qacc_l_h_in, $qacc_h_l = $qacc_h_l_in, $qacc_h_h = $qacc_h_h_in";
+}
+
+def ESP_VMULAS_U16_QACC_LD_XP_MC: ESP_VMULAS_U16_QACC_LD_XP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_U16_QACC_ST_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.u16.qacc.st.ip\t $qu, $rs1, $off1616, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21-19} = off1616{3-1};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off1616{0};
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register>, Uses = []<Register> , isCodeGenOnly = 1 in
+def ESP_VMULAS_U16_QACC_ST_IP: ESP_VMULAS_U16_QACC_ST_IP_Base<(outs GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qu, QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_l_l = $qacc_l_l_in, $qacc_l_h = $qacc_l_h_in, $qacc_h_l = $qacc_h_l_in, $qacc_h_h = $qacc_h_h_in";
+}
+
+def ESP_VMULAS_U16_QACC_ST_IP_MC: ESP_VMULAS_U16_QACC_ST_IP_Base<(outs GPRPIE:$rs1r), (ins QR:$qu, QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_U16_QACC_ST_XP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.u16.qacc.st.xp\t $qu, $rs1, $rs2, $qx, $qy", pat> {
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register>, Uses = []<Register> , isCodeGenOnly = 1 in
+def ESP_VMULAS_U16_QACC_ST_XP: ESP_VMULAS_U16_QACC_ST_XP_Base<(outs GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qu, QR:$qx, QR:$qy, GPRPIE:$rs1, GPRPIE:$rs2),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_l_l = $qacc_l_l_in, $qacc_l_h = $qacc_l_h_in, $qacc_h_l = $qacc_h_l_in, $qacc_h_h = $qacc_h_h_in";
+}
+
+def ESP_VMULAS_U16_QACC_ST_XP_MC: ESP_VMULAS_U16_QACC_ST_XP_Base<(outs GPRPIE:$rs1r), (ins QR:$qu, QR:$qx, QR:$qy, GPRPIE:$rs1, GPRPIE:$rs2), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_U16_XACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.u16.xacc\t $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VMULAS_U16_XACC: ESP_VMULAS_U16_XACC_Base<(outs XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out), (ins XACC_LOW:$xacc_low_in, XACC_HIGH:$xacc_high_in, QR:$qx, QR:$qy),
+                   []> {
+  let Constraints = "$xacc_low_out = $xacc_low_in, $xacc_high_out = $xacc_high_in";
+}
+
+def ESP_VMULAS_U16_XACC_MC: ESP_VMULAS_U16_XACC_Base<(outs), (ins QR:$qx, QR:$qy), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_VMULAS_U16_XACC_LD_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.u16.xacc.ld.ip\t $qu, $rs1, $off1616, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21-19} = off1616{3-1};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off1616{0};
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VMULAS_U16_XACC_LD_IP: ESP_VMULAS_U16_XACC_LD_IP_Base<(outs QR:$qu, GPRPIE:$rs1r, XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out), (ins XACC_LOW:$xacc_low_in, XACC_HIGH:$xacc_high_in, QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616),
+                   // Lowering code handles XACC via CopyToReg/CopyFromReg
+                   []> {
+  let Constraints = "$rs1r = $rs1, $xacc_low_out = $xacc_low_in, $xacc_high_out = $xacc_high_in";
+}
+
+def ESP_VMULAS_U16_XACC_LD_IP_MC: ESP_VMULAS_U16_XACC_LD_IP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_U16_XACC_LD_XP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.u16.xacc.ld.xp\t $qu, $rs1, $rs2, $qx, $qy", pat> {
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VMULAS_U16_XACC_LD_XP: ESP_VMULAS_U16_XACC_LD_XP_Base<(outs QR:$qu, GPRPIE:$rs1r, XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out), (ins XACC_LOW:$xacc_low_in, XACC_HIGH:$xacc_high_in, GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   // Lowering code handles XACC via CopyToReg/CopyFromReg
+                   []> {
+  let Constraints = "$rs1r = $rs1, $xacc_low_out = $xacc_low_in, $xacc_high_out = $xacc_high_in";
+}
+
+def ESP_VMULAS_U16_XACC_LD_XP_MC: ESP_VMULAS_U16_XACC_LD_XP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_U16_XACC_ST_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.u16.xacc.st.ip\t $qu, $rs1, $off1616, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21-19} = off1616{3-1};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off1616{0};
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VMULAS_U16_XACC_ST_IP: ESP_VMULAS_U16_XACC_ST_IP_Base<(outs GPRPIE:$rs1r, XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out), (ins XACC_LOW:$xacc_low_in, XACC_HIGH:$xacc_high_in, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, offset_16_16:$off1616),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $xacc_low_out = $xacc_low_in, $xacc_high_out = $xacc_high_in";
+}
+
+def ESP_VMULAS_U16_XACC_ST_IP_MC: ESP_VMULAS_U16_XACC_ST_IP_Base<(outs GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, offset_16_16:$off1616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_U16_XACC_ST_XP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.u16.xacc.st.xp\t $qu, $rs1, $rs2, $qx, $qy", pat> {
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VMULAS_U16_XACC_ST_XP: ESP_VMULAS_U16_XACC_ST_XP_Base<(outs GPRPIE:$rs1r, XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out), (ins XACC_LOW:$xacc_low_in, XACC_HIGH:$xacc_high_in, GPRPIE:$rs2, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $xacc_low_out = $xacc_low_in, $xacc_high_out = $xacc_high_in";
+}
+
+def ESP_VMULAS_U16_XACC_ST_XP_MC: ESP_VMULAS_U16_XACC_ST_XP_Base<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_U8_QACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.u8.qacc\t $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_VMULAS_U8_QACC: ESP_VMULAS_U8_QACC_Base<(outs QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy),
+                   []>;
+
+def ESP_VMULAS_U8_QACC_MC: ESP_VMULAS_U8_QACC_Base<(outs), (ins QR:$qx, QR:$qy), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_VMULAS_U8_QACC_LD_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.u8.qacc.ld.ip\t $qu, $rs1, $off1616, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21-19} = off1616{3-1};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off1616{0};
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register>, Uses = []<Register> , isCodeGenOnly = 1 in
+def ESP_VMULAS_U8_QACC_LD_IP: ESP_VMULAS_U8_QACC_LD_IP_Base<(outs QR:$qu, GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_l_l = $qacc_l_l_in, $qacc_l_h = $qacc_l_h_in, $qacc_h_l = $qacc_h_l_in, $qacc_h_h = $qacc_h_h_in";
+}
+
+def ESP_VMULAS_U8_QACC_LD_IP_MC: ESP_VMULAS_U8_QACC_LD_IP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_U8_QACC_LD_XP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.u8.qacc.ld.xp\t $qu, $rs1, $rs2, $qx, $qy", pat> {
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VMULAS_U8_QACC_LD_XP: ESP_VMULAS_U8_QACC_LD_XP_Base<(outs QR:$qu, GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_l_l = $qacc_l_l_in, $qacc_l_h = $qacc_l_h_in, $qacc_h_l = $qacc_h_l_in, $qacc_h_h = $qacc_h_h_in";
+}
+
+def ESP_VMULAS_U8_QACC_LD_XP_MC: ESP_VMULAS_U8_QACC_LD_XP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_U8_QACC_ST_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.u8.qacc.st.ip\t $qu, $rs1, $off1616, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21-19} = off1616{3-1};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off1616{0};
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register>, Uses = []<Register> , isCodeGenOnly = 1 in
+def ESP_VMULAS_U8_QACC_ST_IP: ESP_VMULAS_U8_QACC_ST_IP_Base<(outs GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qu, QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_l_l = $qacc_l_l_in, $qacc_l_h = $qacc_l_h_in, $qacc_h_l = $qacc_h_l_in, $qacc_h_h = $qacc_h_h_in";
+}
+
+def ESP_VMULAS_U8_QACC_ST_IP_MC: ESP_VMULAS_U8_QACC_ST_IP_Base<(outs GPRPIE:$rs1r), (ins QR:$qu, QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_U8_QACC_ST_XP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.u8.qacc.st.xp\t $qu, $rs1, $rs2, $qx, $qy", pat> {
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register>, Uses = []<Register> , isCodeGenOnly = 1 in
+def ESP_VMULAS_U8_QACC_ST_XP: ESP_VMULAS_U8_QACC_ST_XP_Base<(outs GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qu, QR:$qx, QR:$qy, GPRPIE:$rs1, GPRPIE:$rs2),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_l_l = $qacc_l_l_in, $qacc_l_h = $qacc_l_h_in, $qacc_h_l = $qacc_h_l_in, $qacc_h_h = $qacc_h_h_in";
+}
+
+def ESP_VMULAS_U8_QACC_ST_XP_MC: ESP_VMULAS_U8_QACC_ST_XP_Base<(outs GPRPIE:$rs1r), (ins QR:$qu, QR:$qx, QR:$qy, GPRPIE:$rs1, GPRPIE:$rs2), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_U8_XACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.u8.xacc\t $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VMULAS_U8_XACC: ESP_VMULAS_U8_XACC_Base<(outs XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out), (ins XACC_LOW:$xacc_low_in, XACC_HIGH:$xacc_high_in, QR:$qx, QR:$qy),
+                   []> {
+  let Constraints = "$xacc_low_out = $xacc_low_in, $xacc_high_out = $xacc_high_in";
+}
+
+def ESP_VMULAS_U8_XACC_MC: ESP_VMULAS_U8_XACC_Base<(outs), (ins QR:$qx, QR:$qy), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_VMULAS_U8_XACC_LD_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.u8.xacc.ld.ip\t $qu, $rs1, $off1616, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21-19} = off1616{3-1};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off1616{0};
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VMULAS_U8_XACC_LD_IP: ESP_VMULAS_U8_XACC_LD_IP_Base<(outs QR:$qu, GPRPIE:$rs1r, XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out), (ins XACC_LOW:$xacc_low_in, XACC_HIGH:$xacc_high_in, QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616),
+                   // Lowering code handles XACC via CopyToReg/CopyFromReg
+                   []> {
+  let Constraints = "$rs1r = $rs1, $xacc_low_out = $xacc_low_in, $xacc_high_out = $xacc_high_in";
+}
+
+def ESP_VMULAS_U8_XACC_LD_IP_MC: ESP_VMULAS_U8_XACC_LD_IP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, offset_16_16:$off1616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_U8_XACC_LD_XP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.u8.xacc.ld.xp\t $qu, $rs1, $rs2, $qx, $qy", pat> {
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VMULAS_U8_XACC_LD_XP: ESP_VMULAS_U8_XACC_LD_XP_Base<(outs QR:$qu, GPRPIE:$rs1r, XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out), (ins XACC_LOW:$xacc_low_in, XACC_HIGH:$xacc_high_in, GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   // Lowering code handles XACC via CopyToReg/CopyFromReg
+                   []> {
+  let Constraints = "$rs1r = $rs1, $xacc_low_out = $xacc_low_in, $xacc_high_out = $xacc_high_in";
+}
+
+def ESP_VMULAS_U8_XACC_LD_XP_MC: ESP_VMULAS_U8_XACC_LD_XP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_U8_XACC_ST_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.u8.xacc.st.ip\t $qu, $rs1, $off1616, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21-19} = off1616{3-1};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off1616{0};
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VMULAS_U8_XACC_ST_IP: ESP_VMULAS_U8_XACC_ST_IP_Base<(outs GPRPIE:$rs1r, XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out), (ins XACC_LOW:$xacc_low_in, XACC_HIGH:$xacc_high_in, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, offset_16_16:$off1616),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $xacc_low_out = $xacc_low_in, $xacc_high_out = $xacc_high_in";
+}
+
+def ESP_VMULAS_U8_XACC_ST_IP_MC: ESP_VMULAS_U8_XACC_ST_IP_Base<(outs GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, offset_16_16:$off1616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_U8_XACC_ST_XP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.u8.xacc.st.xp\t $qu, $rs1, $rs2, $qx, $qy", pat> {
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_VMULAS_U8_XACC_ST_XP: ESP_VMULAS_U8_XACC_ST_XP_Base<(outs GPRPIE:$rs1r, XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out), (ins XACC_LOW:$xacc_low_in, XACC_HIGH:$xacc_high_in, GPRPIE:$rs2, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $xacc_low_out = $xacc_low_in, $xacc_high_out = $xacc_high_in";
+}
+
+def ESP_VMULAS_U8_XACC_ST_XP_MC: ESP_VMULAS_U8_XACC_ST_XP_Base<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_S16_QACC_LDBC_INCP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.s16.qacc.ldbc.incp\t $qu, $rs1, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register>, Uses = []<Register> , isCodeGenOnly = 1 in
+def ESP_VMULAS_S16_QACC_LDBC_INCP: ESP_VMULAS_S16_QACC_LDBC_INCP_Base<(outs QR:$qu, GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_l_l = $qacc_l_l_in, $qacc_l_h = $qacc_l_h_in, $qacc_h_l = $qacc_h_l_in, $qacc_h_h = $qacc_h_h_in";
+}
+
+def ESP_VMULAS_S16_QACC_LDBC_INCP_MC: ESP_VMULAS_S16_QACC_LDBC_INCP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_S8_QACC_LDBC_INCP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.s8.qacc.ldbc.incp\t $qu, $rs1, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register>, Uses = []<Register> , isCodeGenOnly = 1 in
+def ESP_VMULAS_S8_QACC_LDBC_INCP: ESP_VMULAS_S8_QACC_LDBC_INCP_Base<(outs QR:$qu, GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_l_l = $qacc_l_l_in, $qacc_l_h = $qacc_l_h_in, $qacc_h_l = $qacc_h_l_in, $qacc_h_h = $qacc_h_h_in";
+}
+
+def ESP_VMULAS_S8_QACC_LDBC_INCP_MC: ESP_VMULAS_S8_QACC_LDBC_INCP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_U16_QACC_LDBC_INCP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.u16.qacc.ldbc.incp\t $qu, $rs1, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register>, Uses = []<Register> , isCodeGenOnly = 1 in
+def ESP_VMULAS_U16_QACC_LDBC_INCP: ESP_VMULAS_U16_QACC_LDBC_INCP_Base<(outs QR:$qu, GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_l_l = $qacc_l_l_in, $qacc_l_h = $qacc_l_h_in, $qacc_h_l = $qacc_h_l_in, $qacc_h_h = $qacc_h_h_in";
+}
+
+def ESP_VMULAS_U16_QACC_LDBC_INCP_MC: ESP_VMULAS_U16_QACC_LDBC_INCP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VMULAS_U8_QACC_LDBC_INCP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vmulas.u8.qacc.ldbc.incp\t $qu, $rs1, $qx, $qy", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register>, Uses = []<Register> , isCodeGenOnly = 1 in
+def ESP_VMULAS_U8_QACC_LDBC_INCP: ESP_VMULAS_U8_QACC_LDBC_INCP_Base<(outs QR:$qu, GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   []> {
+  let Constraints = "$rs1r = $rs1";
+}
+
+def ESP_VMULAS_U8_QACC_LDBC_INCP_MC: ESP_VMULAS_U8_QACC_LDBC_INCP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VSMULAS_S16_QACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vsmulas.s16.qacc\t $qx, $qy, $sel16", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<4> sel16;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18-15} = sel16{3-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_VSMULAS_S16_QACC: ESP_VSMULAS_S16_QACC_Base<(outs QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy, select_16:$sel16),
+                   []>;
+
+def ESP_VSMULAS_S16_QACC_MC: ESP_VSMULAS_S16_QACC_Base<(outs), (ins QR:$qx, QR:$qy, select_16:$sel16), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_VSMULAS_S16_QACC_LD_INCP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vsmulas.s16.qacc.ld.incp\t $qu, $rs1, $qx, $qy, $sel16", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<4> sel16;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22-19} = sel16{3-0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_VSMULAS_S16_QACC_LD_INCP: ESP_VSMULAS_S16_QACC_LD_INCP_Base<(outs QR:$qu, GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy, GPRPIE:$rs1, select_16:$sel16),
+                   []> {
+  let Constraints = "$rs1r = $rs1";
+}
+
+def ESP_VSMULAS_S16_QACC_LD_INCP_MC: ESP_VSMULAS_S16_QACC_LD_INCP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, select_16:$sel16), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VSMULAS_S8_QACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vsmulas.s8.qacc\t $qx, $qy, $sel16", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<4> sel16;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18-15} = sel16{3-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_VSMULAS_S8_QACC: ESP_VSMULAS_S8_QACC_Base<(outs QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy, select_16:$sel16),
+                   []>;
+
+def ESP_VSMULAS_S8_QACC_MC: ESP_VSMULAS_S8_QACC_Base<(outs), (ins QR:$qx, QR:$qy, select_16:$sel16), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_VSMULAS_S8_QACC_LD_INCP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vsmulas.s8.qacc.ld.incp\t $qu, $rs1, $qx, $qy, $sel16", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<4> sel16;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22-19} = sel16{3-0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_VSMULAS_S8_QACC_LD_INCP: ESP_VSMULAS_S8_QACC_LD_INCP_Base<(outs QR:$qu, GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy, GPRPIE:$rs1, select_16:$sel16),
+                   []> {
+  let Constraints = "$rs1r = $rs1";
+}
+
+def ESP_VSMULAS_S8_QACC_LD_INCP_MC: ESP_VSMULAS_S8_QACC_LD_INCP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, select_16:$sel16), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VSMULAS_U16_QACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vsmulas.u16.qacc\t $qx, $qy, $sel16", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<4> sel16;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18-15} = sel16{3-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_VSMULAS_U16_QACC: ESP_VSMULAS_U16_QACC_Base<(outs QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy, select_16:$sel16),
+                   []>;
+
+def ESP_VSMULAS_U16_QACC_MC: ESP_VSMULAS_U16_QACC_Base<(outs), (ins QR:$qx, QR:$qy, select_16:$sel16), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_VSMULAS_U16_QACC_LD_INCP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vsmulas.u16.qacc.ld.incp\t $qu, $rs1, $qx, $qy, $sel16", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<4> sel16;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-19} = sel16{3-0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_VSMULAS_U16_QACC_LD_INCP: ESP_VSMULAS_U16_QACC_LD_INCP_Base<(outs QR:$qu, GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy, GPRPIE:$rs1, select_16:$sel16),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $qacc_l_l = $qacc_l_l_in, $qacc_l_h = $qacc_l_h_in, $qacc_h_l = $qacc_h_l_in, $qacc_h_h = $qacc_h_h_in";
+}
+
+def ESP_VSMULAS_U16_QACC_LD_INCP_MC: ESP_VSMULAS_U16_QACC_LD_INCP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, select_16:$sel16), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_VSMULAS_U8_QACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vsmulas.u8.qacc\t $qx, $qy, $sel16", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<4> sel16;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18-15} = sel16{3-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_VSMULAS_U8_QACC: ESP_VSMULAS_U8_QACC_Base<(outs QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy, select_16:$sel16),
+                   []>;
+
+def ESP_VSMULAS_U8_QACC_MC: ESP_VSMULAS_U8_QACC_Base<(outs), (ins QR:$qx, QR:$qy, select_16:$sel16), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_VSMULAS_U8_QACC_LD_INCP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.vsmulas.u8.qacc.ld.incp\t $qu, $rs1, $qx, $qy, $sel16", pat> {
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<4> sel16;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-19} = sel16{3-0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_VSMULAS_U8_QACC_LD_INCP: ESP_VSMULAS_U8_QACC_LD_INCP_Base<(outs QR:$qu, GPRPIE:$rs1r, QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QACC_L_LOW:$qacc_l_l_in, QACC_L_HIGH:$qacc_l_h_in, QACC_H_LOW:$qacc_h_l_in, QACC_H_HIGH:$qacc_h_h_in, QR:$qx, QR:$qy, GPRPIE:$rs1, select_16:$sel16),
+                   []> {
+  let Constraints = "$rs1r = $rs1";
+}
+
+def ESP_VSMULAS_U8_QACC_LD_INCP_MC: ESP_VSMULAS_U8_QACC_LD_INCP_Base<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, select_16:$sel16), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+def ESP_CMUL_S16: EspVInst<(outs QR:$qz), (ins QR:$qz_in, QR:$qx, QR:$qy, select_4:$sel4, SARReg:$sar_in),
+                   "esp.cmul.s16\t $qz, $qx, $qy, $sel4",
+                   // SAR is explicit in intrinsic and instruction (explicit state passing)
+                   [(set QR:$qz, (int_riscv_esp_cmul_s16 QR:$qz_in, QR:$qx, QR:$qy, timm:$sel4, (i32 0), (i32 7), SARReg:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<2> sel4;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$qz = $qz_in";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 1;
+  let Inst{16-15} = sel4{1-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_CMUL_S16_LD_INCP: EspVInst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qz_in, QR:$qx, QR:$qy, GPRPIE:$rs1, select_4:$sel4, SARReg:$sar_in),
+                   "esp.cmul.s16.ld.incp\t $qu, $rs1, $qz, $qx, $qy, $sel4",
+                   [(set QR:$qz, QR:$qu, GPRPIE:$rs1r, (int_riscv_esp_cmul_s16_ld_incp QR:$qz_in, QR:$qx, QR:$qy, GPRPIE:$rs1, timm:$sel4, (i32 0), (i32 7), SARReg:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<2> sel4;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = !interleave(["$rs1r = $rs1", "$qz = $qz_in"], ",");
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21-20} = sel4{1-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_CMUL_S16_ST_INCP: EspVInst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qz_in, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, select_4:$sel4, SARReg:$sar_in),
+                   "esp.cmul.s16.st.incp\t $qu, $rs1, $qz, $qx, $qy, $sel4",
+                   [(set QR:$qz, GPRPIE:$rs1r, (int_riscv_esp_cmul_s16_st_incp QR:$qz_in, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, timm:$sel4, (i32 0), (i32 7), SARReg:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<2> sel4;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = !interleave(["$rs1r = $rs1", "$qz = $qz_in"], ",");
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21-20} = sel4{1-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_CMUL_S8: EspVInst<(outs QR:$qz), (ins QR:$qz_in, QR:$qx, QR:$qy, select_4:$sel4, SARReg:$sar_in),
+                   "esp.cmul.s8\t $qz, $qx, $qy, $sel4",
+                   // SAR is explicit in intrinsic and instruction (explicit state passing)
+                   [(set QR:$qz, (int_riscv_esp_cmul_s8 QR:$qz_in, QR:$qx, QR:$qy, timm:$sel4, (i32 0), (i32 7), SARReg:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<2> sel4;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$qz = $qz_in";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16-15} = sel4{1-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_CMUL_S8_LD_INCP: EspVInst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qz_in, QR:$qx, QR:$qy, GPRPIE:$rs1, select_4:$sel4, SARReg:$sar_in),
+                   "esp.cmul.s8.ld.incp\t $qu, $rs1, $qz, $qx, $qy, $sel4",
+                   [(set QR:$qz, QR:$qu, GPRPIE:$rs1r, (int_riscv_esp_cmul_s8_ld_incp QR:$qz_in, QR:$qx, QR:$qy, GPRPIE:$rs1, timm:$sel4, (i32 0), (i32 7), SARReg:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<2> sel4;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = !interleave(["$rs1r = $rs1", "$qz = $qz_in"], ",");
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21-20} = sel4{1-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_CMUL_S8_ST_INCP: EspVInst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qz_in, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, select_4:$sel4, SARReg:$sar_in),
+                   "esp.cmul.s8.st.incp\t $qu, $rs1, $qz, $qx, $qy, $sel4",
+                   [(set QR:$qz, GPRPIE:$rs1r, (int_riscv_esp_cmul_s8_st_incp QR:$qz_in, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, timm:$sel4, (i32 0), (i32 7), SARReg:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<2> sel4;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = !interleave(["$rs1r = $rs1", "$qz = $qz_in"], ",");
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21-20} = sel4{1-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_CMUL_U16: EspVInst<(outs QR:$qz), (ins QR:$qz_in, QR:$qx, QR:$qy, select_4:$sel4, SARReg:$sar_in),
+                   "esp.cmul.u16\t $qz, $qx, $qy, $sel4",
+                   // SAR is explicit in intrinsic and instruction (explicit state passing)
+                   [(set QR:$qz, (int_riscv_esp_cmul_u16_m QR:$qz_in, QR:$qx, QR:$qy, timm:$sel4, SARReg:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<2> sel4;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$qz = $qz_in";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16-15} = sel4{1-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_CMUL_U16_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, select_4:$sel4, imm8:$qz),
+				"!esp_cmul_u16_p $qz, $qx, $qy, $sel4",
+			[(int_riscv_esp_cmul_u16 timm:$qx, timm:$qy, timm:$sel4, timm:$qz)]>;
+
+def ESP_CMUL_U16_LD_INCP: EspVInst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qz_in, QR:$qx, QR:$qy, GPRPIE:$rs1, select_4:$sel4, SARReg:$sar_in),
+                   "esp.cmul.u16.ld.incp\t $qu, $rs1, $qz, $qx, $qy, $sel4",
+                   [(set QR:$qz, QR:$qu, GPRPIE:$rs1r, (riscv_esp_cmul_u16_ld_incp_m QR:$qz_in, QR:$qx, QR:$qy, GPRPIE:$rs1, select_4:$sel4, SARReg:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<2> sel4;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = !interleave(["$rs1r = $rs1", "$qz = $qz_in"], ",");
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21-20} = sel4{1-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_CMUL_U16_LD_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, select_4:$sel4, imm8:$qz, imm8:$qu),
+				"!esp_cmul_u16_ld_incp_p $qu, $rs1, $qz, $qx, $qy, $sel4",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_cmul_u16_ld_incp timm:$qx, timm:$qy, GPRPIE:$rs1, timm:$sel4, timm:$qz, timm:$qu))]>;
+
+def ESP_CMUL_U16_ST_INCP: EspVInst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qz_in, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, select_4:$sel4, SARReg:$sar_in),
+                   "esp.cmul.u16.st.incp\t $qu, $rs1, $qz, $qx, $qy, $sel4",
+                   [(set QR:$qz, GPRPIE:$rs1r, (riscv_esp_cmul_u16_st_incp_m QR:$qz_in, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, select_4:$sel4, SARReg:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<2> sel4;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = !interleave(["$rs1r = $rs1", "$qz = $qz_in"], ",");
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21-20} = sel4{1-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_CMUL_U16_ST_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, select_4:$sel4, imm8:$qz),
+				"!esp_cmul_u16_st_incp_p $qu, $rs1, $qz, $qx, $qy, $sel4",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_cmul_u16_st_incp timm:$qx, timm:$qy, timm:$qu, GPRPIE:$rs1, timm:$sel4, timm:$qz))]>;
+
+def ESP_CMUL_U8: EspVInst<(outs QR:$qz), (ins QR:$qz_in, QR:$qx, QR:$qy, select_4:$sel4, SARReg:$sar_in),
+                   "esp.cmul.u8\t $qz, $qx, $qy, $sel4",
+                   // SAR is explicit in intrinsic and instruction (explicit state passing)
+                   [(set QR:$qz, (int_riscv_esp_cmul_u8_m QR:$qz_in, QR:$qx, QR:$qy, timm:$sel4, SARReg:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<2> sel4;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$qz = $qz_in";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16-15} = sel4{1-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_CMUL_U8_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, select_4:$sel4, imm8:$qz),
+				"!esp_cmul_u8_p $qz, $qx, $qy, $sel4",
+			[(int_riscv_esp_cmul_u8 timm:$qx, timm:$qy, timm:$sel4, timm:$qz)]>;
+
+def ESP_CMUL_U8_LD_INCP: EspVInst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qz_in, QR:$qx, QR:$qy, GPRPIE:$rs1, select_4:$sel4, SARReg:$sar_in),
+                   "esp.cmul.u8.ld.incp\t $qu, $rs1, $qz, $qx, $qy, $sel4",
+                   [(set QR:$qz, QR:$qu, GPRPIE:$rs1r, (riscv_esp_cmul_u8_ld_incp_m QR:$qz_in, QR:$qx, QR:$qy, GPRPIE:$rs1, select_4:$sel4, SARReg:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<2> sel4;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = !interleave(["$rs1r = $rs1", "$qz = $qz_in"], ",");
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21-20} = sel4{1-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_CMUL_U8_LD_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, select_4:$sel4, imm8:$qz, imm8:$qu),
+				"!esp_cmul_u8_ld_incp_p $qu, $rs1, $qz, $qx, $qy, $sel4",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_cmul_u8_ld_incp timm:$qx, timm:$qy, GPRPIE:$rs1, timm:$sel4, timm:$qz, timm:$qu))]>;
+
+def ESP_CMUL_U8_ST_INCP: EspVInst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qz_in, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, select_4:$sel4, SARReg:$sar_in),
+                   "esp.cmul.u8.st.incp\t $qu, $rs1, $qz, $qx, $qy, $sel4",
+                   [(set QR:$qz, GPRPIE:$rs1r, (riscv_esp_cmul_u8_st_incp_m QR:$qz_in, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, select_4:$sel4, SARReg:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<2> sel4;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = !interleave(["$rs1r = $rs1", "$qz = $qz_in"], ",");
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21-20} = sel4{1-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_CMUL_U8_ST_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, select_4:$sel4, imm8:$qz),
+				"!esp_cmul_u8_st_incp_p $qu, $rs1, $qz, $qx, $qy, $sel4",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_cmul_u8_st_incp timm:$qx, timm:$qy, timm:$qu, GPRPIE:$rs1, timm:$sel4, timm:$qz))]>;
+
+def ESP_MAX_S16_A: EspVInst<(outs GPRPIE:$rd), (ins QR:$qw),
+                   "esp.max.s16.a\t $qw, $rd", []>
+{
+  bits<3> qw;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MAX_S32_A: EspVInst<(outs GPRPIE:$rd), (ins QR:$qw),
+                   "esp.max.s32.a\t $qw, $rd", []>
+{
+  bits<3> qw;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MAX_S8_A: EspVInst<(outs GPRPIE:$rd), (ins QR:$qw),
+                   "esp.max.s8.a\t $qw, $rd", []>
+{
+  bits<3> qw;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MAX_U16_A: EspVInst<(outs GPRPIE:$rd), (ins QR:$qw),
+                   "esp.max.u16.a\t $qw, $rd", []>
+{
+  bits<3> qw;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MAX_U32_A: EspVInst<(outs GPRPIE:$rd), (ins QR:$qw),
+                   "esp.max.u32.a\t $qw, $rd", []>
+{
+  bits<3> qw;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MAX_U8_A: EspVInst<(outs GPRPIE:$rd), (ins QR:$qw),
+                   "esp.max.u8.a\t $qw, $rd", []>
+{
+  bits<3> qw;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MIN_S16_A: EspVInst<(outs GPRPIE:$rd), (ins QR:$qw),
+                   "esp.min.s16.a\t $qw, $rd", []>
+{
+  bits<3> qw;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MIN_S32_A: EspVInst<(outs GPRPIE:$rd), (ins QR:$qw),
+                   "esp.min.s32.a\t $qw, $rd", []>
+{
+  bits<3> qw;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 1;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MIN_S8_A: EspVInst<(outs GPRPIE:$rd), (ins QR:$qw),
+                   "esp.min.s8.a\t $qw, $rd", []>
+{
+  bits<3> qw;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MIN_U16_A: EspVInst<(outs GPRPIE:$rd), (ins QR:$qw),
+                   "esp.min.u16.a\t $qw, $rd", []>
+{
+  bits<3> qw;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MIN_U32_A: EspVInst<(outs GPRPIE:$rd), (ins QR:$qw),
+                   "esp.min.u32.a\t $qw, $rd", []>
+{
+  bits<3> qw;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 1;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MIN_U8_A: EspVInst<(outs GPRPIE:$rd), (ins QR:$qw),
+                   "esp.min.u8.a\t $qw, $rd", []>
+{
+  bits<3> qw;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+class EspVectorReduceSmaxDirectPat<ValueType vt, ValueType result_vt, EspVInst Inst>
+    : Pat<(result_vt (vecreduce_smax (vt QR:$qw))),
+          (Inst QR:$qw)>;
+
+class EspVectorReduceUmaxDirectPat<ValueType vt, ValueType result_vt, EspVInst Inst>
+    : Pat<(result_vt (vecreduce_umax (vt QR:$qw))),
+          (Inst QR:$qw)>;
+
+class EspVectorReduceSminDirectPat<ValueType vt, ValueType result_vt, EspVInst Inst>
+    : Pat<(result_vt (vecreduce_smin (vt QR:$qw))),
+          (Inst QR:$qw)>;
+
+class EspVectorReduceUminDirectPat<ValueType vt, ValueType result_vt, EspVInst Inst>
+    : Pat<(result_vt (vecreduce_umin (vt QR:$qw))),
+          (Inst QR:$qw)>;
+
+def ESP_VABS_16: EspVInst<(outs QR:$qv), (ins QR:$qy),
+                   "esp.vabs.16\t $qv, $qy",
+                   [(set QR:$qv, (int_riscv_esp_vabs_16 QR:$qy))]>
+{
+  bits<3> qy;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VABS_32: EspVInst<(outs QR:$qv), (ins QR:$qy),
+                   "esp.vabs.32\t $qv, $qy",
+                   [(set QR:$qv, (int_riscv_esp_vabs_32 QR:$qy))]>
+{
+  bits<3> qy;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VABS_8: EspVInst<(outs QR:$qv), (ins QR:$qy),
+                   "esp.vabs.8\t $qv, $qy",
+                   [(set QR:$qv, (int_riscv_esp_vabs_8 QR:$qy))]>
+{
+  bits<3> qy;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_S16: EspVInst<(outs QR:$qv), (ins QR:$qx, QR:$qy),
+                   "esp.vadd.s16\t $qv, $qx, $qy",
+                   [(set QR:$qv, (int_riscv_esp_vadd_s16 QR:$qx, QR:$qy, (i32 0)))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_S16_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, imm8:$qv),
+				"!esp_vadd_s16_p $qv, $qx, $qy",
+			[]>;
+
+def ESP_VADD_S16_LD_INCP: EspVInst<(outs QR:$qv, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vadd.s16.ld.incp\t $qu, $rs1, $qv, $qx, $qy",
+                   [(set QR:$qv, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vadd_s16_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qv;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_S16_LD_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, imm8:$qv, imm8:$qu),
+				"!esp_vadd_s16_ld_incp_p $qu, $rs1, $qv, $qx, $qy",
+			[]>;
+
+def ESP_VADD_S16_ST_INCP: EspVInst<(outs QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vadd.s16.st.incp\t $qu, $rs1, $qv, $qx, $qy",
+                   [(set QR:$qv, GPRPIE:$rs1r,
+                      (riscv_esp_vadd_s16_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_S16_ST_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, imm8:$qv),
+				"!esp_vadd_s16_st_incp_p $qu, $rs1, $qv, $qx, $qy",
+			[]>;
+
+
+
+def ESP_VADD_S32: EspVInst<(outs QR:$qv), (ins QR:$qx, QR:$qy),
+                   "esp.vadd.s32\t $qv, $qx, $qy",
+                   [(set QR:$qv, (int_riscv_esp_vadd_s32 QR:$qx, QR:$qy, (i32 0)))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_S32_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, imm8:$qv),
+				"!esp_vadd_s32_p $qv, $qx, $qy",
+			[]>;
+
+def ESP_VADD_S32_LD_INCP: EspVInst<(outs QR:$qv, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vadd.s32.ld.incp	 $qu, $rs1, $qv, $qx, $qy",
+                   [(set QR:$qv, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vadd_s32_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qv;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_S32_LD_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, imm8:$qv, imm8:$qu),
+				"!esp_vadd_s32_ld_incp_p $qu, $rs1, $qv, $qx, $qy",
+			[]>;
+
+def ESP_VADD_S32_ST_INCP: EspVInst<(outs QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vadd.s32.st.incp	 $qu, $rs1, $qv, $qx, $qy",
+                   [(set QR:$qv, GPRPIE:$rs1r,
+                      (riscv_esp_vadd_s32_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_S32_ST_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, imm8:$qv),
+				"!esp_vadd_s32_st_incp_p $qu, $rs1, $qv, $qx, $qy",
+			[]>;
+
+
+
+def ESP_VADD_S8: EspVInst<(outs QR:$qv), (ins QR:$qx, QR:$qy),
+                   "esp.vadd.s8\t $qv, $qx, $qy",
+                   [(set QR:$qv, (int_riscv_esp_vadd_s8 QR:$qx, QR:$qy, (i32 0)))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_S8_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, imm8:$qv),
+				"!esp_vadd_s8_p $qv, $qx, $qy",
+			[]>;
+
+
+def ESP_VADD_S8_LD_INCP: EspVInst<(outs QR:$qv, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vadd.s8.ld.incp\t $qu, $rs1, $qv, $qx, $qy",
+                   [(set QR:$qv, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vadd_s8_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qv;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_S8_LD_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, imm8:$qv, imm8:$qu),
+				"!esp_vadd_s8_ld_incp_p $qu, $rs1, $qv, $qx, $qy",
+			[]>;
+
+def ESP_VADD_S8_ST_INCP: EspVInst<(outs QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vadd.s8.st.incp	 $qu, $rs1, $qv, $qx, $qy",
+                   [(set QR:$qv, GPRPIE:$rs1r,
+                      (riscv_esp_vadd_s8_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_S8_ST_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, imm8:$qv),
+				"!esp_vadd_s8_st_incp_p $qu, $rs1, $qv, $qx, $qy",
+			[]>;
+
+
+
+def ESP_VADD_U16: EspVInst<(outs QR:$qv), (ins QR:$qx, QR:$qy),
+                   "esp.vadd.u16\t $qv, $qx, $qy",
+                   [(set QR:$qv, (int_riscv_esp_vadd_u16 QR:$qx, QR:$qy, (i32 0)))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_U16_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, imm8:$qv),
+				"!esp_vadd_u16_p $qv, $qx, $qy",
+			[]>;
+
+def ESP_VADD_U16_LD_INCP: EspVInst<(outs QR:$qv, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vadd.u16.ld.incp	 $qu, $rs1, $qv, $qx, $qy",
+                   [(set QR:$qv, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vadd_u16_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qv;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_U16_LD_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, imm8:$qv, imm8:$qu),
+				"!esp_vadd_u16_ld_incp_p $qu, $rs1, $qv, $qx, $qy",
+			[]>;
+
+def ESP_VADD_U16_ST_INCP: EspVInst<(outs QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vadd.u16.st.incp	 $qu, $rs1, $qv, $qx, $qy",
+                   [(set QR:$qv, GPRPIE:$rs1r,
+                      (riscv_esp_vadd_u16_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_U16_ST_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, imm8:$qv),
+				"!esp_vadd_u16_st_incp_p $qu, $rs1, $qv, $qx, $qy",
+			[]>;
+
+
+
+def ESP_VADD_U32: EspVInst<(outs QR:$qv), (ins QR:$qx, QR:$qy),
+                   "esp.vadd.u32\t $qv, $qx, $qy",
+                   [(set QR:$qv, (int_riscv_esp_vadd_u32 QR:$qx, QR:$qy, (i32 0)))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_U32_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, imm8:$qv),
+				"!esp_vadd_u32_p $qv, $qx, $qy",
+			[]>;
+
+def ESP_VADD_U32_LD_INCP: EspVInst<(outs QR:$qv, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vadd.u32.ld.incp	 $qu, $rs1, $qv, $qx, $qy",
+                   [(set QR:$qv, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vadd_u32_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qv;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_U32_LD_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, imm8:$qv, imm8:$qu),
+				"!esp_vadd_u32_ld_incp_p $qu, $rs1, $qv, $qx, $qy",
+			[]>;
+
+def ESP_VADD_U32_ST_INCP: EspVInst<(outs QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vadd.u32.st.incp	 $qu, $rs1, $qv, $qx, $qy",
+                   [(set QR:$qv, GPRPIE:$rs1r,
+                      (riscv_esp_vadd_u32_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_U32_ST_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, imm8:$qv),
+				"!esp_vadd_u32_st_incp_p $qu, $rs1, $qv, $qx, $qy",
+			[]>;
+
+
+
+def ESP_VADD_U8: EspVInst<(outs QR:$qv), (ins QR:$qx, QR:$qy),
+                   "esp.vadd.u8\t $qv, $qx, $qy",
+                   [(set QR:$qv, (int_riscv_esp_vadd_u8 QR:$qx, QR:$qy, (i32 0)))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_U8_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, imm8:$qv),
+				"!esp_vadd_u8_p $qv, $qx, $qy",
+			[]>;
+
+def ESP_VADD_U8_LD_INCP: EspVInst<(outs QR:$qv, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vadd.u8.ld.incp	 $qu, $rs1, $qv, $qx, $qy",
+                   [(set QR:$qv, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vadd_u8_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qv;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_U8_LD_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, imm8:$qv, imm8:$qu),
+				"!esp_vadd_u8_ld_incp_p $qu, $rs1, $qv, $qx, $qy",
+			[]>;
+
+def ESP_VADD_U8_ST_INCP: EspVInst<(outs QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vadd.u8.st.incp	 $qu, $rs1, $qv, $qx, $qy",
+                   [(set QR:$qv, GPRPIE:$rs1r,
+                      (riscv_esp_vadd_u8_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_U8_ST_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, imm8:$qv),
+				"!esp_vadd_u8_st_incp_p $qu, $rs1, $qv, $qx, $qy",
+			[]>;
+
+
+
+def ESP_VCLAMP_S16: EspVInst<(outs QR:$qz), (ins QR:$qx, select_16:$sel16),
+                   "esp.vclamp.s16\t $qz, $qx, $sel16",
+                   [(set QR:$qz, (int_riscv_esp_vclamp_s16 QR:$qx, timm:$sel16))]>
+{
+  bits<3> qx;
+  bits<4> sel16;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = sel16{3-2};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19-18} = sel16{1-0};
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_S16: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vmax.s16\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vmax_s16 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_S16_LD_INCP: EspVInst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vmax.s16.ld.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vmax_s16_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_S16_ST_INCP: EspVInst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vmax.s16.st.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmax_s16_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_S32: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vmax.s32\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vmax_s32 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_S32_LD_INCP: EspVInst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vmax.s32.ld.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vmax_s32_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_S32_ST_INCP: EspVInst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vmax.s32.st.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmax_s32_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_S8: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vmax.s8\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vmax_s8 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_S8_LD_INCP: EspVInst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vmax.s8.ld.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vmax_s8_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_S8_ST_INCP: EspVInst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vmax.s8.st.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmax_s8_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_U16: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vmax.u16\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vmax_u16 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_U16_LD_INCP: EspVInst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vmax.u16.ld.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vmax_u16_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_U16_ST_INCP: EspVInst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vmax.u16.st.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmax_u16_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_U32: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vmax.u32\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vmax_u32 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_U32_LD_INCP: EspVInst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vmax.u32.ld.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vmax_u32_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_U32_ST_INCP: EspVInst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vmax.u32.st.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmax_u32_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_U8: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vmax.u8\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vmax_u8 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_U8_LD_INCP: EspVInst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vmax.u8.ld.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vmax_u8_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_U8_ST_INCP: EspVInst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vmax.u8.st.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmax_u8_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_S16: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vmin.s16\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vmin_s16 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_S16_LD_INCP: EspVInst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vmin.s16.ld.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vmin_s16_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_S16_ST_INCP: EspVInst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vmin.s16.st.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmin_s16_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_S32: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vmin.s32\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vmin_s32 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_S32_LD_INCP: EspVInst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vmin.s32.ld.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vmin_s32_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_S32_ST_INCP: EspVInst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vmin.s32.st.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmin_s32_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_S8: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vmin.s8\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vmin_s8 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_S8_LD_INCP: EspVInst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vmin.s8.ld.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vmin_s8_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_S8_ST_INCP: EspVInst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vmin.s8.st.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmin_s8_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_U16: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vmin.u16\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vmin_u16 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_U16_LD_INCP: EspVInst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vmin.u16.ld.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vmin_u16_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_U16_ST_INCP: EspVInst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vmin.u16.st.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmin_u16_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_U32: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vmin.u32\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vmin_u32 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_U32_LD_INCP: EspVInst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vmin.u32.ld.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vmin_u32_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_U32_ST_INCP: EspVInst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vmin.u32.st.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmin_u32_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_U8: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vmin.u8\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vmin_u8 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_U8_LD_INCP: EspVInst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vmin.u8.ld.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vmin_u8_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_U8_ST_INCP: EspVInst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vmin.u8.st.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmin_u8_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_S16: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy, SARReg:$sar_in),
+                   "esp.vmul.s16\t $qz, $qx, $qy",
+                   // SAR is explicit in intrinsic (SAR is input parameter, i32)
+                   // Hardware automatically extracts SAR[5:0] for shift amount
+                   // Pattern: use i32 instead of SARReg to match SDNode operand type
+                   // LLVM will insert COPY instruction to convert GPR to SARReg
+                   [(set QR:$qz, (int_riscv_esp_vmul_s16 QR:$qx, QR:$qy, (i32 0), (i32 7), i32:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_S16_LD_INCP: EspVInst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, SARReg:$sar_in),
+                   "esp.vmul.s16.ld.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   // SAR is explicit in intrinsic (SAR is input parameter, i32)
+                   // Hardware automatically extracts SAR[5:0] for shift amount
+                   // Pattern: use i32 instead of SARReg to match SDNode operand type
+                   // LLVM will insert COPY instruction to convert GPR to SARReg
+                   [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (int_riscv_esp_vmul_s16_ld_incp QR:$qx, QR:$qy, GPRPIE:$rs1, (i32 0), (i32 7), i32:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_S16_S8XS8: EspVInst<(outs QR:$qz, QR:$qv), (ins QR:$qx, QR:$qy, SARReg:$sar_in),
+                   "esp.vmul.s16.s8xs8\t $qz, $qv, $qx, $qy",
+                   // SAR is explicit in intrinsic (SAR is input parameter, i32)
+                   // Hardware automatically extracts SAR[5:0] for shift amount
+                   // Pattern: use i32 instead of SARReg to match SDNode operand type
+                   // LLVM will insert COPY instruction to convert GPR to SARReg
+                   [(set QR:$qz, QR:$qv, (int_riscv_esp_vmul_s16_s8xs8 QR:$qx, QR:$qy, (i32 0), (i32 7), i32:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 1;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_S16_ST_INCP: EspVInst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, SARReg:$sar_in),
+                   "esp.vmul.s16.st.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   // SAR is explicit in intrinsic (SAR is input parameter, i32)
+                   // Hardware automatically extracts SAR[5:0] for shift amount
+                   // Pattern: use i32 instead of SARReg to match SDNode operand type
+                   // LLVM will insert COPY instruction to convert GPR to SARReg
+                   [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmul_s16_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, i32:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_S32_S16XS16: EspVInst<(outs QR:$qz, QR:$qv), (ins QR:$qx, QR:$qy, SARReg:$sar_in),
+                   "esp.vmul.s32.s16xs16\t $qz, $qv, $qx, $qy",
+                   // SAR is explicit in intrinsic (SAR is input parameter, i32)
+                   // Hardware automatically extracts SAR[5:0] for shift amount
+                   // Pattern: use i32 instead of SARReg to match SDNode operand type
+                   // LLVM will insert COPY instruction to convert GPR to SARReg
+                   [(set QR:$qz, QR:$qv, (int_riscv_esp_vmul_s32_s16xs16 QR:$qx, QR:$qy, (i32 0), (i32 7), i32:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 1;
+  let Inst{16} = 1;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_S8: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy, SARReg:$sar_in),
+                   "esp.vmul.s8\t $qz, $qx, $qy",
+                   // SAR is explicit in intrinsic (SAR is input parameter, i32)
+                   // Hardware automatically extracts SAR[5:0] for shift amount
+                   [(set QR:$qz, (int_riscv_esp_vmul_s8 QR:$qx, QR:$qy, (i32 0), (i32 7), SARReg:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_S8_LD_INCP: EspVInst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, SARReg:$sar_in),
+                   "esp.vmul.s8.ld.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (int_riscv_esp_vmul_s8_ld_incp QR:$qx, QR:$qy, GPRPIE:$rs1, (i32 0), (i32 7), i32:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_S8_ST_INCP: EspVInst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, SARReg:$sar_in),
+                   "esp.vmul.s8.st.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmul_s8_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, i32:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_U16: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy, SARReg:$sar_in),
+                   "esp.vmul.u16\t $qz, $qx, $qy",
+                   // SAR is explicit in intrinsic (SAR is input parameter, i32)
+                   // Hardware automatically extracts SAR[5:0] for shift amount
+                   // Pattern: use i32 instead of SARReg to match SDNode operand type
+                   // LLVM will insert COPY instruction to convert GPR to SARReg
+                   [(set QR:$qz, (int_riscv_esp_vmul_u16 QR:$qx, QR:$qy, (i32 0), (i32 7), i32:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_U16_LD_INCP: EspVInst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, SARReg:$sar_in),
+                   "esp.vmul.u16.ld.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (int_riscv_esp_vmul_u16_ld_incp QR:$qx, QR:$qy, GPRPIE:$rs1, (i32 0), (i32 7), i32:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_U16_ST_INCP: EspVInst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, SARReg:$sar_in),
+                   "esp.vmul.u16.st.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmul_u16_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, i32:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_U8: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy, SARReg:$sar_in),
+                   "esp.vmul.u8\t $qz, $qx, $qy",
+                   // SAR is explicit in intrinsic (SAR is input parameter, i32)
+                   // Hardware automatically extracts SAR[5:0] for shift amount
+                   [(set QR:$qz, (int_riscv_esp_vmul_u8 QR:$qx, QR:$qy, (i32 0), (i32 7), SARReg:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_U8_LD_INCP: EspVInst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, SARReg:$sar_in),
+                   "esp.vmul.u8.ld.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (int_riscv_esp_vmul_u8_ld_incp QR:$qx, QR:$qy, GPRPIE:$rs1, (i32 0), (i32 7), i32:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_U8_ST_INCP: EspVInst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, SARReg:$sar_in),
+                   "esp.vmul.u8.st.incp\t $qu, $rs1, $qz, $qx, $qy",
+                   [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmul_u8_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, i32:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VPRELU_S16: EspVInst<(outs QR:$qz), (ins GPRPIE:$rs1, QR:$qx, QR:$qy),
+                   "esp.vprelu.s16\t $qz, $qy, $qx, $rs1",
+                   [(set QR:$qz, (int_riscv_esp_vprelu_s16 QR:$qx, QR:$qy, GPRPIE:$rs1, (i32 0), (i32 7)))]>
+{
+  bits<5> rs1;
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VPRELU_S8: EspVInst<(outs QR:$qz), (ins GPRPIE:$rs1, QR:$qx, QR:$qy),
+                   "esp.vprelu.s8\t $qz, $qy, $qx, $rs1",
+                   [(set QR:$qz, (int_riscv_esp_vprelu_s8 QR:$qx, QR:$qy, GPRPIE:$rs1, (i32 0), (i32 7)))]>
+{
+  bits<5> rs1;
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VRELU_S16: EspVInst<(outs QR:$qyr), (ins GPRPIE:$rs1, GPRPIE:$rs2, QR:$qy),
+                   "esp.vrelu.s16\t $qy, $rs2, $rs1",
+                   [(set QR:$qyr, (int_riscv_esp_vrelu_s16 QR:$qy, GPRPIE:$rs1, GPRPIE:$rs2, (i32 0), (i32 7)))]>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<3> qy;
+  bits<3> qyr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$qyr = $qy";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VRELU_S8: EspVInst<(outs QR:$qyr), (ins GPRPIE:$rs1, GPRPIE:$rs2, QR:$qy),
+                   "esp.vrelu.s8\t $qy, $rs2, $rs1",
+                   [(set QR:$qyr, (int_riscv_esp_vrelu_s8 QR:$qy, GPRPIE:$rs1, GPRPIE:$rs2, (i32 0), (i32 7)))]>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<3> qy;
+  bits<3> qyr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$qyr = $qy";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSADDS_S16: EspVInst<(outs QR:$qv), (ins GPRPIE:$rs1, QR:$qx),
+                   "esp.vsadds.s16\t $qv, $qx, $rs1",
+                   [(set QR:$qv, (int_riscv_esp_vsadds_s16 QR:$qx, GPRPIE:$rs1, (i32 0)))]>
+{
+  bits<5> rs1;
+  bits<3> qx;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_VSADDS_S16_P : PseudoEsp<(outs), (ins GPRPIE:$rs1, imm8:$qx, imm8:$qv),
+				"!esp_vsadds_s16_p $qv, $qx, $rs1",
+			[]>;
+
+def ESP_VSADDS_S8: EspVInst<(outs QR:$qv), (ins GPRPIE:$rs1, QR:$qx),
+                   "esp.vsadds.s8\t $qv, $qx, $rs1",
+                   [(set QR:$qv, (int_riscv_esp_vsadds_s8 QR:$qx, GPRPIE:$rs1, (i32 0)))]>
+{
+  bits<5> rs1;
+  bits<3> qx;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_VSADDS_S8_P : PseudoEsp<(outs), (ins GPRPIE:$rs1, imm8:$qx, imm8:$qv),
+				"!esp_vsadds_s8_p $qv, $qx, $rs1",
+			[]>;
+
+def ESP_VSADDS_U16: EspVInst<(outs QR:$qv), (ins GPRPIE:$rs1, QR:$qx),
+                   "esp.vsadds.u16\t $qv, $qx, $rs1",
+                   [(set QR:$qv, (int_riscv_esp_vsadds_u16 QR:$qx, GPRPIE:$rs1, (i32 0)))]>
+{
+  bits<5> rs1;
+  bits<3> qx;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_VSADDS_U16_P : PseudoEsp<(outs), (ins GPRPIE:$rs1, imm8:$qx, imm8:$qv),
+				"!esp_vsadds_u16_p $qv, $qx, $rs1",
+			[]>;
+
+def ESP_VSADDS_U8: EspVInst<(outs QR:$qv), (ins GPRPIE:$rs1, QR:$qx),
+                   "esp.vsadds.u8\t $qv, $qx, $rs1",
+                   [(set QR:$qv, (int_riscv_esp_vsadds_u8 QR:$qx, GPRPIE:$rs1, (i32 0)))]>
+{
+  bits<5> rs1;
+  bits<3> qx;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_VSADDS_U8_P : PseudoEsp<(outs), (ins GPRPIE:$rs1, imm8:$qx, imm8:$qv),
+				"!esp_vsadds_u8_p $qv, $qx, $rs1",
+			[]>;
+
+def ESP_VSAT_S16: EspVInst<(outs QR:$qz), (ins GPRPIE:$rs1, GPRPIE:$rs2, QR:$qx),
+                   "esp.vsat.s16\t $qz, $qx, $rs1, $rs2",
+                   [(set QR:$qz,
+                      (int_riscv_esp_vsat_s16 QR:$qx, GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSAT_S32: EspVInst<(outs QR:$qz), (ins GPRPIE:$rs1, GPRPIE:$rs2, QR:$qx),
+                   "esp.vsat.s32\t $qz, $qx, $rs1, $rs2",
+                   [(set QR:$qz,
+                      (int_riscv_esp_vsat_s32 QR:$qx, GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSAT_S8: EspVInst<(outs QR:$qz), (ins GPRPIE:$rs1, GPRPIE:$rs2, QR:$qx),
+                   "esp.vsat.s8\t $qz, $qx, $rs1, $rs2",
+                   [(set QR:$qz, (int_riscv_esp_vsat_s8 QR:$qx, GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSAT_U16: EspVInst<(outs QR:$qz), (ins GPRPIE:$rs1, GPRPIE:$rs2, QR:$qx),
+                   "esp.vsat.u16\t $qz, $qx, $rs1, $rs2",
+                   [(set QR:$qz,
+                      (int_riscv_esp_vsat_u16 QR:$qx, GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSAT_U32: EspVInst<(outs QR:$qz), (ins GPRPIE:$rs1, GPRPIE:$rs2, QR:$qx),
+                   "esp.vsat.u32\t $qz, $qx, $rs1, $rs2",
+                   [(set QR:$qz,
+                      (int_riscv_esp_vsat_u32 QR:$qx, GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSAT_U8: EspVInst<(outs QR:$qz), (ins GPRPIE:$rs1, GPRPIE:$rs2, QR:$qx),
+                   "esp.vsat.u8\t $qz, $qx, $rs1, $rs2",
+                   [(set QR:$qz, (int_riscv_esp_vsat_u8 QR:$qx, GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSSUBS_S16: EspVInst<(outs QR:$qv), (ins GPRPIE:$rs1, QR:$qx),
+                   "esp.vssubs.s16\t $qv, $qx, $rs1",
+                   [(set QR:$qv, (int_riscv_esp_vssubs_s16 QR:$qx, GPRPIE:$rs1, (i32 0)))]>
+{
+  bits<5> rs1;
+  bits<3> qx;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = 1;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_VSSUBS_S16_P : PseudoEsp<(outs), (ins GPRPIE:$rs1, imm8:$qx, imm8:$qv),
+				"!esp_vssubs_s16_p $qv, $qx, $rs1",
+			[]>;
+
+def ESP_VSSUBS_S8: EspVInst<(outs QR:$qv), (ins GPRPIE:$rs1, QR:$qx),
+                   "esp.vssubs.s8\t $qv, $qx, $rs1",
+                   [(set QR:$qv, (int_riscv_esp_vssubs_s8 QR:$qx, GPRPIE:$rs1, (i32 0)))]>
+{
+  bits<5> rs1;
+  bits<3> qx;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = 1;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_VSSUBS_S8_P : PseudoEsp<(outs), (ins GPRPIE:$rs1, imm8:$qx, imm8:$qv),
+				"!esp_vssubs_s8_p $qv, $qx, $rs1",
+			[]>;
+
+def ESP_VSSUBS_U16: EspVInst<(outs QR:$qv), (ins GPRPIE:$rs1, QR:$qx),
+                   "esp.vssubs.u16\t $qv, $qx, $rs1",
+                   [(set QR:$qv, (int_riscv_esp_vssubs_u16 QR:$qx, GPRPIE:$rs1, (i32 0)))]>
+{
+  bits<5> rs1;
+  bits<3> qx;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 1;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_VSSUBS_U16_P : PseudoEsp<(outs), (ins GPRPIE:$rs1, imm8:$qx, imm8:$qv),
+				"!esp_vssubs_u16_p $qv, $qx, $rs1",
+			[]>;
+
+def ESP_VSSUBS_U8: EspVInst<(outs QR:$qv), (ins GPRPIE:$rs1, QR:$qx),
+                   "esp.vssubs.u8\t $qv, $qx, $rs1",
+                   [(set QR:$qv, (int_riscv_esp_vssubs_u8 QR:$qx, GPRPIE:$rs1, (i32 0)))]>
+{
+  bits<5> rs1;
+  bits<3> qx;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 1;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_VSSUBS_U8_P : PseudoEsp<(outs), (ins GPRPIE:$rs1, imm8:$qx, imm8:$qv),
+				"!esp_vssubs_u8_p $qv, $qx, $rs1",
+			[]>;
+
+def ESP_VSUB_S16: EspVInst<(outs QR:$qv), (ins QR:$qx, QR:$qy),
+                   "esp.vsub.s16\t $qv, $qx, $qy",
+                   [(set QR:$qv, (int_riscv_esp_vsub_s16 QR:$qx, QR:$qy, (i32 0)))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_S16_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, imm8:$qv),
+				"!esp_vsub_s16_p $qv, $qx, $qy",
+			[]>;
+
+def ESP_VSUB_S16_LD_INCP: EspVInst<(outs QR:$qv, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vsub.s16.ld.incp	 $qu, $rs1, $qv, $qx, $qy",
+                   [(set QR:$qv, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vsub_s16_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qv;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_S16_LD_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, imm8:$qv, imm8:$qu),
+				"!esp_vsub_s16_ld_incp_p $qu, $rs1, $qv, $qx, $qy",
+			[]>;
+
+def ESP_VSUB_S16_ST_INCP: EspVInst<(outs QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vsub.s16.st.incp	 $qu, $rs1, $qv, $qx, $qy",
+                   [(set QR:$qv, GPRPIE:$rs1r,
+                      (riscv_esp_vsub_s16_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_S16_ST_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, imm8:$qv),
+				"!esp_vsub_s16_st_incp_p $qu, $rs1, $qv, $qx, $qy",
+			[]>;
+
+
+def ESP_VSUB_S32: EspVInst<(outs QR:$qv), (ins QR:$qx, QR:$qy),
+                   "esp.vsub.s32\t $qv, $qx, $qy",
+                   [(set QR:$qv, (int_riscv_esp_vsub_s32 QR:$qx, QR:$qy, (i32 0)))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_S32_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, imm8:$qv),
+				"!esp_vsub_s32_p $qv, $qx, $qy",
+			[]>;
+
+def ESP_VSUB_S32_LD_INCP: EspVInst<(outs QR:$qv, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vsub.s32.ld.incp	 $qu, $rs1, $qv, $qx, $qy",
+                   [(set QR:$qv, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vsub_s32_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qv;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_S32_LD_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, imm8:$qv, imm8:$qu),
+				"!esp_vsub_s32_ld_incp_p $qu, $rs1, $qv, $qx, $qy",
+			[]>;
+
+def ESP_VSUB_S32_ST_INCP: EspVInst<(outs QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vsub.s32.st.incp	 $qu, $rs1, $qv, $qx, $qy",
+                   [(set QR:$qv, GPRPIE:$rs1r,
+                      (riscv_esp_vsub_s32_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_S32_ST_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, imm8:$qv),
+				"!esp_vsub_s32_st_incp_p $qu, $rs1, $qv, $qx, $qy",
+			[]>;
+
+
+def ESP_VSUB_S8: EspVInst<(outs QR:$qv), (ins QR:$qx, QR:$qy),
+                   "esp.vsub.s8\t $qv, $qx, $qy",
+                   [(set QR:$qv, (int_riscv_esp_vsub_s8 QR:$qx, QR:$qy, (i32 0)))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_S8_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, imm8:$qv),
+				"!esp_vsub_s8_p $qv, $qx, $qy",
+			[]>;
+
+def ESP_VSUB_S8_LD_INCP: EspVInst<(outs QR:$qv, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vsub.s8.ld.incp	 $qu, $rs1, $qv, $qx, $qy",
+                   [(set QR:$qv, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vsub_s8_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qv;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_S8_LD_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, imm8:$qv, imm8:$qu),
+				"!esp_vsub_s8_ld_incp_p $qu, $rs1, $qv, $qx, $qy",
+			[]>;
+
+def ESP_VSUB_S8_ST_INCP: EspVInst<(outs QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vsub.s8.st.incp	 $qu, $rs1, $qv, $qx, $qy",
+                   [(set QR:$qv, GPRPIE:$rs1r,
+                      (riscv_esp_vsub_s8_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_S8_ST_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, imm8:$qv),
+				"!esp_vsub_s8_st_incp_p $qu, $rs1, $qv, $qx, $qy",
+			[]>;
+
+
+def ESP_VSUB_U16: EspVInst<(outs QR:$qv), (ins QR:$qx, QR:$qy),
+                   "esp.vsub.u16\t $qv, $qx, $qy",
+                   [(set QR:$qv, (int_riscv_esp_vsub_u16 QR:$qx, QR:$qy, (i32 0)))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_U16_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, imm8:$qv),
+				"!esp_vsub_u16_p $qv, $qx, $qy",
+			[]>;
+
+def ESP_VSUB_U16_LD_INCP: EspVInst<(outs QR:$qv, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vsub.u16.ld.incp	 $qu, $rs1, $qv, $qx, $qy",
+                   [(set QR:$qv, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vsub_u16_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qv;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_U16_LD_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, imm8:$qv, imm8:$qu),
+				"!esp_vsub_u16_ld_incp_p $qu, $rs1, $qv, $qx, $qy",
+			[]>;
+
+def ESP_VSUB_U16_ST_INCP: EspVInst<(outs QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vsub.u16.st.incp	 $qu, $rs1, $qv, $qx, $qy",
+                   [(set QR:$qv, GPRPIE:$rs1r,
+                      (riscv_esp_vsub_u16_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_U16_ST_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, imm8:$qv),
+				"!esp_vsub_u16_st_incp_p $qu, $rs1, $qv, $qx, $qy",
+			[]>;
+
+
+def ESP_VSUB_U32: EspVInst<(outs QR:$qv), (ins QR:$qx, QR:$qy),
+                   "esp.vsub.u32\t $qv, $qx, $qy",
+                   [(set QR:$qv, (int_riscv_esp_vsub_u32 QR:$qx, QR:$qy, (i32 0)))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_U32_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, imm8:$qv),
+				"!esp_vsub_u32_p $qv, $qx, $qy",
+			[]>;
+
+def ESP_VSUB_U32_LD_INCP: EspVInst<(outs QR:$qv, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vsub.u32.ld.incp	 $qu, $rs1, $qv, $qx, $qy",
+                   [(set QR:$qv, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vsub_u32_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qv;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_U32_LD_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, imm8:$qv, imm8:$qu),
+				"!esp_vsub_u32_ld_incp_p $qu, $rs1, $qv, $qx, $qy",
+			[]>;
+
+def ESP_VSUB_U32_ST_INCP: EspVInst<(outs QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vsub.u32.st.incp	 $qu, $rs1, $qv, $qx, $qy",
+                   [(set QR:$qv, GPRPIE:$rs1r,
+                      (riscv_esp_vsub_u32_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_U32_ST_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, imm8:$qv),
+				"!esp_vsub_u32_st_incp_p $qu, $rs1, $qv, $qx, $qy",
+			[]>;
+
+
+def ESP_VSUB_U8: EspVInst<(outs QR:$qv), (ins QR:$qx, QR:$qy),
+                   "esp.vsub.u8\t $qv, $qx, $qy",
+                   [(set QR:$qv, (int_riscv_esp_vsub_u8 QR:$qx, QR:$qy, (i32 0)))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_U8_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, imm8:$qv),
+				"!esp_vsub_u8_p $qv, $qx, $qy",
+			[]>;
+
+def ESP_VSUB_U8_LD_INCP: EspVInst<(outs QR:$qv, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vsub.u8.ld.incp	 $qu, $rs1, $qv, $qx, $qy",
+                   [(set QR:$qv, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vsub_u8_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qv;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_U8_LD_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, imm8:$qv, imm8:$qu),
+				"!esp_vsub_u8_ld_incp_p $qu, $rs1, $qv, $qx, $qy",
+			[]>;
+
+def ESP_VSUB_U8_ST_INCP: EspVInst<(outs QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vsub.u8.st.incp	 $qu, $rs1, $qv, $qx, $qy",
+                   [(set QR:$qv, GPRPIE:$rs1r,
+                      (riscv_esp_vsub_u8_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_U8_ST_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, imm8:$qv),
+				"!esp_vsub_u8_st_incp_p $qu, $rs1, $qv, $qx, $qy",
+			[]>;
+
+
+def ESP_ADDX2: EspVInst<(outs GPR:$rd), (ins GPR:$rs1, GPR:$rs2),
+                   "esp.addx2\t $rd, $rs1, $rs2", []>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24-20} = rs2{4-0};
+  let Inst{19-15} = rs1{4-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11-7} = rd{4-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 0;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_ADDX4: EspVInst<(outs GPR:$rd), (ins GPR:$rs1, GPR:$rs2),
+                   "esp.addx4\t $rd, $rs1, $rs2", []>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24-20} = rs2{4-0};
+  let Inst{19-15} = rs1{4-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11-7} = rd{4-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 0;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SAT: EspVInst<(outs GPR:$rsdr), (ins GPR:$rs0, GPR:$rs1, GPR:$rsd),
+                   "esp.sat\t $rsd, $rs0, $rs1", []>
+{
+  bits<5> rs0;
+  bits<5> rs1;
+  bits<5> rsd;
+  bits<5> rsdr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  // esp.sat belongs to ESP-DSP as well as ESPV 2.1; make it assemble under
+  // either extension (overrides the EspVInst default of xespv2p1-only).
+  let Predicates = [HasVendorEspSAT];
+
+  let Constraints = "$rsdr = $rsd";
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24-20} = rsd{4-0};
+  let Inst{19-15} = rs1{4-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11-7} = rs0{4-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 0;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SUBX2: EspVInst<(outs GPR:$rd), (ins GPR:$rs1, GPR:$rs2),
+                   "esp.subx2\t $rd, $rs1, $rs2", []>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24-20} = rs2{4-0};
+  let Inst{19-15} = rs1{4-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11-7} = rd{4-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 0;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SUBX4: EspVInst<(outs GPR:$rd), (ins GPR:$rs1, GPR:$rs2),
+                   "esp.subx4\t $rd, $rs1, $rs2", []>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24-20} = rs2{4-0};
+  let Inst{19-15} = rs1{4-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11-7} = rd{4-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 0;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_ANDQ: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.andq\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_andq QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_NOTQ: EspVInst<(outs QR:$qz), (ins QR:$qx),
+                   "esp.notq\t $qz, $qx",
+                   [(set QR:$qz, (int_riscv_esp_notq QR:$qx))]>
+{
+  bits<3> qx;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_ORQ: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.orq\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_orq QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_XORQ: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.xorq\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_xorq QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMP_EQ_S16: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.eq.s16\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vcmp_eq_s16 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMP_EQ_S32: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.eq.s32\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vcmp_eq_s32 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMP_EQ_S8: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.eq.s8\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vcmp_eq_s8 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMP_EQ_U16: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.eq.u16\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vcmp_eq_u16_m QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_VCMP_EQ_U16_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, imm8:$qz),
+				"!esp_vcmp_eq_u16_p $qz, $qx, $qy",
+			[(int_riscv_esp_vcmp_eq_u16 timm:$qx, timm:$qy, timm:$qz)]>;
+
+def ESP_VCMP_EQ_U32: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.eq.u32\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vcmp_eq_u32_m QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_VCMP_EQ_U32_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, imm8:$qz),
+				"!esp_vcmp_eq_u32_p $qz, $qx, $qy",
+			[(int_riscv_esp_vcmp_eq_u32 timm:$qx, timm:$qy, timm:$qz)]>;
+
+def ESP_VCMP_EQ_U8: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.eq.u8\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vcmp_eq_u8_m QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_VCMP_EQ_U8_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, imm8:$qz),
+				"!esp_vcmp_eq_u8_p $qz, $qx, $qy",
+			[(int_riscv_esp_vcmp_eq_u8 timm:$qx, timm:$qy, timm:$qz)]>;
+
+def ESP_VCMP_GT_S16: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.gt.s16\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vcmp_gt_s16 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMP_GT_S32: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.gt.s32\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vcmp_gt_s32 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMP_GT_S8: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.gt.s8\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vcmp_gt_s8 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMP_GT_U16: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.gt.u16\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vcmp_gt_u16_m QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_VCMP_GT_U16_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, imm8:$qz),
+				"!esp_vcmp_gt_u16_p $qz, $qx, $qy",
+			[(int_riscv_esp_vcmp_gt_u16 timm:$qx, timm:$qy, timm:$qz)]>;
+
+def ESP_VCMP_GT_U32: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.gt.u32\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vcmp_gt_u32_m QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_VCMP_GT_U32_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, imm8:$qz),
+				"!esp_vcmp_gt_u32_p $qz, $qx, $qy",
+			[(int_riscv_esp_vcmp_gt_u32 timm:$qx, timm:$qy, timm:$qz)]>;
+
+def ESP_VCMP_GT_U8: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.gt.u8\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vcmp_gt_u8_m QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_VCMP_GT_U8_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, imm8:$qz),
+				"!esp_vcmp_gt_u8_p $qz, $qx, $qy",
+			[(int_riscv_esp_vcmp_gt_u8 timm:$qx, timm:$qy, timm:$qz)]>;
+
+def ESP_VCMP_LT_S16: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.lt.s16\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vcmp_lt_s16 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 1;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMP_LT_S32: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.lt.s32\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vcmp_lt_s32 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 1;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMP_LT_S8: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.lt.s8\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vcmp_lt_s8 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMP_LT_U16: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.lt.u16\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vcmp_lt_u16 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 1;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMP_LT_U32: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.lt.u32\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vcmp_lt_u32 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMP_LT_U8: EspVInst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.lt.u8\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_vcmp_lt_u8 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+class ESP_MOV_S16_QACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.mov.s16.qacc\t $qu", pat> {
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_MOV_S16_QACC: ESP_MOV_S16_QACC_Base<(outs QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QR:$qu),
+                   []>;
+
+def ESP_MOV_S16_QACC_MC: ESP_MOV_S16_QACC_Base<(outs), (ins QR:$qu), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_MOV_S8_QACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.mov.s8.qacc\t $qu", pat> {
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_MOV_S8_QACC: ESP_MOV_S8_QACC_Base<(outs QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QR:$qu),
+                   []>;
+
+def ESP_MOV_S8_QACC_MC: ESP_MOV_S8_QACC_Base<(outs), (ins QR:$qu), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_MOV_U16_QACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.mov.u16.qacc\t $qu", pat> {
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_MOV_U16_QACC: ESP_MOV_U16_QACC_Base<(outs QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QR:$qu),
+                   []>;
+
+def ESP_MOV_U16_QACC_MC: ESP_MOV_U16_QACC_Base<(outs), (ins QR:$qu), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_MOV_U8_QACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.mov.u8.qacc\t $qu", pat> {
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_MOV_U8_QACC: ESP_MOV_U8_QACC_Base<(outs QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins QR:$qu),
+                   []>;
+
+def ESP_MOV_U8_QACC_MC: ESP_MOV_U8_QACC_Base<(outs), (ins QR:$qu), []> {
+  let hasSideEffects = 1;
+}
+
+
+def ESP_MOVI_16_A: EspVInst<(outs GPRPIE:$rd), (ins QR:$qy, select_16:$sel16),
+                   "esp.movi.16.a\t $qy, $rd, $sel16",
+                   [(set i32:$rd, (int_riscv_esp_movi_16_a QR:$qy, (i32 imm:$sel16)))]>
+{
+  bits<3> qy;
+  bits<4> sel16;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18-15} = sel16{3-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVI_16_Q: EspVInst<(outs QR:$qy), (ins QR:$qy_in, GPRPIE:$rs1, select_16:$sel16),
+                   "esp.movi.16.q\t $qy, $rs1, $sel16",
+                   // Intrinsic signature: (v8i16 qy_in, i32 sel16, i32 rs1) -> v8i16
+                   // Instruction: ESP.MOVI.16.Q qy, rs1, sel16
+                   // Parameter order in pattern: (qy_in, sel16, rs1) matches intrinsic signature
+                   // Instruction uses: (qy_in, rs1, sel16) - note: rs1 and sel16 are swapped in instruction
+                   [(set v8i16:$qy, (int_riscv_esp_movi_16_q QR:$qy_in, (i32 imm:$sel16), GPRPIE:$rs1))]>
+{
+  bits<5> rs1;
+  bits<4> sel16;
+  bits<3> qy;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  // Add constraint: output register is the same as the input register
+  let Constraints = "$qy = $qy_in";
+
+  // Keep existing bit encoding
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10-7} = sel16{3-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVI_32_A: EspVInst<(outs GPRPIE:$rd), (ins QR:$qy, select_4:$sel4),
+                   "esp.movi.32.a\t $qy, $rd, $sel4",
+                   [(set i32:$rd, (int_riscv_esp_movi_32_a QR:$qy, (i32 imm:$sel4)))]>
+{
+  bits<3> qy;
+  bits<2> sel4;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = sel4{1};
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = sel4{0};
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVI_32_Q: EspVInst<(outs QR:$qy), (ins QR:$qy_in, GPRPIE:$rs1, select_4:$sel4),
+                   "esp.movi.32.q\t $qy, $rs1, $sel4",
+                   // Intrinsic signature: (v4i32 qy_in, i32 sel4, i32 rs1) -> v4i32
+                   // Instruction: ESP.MOVI.32.Q qy, rs1, sel4
+                   // Parameter order in pattern: (qy_in, sel4, rs1) matches intrinsic signature
+                   // Instruction uses: (qy_in, rs1, sel4) - note: rs1 and sel4 are swapped in instruction
+                   [(set v4i32:$qy, (int_riscv_esp_movi_32_q QR:$qy_in, (i32 imm:$sel4), GPRPIE:$rs1))]>
+{
+  bits<5> rs1;
+  bits<2> sel4;
+  bits<3> qy;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$qy = $qy_in";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10-9} = sel4{1-0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVI_8_A: EspVInst<(outs GPRPIE:$rd), (ins QR:$qy, select_16:$sel16),
+                   "esp.movi.8.a\t $qy, $rd, $sel16",
+                   [(set i32:$rd, (int_riscv_esp_movi_8_a QR:$qy, (i32 imm:$sel16)))]>
+{
+  bits<3> qy;
+  bits<4> sel16;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18-15} = sel16{3-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVI_8_Q: EspVInst<(outs QR:$qy), (ins QR:$qy_in, GPRPIE:$rs1, select_16:$sel16),
+                   "esp.movi.8.q\t $qy, $rs1, $sel16",
+                   // Intrinsic signature: (v16i8 qy_in, i32 sel16, i32 rs1) -> v16i8
+                   // Instruction: ESP.MOVI.8.Q qy, rs1, sel16
+                   // Parameter order in pattern: (qy_in, sel16, rs1) matches intrinsic signature
+                   // Instruction uses: (qy_in, rs1, sel16) - note: rs1 and sel16 are swapped in instruction
+                   [(set v16i8:$qy, (int_riscv_esp_movi_8_q QR:$qy_in, (i32 imm:$sel16), GPRPIE:$rs1))]>
+{
+  bits<5> rs1;
+  bits<4> sel16;
+  bits<3> qy;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$qy = $qy_in";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10-7} = sel16{3-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVX_R_CFG: EspVInst<(outs GPRPIE:$rd), (ins), //
+                   "esp.movx.r.cfg\t $rd",
+                   // Pattern: set rd = intrinsic()
+                   [(set GPRPIE:$rd, (int_riscv_esp_movx_r_cfg))]>
+{
+  bits<5> rd;
+  let hasSideEffects = 1;
+  let mayLoad = 0;
+  let mayStore = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVX_R_FFT_BIT_WIDTH: EspVInst<(outs GPRPIE:$rd), (ins FFT_BIT_WIDTHReg:$fft_bit_width_in),
+                   "esp.movx.r.fft.bit.width\t $rd",
+                   // FFT_BIT_WIDTH is 32-bit, but instruction outputs only 32-bit rd
+                   // Hardware automatically extracts FFT_BIT_WIDTH[3:0] and zero-extends to 32-bit
+                   // Intrinsic returns i32 directly, no trunc needed
+                   [(set GPRPIE:$rd, (int_riscv_esp_movx_r_fft_bit_width FFT_BIT_WIDTHReg:$fft_bit_width_in))]>
+{
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Uses = [PERF] in
+def ESP_MOVX_R_PERF: EspVInst<(outs GPRPIE:$rd), (ins PERFReg:$perf_in, GPRPIE:$rs1),
+                   "esp.movx.r.perf\t $rd, $rs1",
+                   // PERF is explicit in intrinsic and instruction (explicit state passing)
+                   [(set GPRPIE:$rd, (int_riscv_esp_movx_r_perf PERFReg:$perf_in, GPRPIE:$rs1))]>
+{
+  bits<5> rs1;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVX_R_SAR: EspVInst<(outs GPRPIE:$rd), (ins SARReg:$sar_in),
+                   "esp.movx.r.sar\t $rd",
+                   // SAR is 64-bit, but instruction outputs only 32-bit rd
+                   // Hardware automatically extracts SAR[5:0] and zero-extends to 32-bit
+                   // Intrinsic returns i32 directly, no trunc needed
+                   [(set GPRPIE:$rd, (int_riscv_esp_movx_r_sar SARReg:$sar_in))]>
+{
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVX_R_SAR_BYTES: EspVInst<(outs GPRPIE:$rd), (ins SAR_BYTESReg:$sar_bytes_in),
+                   "esp.movx.r.sar.bytes\t $rd",
+                   // SAR_BYTES is 64-bit, but instruction outputs only 32-bit rd
+                   // Hardware automatically extracts SAR_BYTES[3:0] and zero-extends to 32-bit
+                   // Intrinsic returns i32 directly, no trunc needed
+                   [(set GPRPIE:$rd, (int_riscv_esp_movx_r_sar_bytes SAR_BYTESReg:$sar_bytes_in))]>
+{
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+class ESP_MOVX_R_XACC_H_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.movx.r.xacc.h\t $rd", pat> {
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;  // Explicit state passing, no side effects
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_MOVX_R_XACC_H: ESP_MOVX_R_XACC_H_Base<(outs GPRPIE:$rd), (ins XACC_HIGH:$xacc_h_in),
+                   // Subregister model: reads from XACC[39:32] (high 8 bits)
+                   // Return value: XACC[39:32] (i32, zero-extended from 8-bit)
+                   // Input: xacc_h_in (passthru for explicit state passing, XACC_HIGH type to match ESP_MOVX_W_XACC_H output)
+                   // Hardware reads directly from XACC register, but xacc_h_in maintains data flow dependency
+                   [(set GPRPIE:$rd, (int_riscv_esp_movx_r_xacc_h XACC_HIGH:$xacc_h_in))]>;
+
+def ESP_MOVX_R_XACC_H_MC: ESP_MOVX_R_XACC_H_Base<(outs GPRPIE:$rd), (ins), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_MOVX_R_XACC_L_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.movx.r.xacc.l\t $rd", pat> {
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;  // Explicit state passing, no side effects
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_MOVX_R_XACC_L: ESP_MOVX_R_XACC_L_Base<(outs GPRPIE:$rd), (ins XACC_LOW:$xacc_l_in),
+                   // Subregister model: reads from XACC[31:0] (low 32 bits)
+                   // Return value: XACC[31:0] (i32)
+                   // Input: xacc_l_in (passthru for explicit state passing, XACC_LOW type to match ESP_MOVX_W_XACC_L output)
+                   // Hardware reads directly from XACC register, but xacc_l_in maintains data flow dependency
+                   [(set GPRPIE:$rd, (int_riscv_esp_movx_r_xacc_l XACC_LOW:$xacc_l_in))]>;
+
+def ESP_MOVX_R_XACC_L_MC: ESP_MOVX_R_XACC_L_Base<(outs GPRPIE:$rd), (ins), []> {
+  let hasSideEffects = 1;
+}
+
+
+def ESP_MOVX_W_CFG: EspVInst<(outs), (ins GPRPIE:$rs1),
+                   "esp.movx.w.cfg\t $rs1",
+                   // Pattern: intrinsic(rs1)
+                   [(int_riscv_esp_movx_w_cfg GPRPIE:$rs1)]>
+{
+  bits<5> rs1;
+  let hasSideEffects = 1; // Must be enabled to prevent write operations from being deleted or reordered
+  let mayLoad = 0;
+  let mayStore = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVX_W_FFT_BIT_WIDTH: EspVInst<(outs FFT_BIT_WIDTHReg:$fft_bit_width_out), (ins GPRPIE:$rs1),
+                   "esp.movx.w.fft.bit.width\t $rs1",
+                   // Note: FFT_BIT_WIDTH is explicit in intrinsic (returns FFT_BIT_WIDTH value, 32-bit)
+                   // Instruction: FFT_BIT_WIDTH[3:0] = rs1[3:0] (hardware automatically uses only low 4 bits of rs1)
+                   // Return value: FFT_BIT_WIDTH (32-bit, zero-extended from rs1[3:0])
+                   // Hardware automatically handles the 4-bit copy, no compiler masking needed
+                   [(set FFT_BIT_WIDTHReg:$fft_bit_width_out, (int_riscv_esp_movx_w_fft_bit_width GPRPIE:$rs1))]>
+{
+  // Return value is FFT_BIT_WIDTH (32-bit), zero-extended from rs1[3:0]
+  // Hardware automatically writes FFT_BIT_WIDTH[3:0] = rs1[3:0] (only low 4 bits are used)
+  bits<5> rs1;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = [PERF] in
+def ESP_MOVX_W_PERF: EspVInst<(outs PERFReg:$perf_out), (ins PERFReg:$perf_in, GPRPIE:$rs1),
+                   "esp.movx.w.perf\t $rs1",
+                   // PERF is explicit in intrinsic and instruction (explicit state passing)
+                   [(set PERFReg:$perf_out, (int_riscv_esp_movx_w_perf PERFReg:$perf_in, GPRPIE:$rs1))]>
+{
+  bits<5> rs1;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVX_W_SAR: EspVInst<(outs SARReg:$sar_out), (ins GPRPIE:$rs1),
+                   "esp.movx.w.sar\t $rs1",
+                   // Note: SAR is explicit in intrinsic (returns SAR value, 32-bit)
+                   // Instruction: SAR[5:0] = rs1[5:0] (hardware automatically uses only low 6 bits of rs1)
+                   // Return value: SAR (32-bit, zero-extended from rs1[5:0])
+                   // Hardware automatically handles the 6-bit copy, no compiler masking needed
+                   // Note: SARReg:$sar_out is explicit output for state passing, SARReg (phantom) defines physical SAR for instructions using let Uses = [SAR]
+                   [(set SARReg:$sar_out, (int_riscv_esp_movx_w_sar GPRPIE:$rs1))]>
+{
+  // Return value is SAR (64-bit), zero-extended from rs1[5:0]
+  // Hardware automatically writes SAR[5:0] = rs1[5:0] (only low 6 bits are used)
+  bits<5> rs1;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVX_W_SAR_BYTES: EspVInst<(outs SAR_BYTESReg:$sar_bytes_out), (ins GPRPIE:$rs1),
+                   "esp.movx.w.sar.bytes\t $rs1",
+                   // Note: SAR_BYTES is explicit in intrinsic (returns SAR value, 64-bit)
+                   // Instruction: SAR_BYTES[3:0] = rs1[3:0] (hardware automatically uses only low 4 bits of rs1)
+                   // Return value: SAR_BYTES (64-bit, zero-extended from rs1[3:0])
+                   // Hardware automatically handles the 4-bit copy, no compiler masking needed
+                   [(set SAR_BYTESReg:$sar_bytes_out, (int_riscv_esp_movx_w_sar_bytes GPRPIE:$rs1))]>
+{
+  // Return value is SAR_BYTES (64-bit), zero-extended from rs1[3:0]
+  // Hardware automatically writes SAR_BYTES[3:0] = rs1[3:0] (only low 4 bits are used)
+  bits<5> rs1;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+class ESP_MOVX_W_XACC_H_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.movx.w.xacc.h\t $rs1", pat> {
+  bits<5> rs1;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;  // Explicit state passing, no side effects
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_MOVX_W_XACC_H: ESP_MOVX_W_XACC_H_Base<(outs XACC_HIGH:$xacc_out), (ins GPRPIE:$rs1),
+                   // Subregister model: writes to XACC[39:32] (high 8 bits)
+                   // Instruction writes XACC[39:32] = rs1[7:0], XACC[31:0] remains unchanged (hardware passthru)
+                   // Returns XACC_HIGH register (matches ESP_MOVX_R_XACC_H input type)
+                   [(set XACC_HIGH:$xacc_out, (int_riscv_esp_movx_w_xacc_h GPRPIE:$rs1))]>;
+
+def ESP_MOVX_W_XACC_H_MC: ESP_MOVX_W_XACC_H_Base<(outs), (ins GPRPIE:$rs1), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_MOVX_W_XACC_L_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.movx.w.xacc.l\t $rs1", pat> {
+  bits<5> rs1;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;  // Explicit state passing, no side effects
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_MOVX_W_XACC_L: ESP_MOVX_W_XACC_L_Base<(outs XACC_LOW:$xacc_out), (ins GPRPIE:$rs1),
+                   // Subregister model: writes to XACC[31:0] (low 32 bits)
+                   // Instruction writes XACC[31:0] = rs1[31:0], XACC[39:32] remains unchanged (hardware passthru)
+                   // Returns XACC[31:0] (i32)
+                   [(set XACC_LOW:$xacc_out, (int_riscv_esp_movx_w_xacc_l GPRPIE:$rs1))]>;
+
+def ESP_MOVX_W_XACC_L_MC: ESP_MOVX_W_XACC_L_Base<(outs), (ins GPRPIE:$rs1), []> {
+  let hasSideEffects = 1;
+}
+
+
+def ESP_VEXT_S16: EspVInst<(outs QR:$qz, QR:$qv), (ins QR:$qw),
+                   "esp.vext.s16\t $qz, $qv, $qw",
+                   [(set QR:$qz, QR:$qv, (int_riscv_esp_vext_s16 QR:$qw))]>
+{
+  bits<3> qw;
+  bits<3> qz;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VEXT_S8: EspVInst<(outs QR:$qz, QR:$qv), (ins QR:$qw),
+                   "esp.vext.s8\t $qz, $qv, $qw",
+                   [(set QR:$qz, QR:$qv, (int_riscv_esp_vext_s8 QR:$qw))]>
+{
+  bits<3> qw;
+  bits<3> qz;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VEXT_U16: EspVInst<(outs QR:$qz, QR:$qv), (ins QR:$qw),
+                   "esp.vext.u16\t $qz, $qv, $qw",
+                   [(set QR:$qz, QR:$qv, (int_riscv_esp_vext_u16 QR:$qw))]>
+{
+  bits<3> qw;
+  bits<3> qz;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VEXT_U8: EspVInst<(outs QR:$qz, QR:$qv), (ins QR:$qw),
+                   "esp.vext.u8\t $qz, $qv, $qw",
+                   [(set QR:$qz, QR:$qv, (int_riscv_esp_vext_u8 QR:$qw))]>
+{
+  bits<3> qw;
+  bits<3> qz;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VUNZIP_16: EspVInst<(outs QR:$qxr, QR:$qyr), (ins QR:$qx, QR:$qy),
+                   "esp.vunzip.16\t $qx, $qy",
+                   [(set QR:$qxr, QR:$qyr, (int_riscv_esp_vunzip_16 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qxr;
+  bits<3> qyr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$qxr = $qx, $qyr = $qy";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VUNZIP_32: EspVInst<(outs QR:$qxr, QR:$qyr), (ins QR:$qx, QR:$qy),
+                   "esp.vunzip.32\t $qx, $qy",
+                   [(set QR:$qxr, QR:$qyr, (int_riscv_esp_vunzip_32 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qxr;
+  bits<3> qyr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$qxr = $qx, $qyr = $qy";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VUNZIP_8: EspVInst<(outs QR:$qxr, QR:$qyr), (ins QR:$qx, QR:$qy),
+                   "esp.vunzip.8\t $qx, $qy",
+                   [(set QR:$qxr, QR:$qyr, (int_riscv_esp_vunzip_8 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qxr;
+  bits<3> qyr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$qxr = $qx, $qyr = $qy";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VUNZIPT_16: EspVInst<(outs QR:$qxr, QR:$qyr, QR:$qwr), (ins QR:$qx, QR:$qy, QR:$qw),
+                   "esp.vunzipt.16\t $qx, $qy, $qw",
+                   [(set QR:$qxr, QR:$qyr, QR:$qwr,
+                      (int_riscv_esp_vunzipt_16 QR:$qx, QR:$qy, QR:$qw))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qw;
+  bits<3> qxr;
+  bits<3> qyr;
+  bits<3> qwr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$qxr = $qx, $qyr = $qy, $qwr = $qw";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VUNZIPT_8: EspVInst<(outs QR:$qxr, QR:$qyr, QR:$qwr), (ins QR:$qx, QR:$qy, QR:$qw),
+                   "esp.vunzipt.8\t $qx, $qy, $qw",
+                   [(set QR:$qxr, QR:$qyr, QR:$qwr,
+                      (int_riscv_esp_vunzipt_8 QR:$qx, QR:$qy, QR:$qw))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qw;
+  bits<3> qxr;
+  bits<3> qyr;
+  bits<3> qwr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$qxr = $qx, $qyr = $qy, $qwr = $qw";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VZIP_16: EspVInst<(outs QR:$qxr, QR:$qyr), (ins QR:$qx, QR:$qy),
+                   "esp.vzip.16\t $qx, $qy",
+                   [(set QR:$qxr, QR:$qyr, (int_riscv_esp_vzip_16 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qxr;
+  bits<3> qyr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$qxr = $qx, $qyr = $qy";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VZIP_32: EspVInst<(outs QR:$qxr, QR:$qyr), (ins QR:$qx, QR:$qy),
+                   "esp.vzip.32\t $qx, $qy",
+                   [(set QR:$qxr, QR:$qyr, (int_riscv_esp_vzip_32 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qxr;
+  bits<3> qyr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$qxr = $qx, $qyr = $qy";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VZIP_8: EspVInst<(outs QR:$qxr, QR:$qyr), (ins QR:$qx, QR:$qy),
+                   "esp.vzip.8\t $qx, $qy",
+                   [(set QR:$qxr, QR:$qyr, (int_riscv_esp_vzip_8 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qxr;
+  bits<3> qyr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$qxr = $qx, $qyr = $qy";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VZIPT_16: EspVInst<(outs QR:$qxr, QR:$qyr, QR:$qwr), (ins QR:$qx, QR:$qy, QR:$qw),
+                   "esp.vzipt.16\t $qx, $qy, $qw",
+                   [(set QR:$qxr, QR:$qyr, QR:$qwr,
+                      (int_riscv_esp_vzipt_16 QR:$qx, QR:$qy, QR:$qw))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qw;
+  bits<3> qxr;
+  bits<3> qyr;
+  bits<3> qwr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$qxr = $qx, $qyr = $qy, $qwr = $qw";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VZIPT_8: EspVInst<(outs QR:$qxr, QR:$qyr, QR:$qwr), (ins QR:$qx, QR:$qy, QR:$qw),
+                   "esp.vzipt.8\t $qx, $qy, $qw",
+                   [(set QR:$qxr, QR:$qyr, QR:$qwr, (int_riscv_esp_vzipt_8 QR:$qx, QR:$qy, QR:$qw))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qw;
+  bits<3> qxr;
+  bits<3> qyr;
+  bits<3> qwr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$qxr = $qx, $qyr = $qy, $qwr = $qw";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 1;
+  let Inst{10} = 1;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_ZERO_Q: EspVInst<(outs QR:$qz), (ins),
+                   "esp.zero.q\t $qz",
+                   [(set QR:$qz, (int_riscv_esp_zero_q))]>
+{
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+class ESP_ZERO_QACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.zero.qacc\t", pat> {
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_ZERO_QACC: ESP_ZERO_QACC_Base<(outs QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h), (ins),
+                   [(set QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h, (int_riscv_esp_zero_qacc))]>;
+
+def ESP_ZERO_QACC_MC: ESP_ZERO_QACC_Base<(outs), (ins), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_ZERO_XACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.zero.xacc\t", pat> {
+  let mayStore = 0;
+  let mayLoad = 0;
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_ZERO_XACC: ESP_ZERO_XACC_Base<(outs XACC_LOW:$xacc_low, XACC_HIGH:$xacc_high), (ins),
+                   []> {
+  // Outs already model XACC via subregs; Defs=[XACC] + outs fights RA
+  // ("Some interferences are not with virtual registers").
+  let hasSideEffects = 1;
+}
+
+def ESP_ZERO_XACC_MC: ESP_ZERO_XACC_Base<(outs), (ins), []> {
+  let hasSideEffects = 1;
+}
+
+
+def ESP_FFT_AMS_S16_LD_INCP: EspVInst<(outs QR:$qu, QR:$qz, QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qw, GPRPIE:$rs1, select_2:$sel2, SARReg:$sar_in),
+                   "esp.fft.ams.s16.ld.incp\t $qu, $rs1, $qz, $qv, $qx, $qw, $qy, $sel2",
+                   [(set QR:$qu, QR:$qz, QR:$qv, GPRPIE:$rs1r, (int_riscv_esp_fft_ams_s16_ld_incp QR:$qx, QR:$qy, QR:$qw, GPRPIE:$rs1, timm:$sel2, (i32 0), SARReg:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qw;
+  bits<5> rs1;
+  bits<1> sel2;
+  bits<3> qu;
+  bits<3> qz;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = sel2{0};
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_FFT_AMS_S16_LD_INCP_UAUP: EspVInst<(outs QR:$qu, QR:$qz, QR:$qv, GPRPIE:$rs1r, UA_STATEReg:$ua_state_out),
+                                            (ins QR:$qx, QR:$qy, QR:$qw, GPRPIE:$rs1, select_2:$sel2, UA_STATEReg:$ua_state_in, SAR_BYTESReg:$sar_bytes_in, SARReg:$sar_in),
+                   "esp.fft.ams.s16.ld.incp.uaup\t $qu, $rs1, $qz, $qv, $qx, $qw, $qy, $sel2",
+                   [(set QR:$qu, QR:$qz, QR:$qv, GPRPIE:$rs1r, UA_STATEReg:$ua_state_out,
+                       (int_riscv_esp_fft_ams_s16_ld_incp_uaup QR:$qx, QR:$qy, QR:$qw, GPRPIE:$rs1, timm:$sel2, (i32 0), UA_STATEReg:$ua_state_in, SAR_BYTESReg:$sar_bytes_in, SARReg:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qw;
+  bits<5> rs1;
+  bits<1> sel2;
+  bits<3> qu;
+  bits<3> qz;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  // Tied constraints: rs1r = rs1 (pointer update)
+  // UA_STATE tied constraints: Input and output must use same physical register
+  // This is critical for singleton register classes (only one physical register)
+  let Constraints = "$rs1r = $rs1, $ua_state_out = $ua_state_in";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = sel2{0};
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_FFT_AMS_S16_LD_R32_DECP: EspVInst<(outs QR:$qu, QR:$qz, QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qw, GPRPIE:$rs1, select_2:$sel2, SARReg:$sar_in),
+                   "esp.fft.ams.s16.ld.r32.decp\t $qu, $rs1, $qz, $qv, $qx, $qw, $qy, $sel2",
+                   [(set QR:$qu, QR:$qz, QR:$qv, GPRPIE:$rs1r, (int_riscv_esp_fft_ams_s16_ld_r32_decp QR:$qx, QR:$qy, QR:$qw, GPRPIE:$rs1, timm:$sel2, (i32 0), SARReg:$sar_in))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qw;
+  bits<5> rs1;
+  bits<1> sel2;
+  bits<3> qu;
+  bits<3> qz;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = sel2{0};
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_FFT_AMS_S16_ST_INCP: EspVInst<(outs QR:$qz, GPRPIE:$rs1r, GPRPIE:$rs2r), (ins QR:$qx, QR:$qy, QR:$qw, QR:$qu, GPRPIE:$rs1, GPRPIE:$rs2, select_2:$sel2, SARReg:$sar_in),
+                   "esp.fft.ams.s16.st.incp\t $qu, $qz, $rs2, $rs1, $qx, $qw, $qy, $sel2",
+                   [(set QR:$qz, GPRPIE:$rs1r, (int_riscv_esp_fft_ams_s16_st_incp QR:$qx, QR:$qy, QR:$qw, QR:$qu, GPRPIE:$rs1, GPRPIE:$rs2, timm:$sel2, (i32 0), SARReg:$sar_in)),
+                    (set GPRPIE:$rs2r, GPRPIE:$rs2)]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qw;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<1> sel2;
+  bits<3> qz;
+  bits<5> rs1r;
+  bits<5> rs2r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1, $rs2r = $rs2";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = sel2{0};
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_FFT_BITREV: EspVInst<(outs GPRPIE:$rs1r, QR:$qvr), (ins GPRPIE:$rs1, FFT_BIT_WIDTHReg:$fft_bit_width_in),
+                   "esp.fft.bitrev\t $qvr, $rs1",
+                   // Note: FFT_BIT_WIDTH is explicit in intrinsic (passed as i32 parameter)
+                   // Instruction uses FFT_BIT_WIDTH[3:0] for bit reversal operation
+                   // Pattern: use i32 instead of FFT_BIT_WIDTHReg to match SDNode operand type
+                   // LLVM will insert COPY instruction to convert GPR to FFT_BIT_WIDTHReg
+                   [(set GPRPIE:$rs1r, QR:$qvr, (riscv_esp_fft_bitrev_m GPRPIE:$rs1, i32:$fft_bit_width_in))]>
+{
+  bits<5> rs1;
+  bits<5> rs1r;
+  bits<3> qvr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22-20} = qvr{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_FFT_CMUL_S16_LD_XP: EspVInst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1, select_8:$sel8, SARReg:$sar_in),
+                   "esp.fft.cmul.s16.ld.xp\t $qu, $rs1, $rs2, $qz, $qy, $qx, $sel8",
+                   [(set QR:$qz, QR:$qu, GPRPIE:$rs1r, (int_riscv_esp_fft_cmul_s16_ld_xp QR:$qx, QR:$qy, GPRPIE:$rs1, GPRPIE:$rs2, timm:$sel8, (i32 0), SARReg:$sar_in))]>
+{
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> sel8;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = sel8{2-1};
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = sel8{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_FFT_CMUL_S16_ST_XP: EspVInst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, select_4:$sel4, select_4:$upd4, select_8:$sel8, SARReg:$sar_in),
+                   "esp.fft.cmul.s16.st.xp\t $qy, $qx, $qu, $rs1, $rs2, $sel8, $upd4, $sel4",
+                   [(set GPRPIE:$rs1r, (int_riscv_esp_fft_cmul_s16_st_xp QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, GPRPIE:$rs2, timm:$sel8, timm:$upd4, timm:$sel4, (i32 0), SARReg:$sar_in))]>
+{
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<2> sel4;
+  bits<2> upd4;
+  bits<3> sel8;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = sel4{1-0};
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = upd4{1};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = upd4{0};
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = sel8{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_FFT_R2BF_S16: EspVInst<(outs QR:$qz, QR:$qv), (ins QR:$qx, QR:$qy, select_2:$sel2),
+                   "esp.fft.r2bf.s16\t $qz, $qv, $qx, $qy, $sel2",
+                   [(set QR:$qz, QR:$qv, (int_riscv_esp_fft_r2bf_s16 QR:$qx, QR:$qy, timm:$sel2, (i32 0)))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sel2;
+  bits<3> qz;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = sel2{0};
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_FFT_R2BF_S16_ST_INCP: EspVInst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, select_4:$sel4),
+                   "esp.fft.r2bf.s16.st.incp\t $qz, $qx, $qy, $rs1, $sel4",
+                   [(set QR:$qz, GPRPIE:$rs1r, (int_riscv_esp_fft_r2bf_s16_st_incp QR:$qx, QR:$qy, GPRPIE:$rs1, timm:$sel4, (i32 0)))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<2> sel4;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23-22} = sel4{1-0};
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_FFT_VST_R32_DECP: EspVInst<(outs GPRPIE:$rs1r), (ins QR:$qu, GPRPIE:$rs1, select_2:$sel2),
+                   "esp.fft.vst.r32.decp\t $qu, $rs1, $sel2",
+                   [(set GPRPIE:$rs1r, (riscv_esp_fft_vst_r32_decp_m QR:$qu, GPRPIE:$rs1, select_2:$sel2))]>
+{
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sel2;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = sel2{0};
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_LD_128_USAR_IP: EspVInst<(outs QR:$qu, GPRPIE:$rs1r, SAR_BYTESReg:$sar_bytes_out), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   "esp.ld.128.usar.ip\t $qu, $rs1, $off25616",
+                   // Note: SAR_BYTES[3:0] = rs1[3:0] (hardware automatically extracts only low 4 bits from rs1)
+                   [(set QR:$qu, GPRPIE:$rs1r, SAR_BYTESReg:$sar_bytes_out, (riscv_esp_ld_128_usar_ip_m GPRPIE:$rs1, offset_256_16:$off25616))]>
+{
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = off25616{7-5};
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off25616{4-1};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off25616{0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_LD_128_USAR_XP: EspVInst<(outs QR:$qu, GPRPIE:$rs1r, SAR_BYTESReg:$sar_bytes_out), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.ld.128.usar.xp\t $qu, $rs1, $rs2",
+                   // Note: SAR_BYTES[3:0] = rs1[3:0] (hardware automatically extracts only low 4 bits from rs1)
+                   [(set QR:$qu, GPRPIE:$rs1r, SAR_BYTESReg:$sar_bytes_out, (riscv_esp_ld_128_usar_xp_m GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+class ESP_LD_XACC_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.ld.xacc.ip\t $rs1, $off2568", pat> {
+  bits<5> rs1;
+  bits<8> off2568;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31} = off2568{7};
+  let Inst{30} = 0;
+  let Inst{29} = 1;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off2568{6-3};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = off2568{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_LD_XACC_IP: ESP_LD_XACC_IP_Base<(outs GPRPIE:$rs1r, XACC_LOW:$xacc_low, XACC_HIGH:$xacc_high), (ins XACC_LOW:$xacc_low_in, XACC_HIGH:$xacc_high_in, GPRPIE:$rs1, offset_256_8:$off2568),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $xacc_low = $xacc_low_in, $xacc_high = $xacc_high_in";
+}
+
+def ESP_LD_XACC_IP_MC: ESP_LD_XACC_IP_Base<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_8:$off2568), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_LDQA_S16_128_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.ldqa.s16.128.ip\t $rs1, $off25616", pat> {
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31} = 1;
+  let Inst{30} = 1;
+  let Inst{29} = 1;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off25616{7-4};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-9} = off25616{3-0};
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_LDQA_S16_128_IP: ESP_LDQA_S16_128_IP_Base<(outs QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   []> {
+  let Constraints = "$rs1r = $rs1";
+}
+
+def ESP_LDQA_S16_128_IP_MC: ESP_LDQA_S16_128_IP_Base<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_LDQA_S16_128_XP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.ldqa.s16.128.xp\t $rs1, $rs2", pat> {
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_LDQA_S16_128_XP: ESP_LDQA_S16_128_XP_Base<(outs QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   []> {
+  let Constraints = "$rs1r = $rs1";
+}
+
+def ESP_LDQA_S16_128_XP_MC: ESP_LDQA_S16_128_XP_Base<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_LDQA_S8_128_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.ldqa.s8.128.ip\t $rs1, $off25616", pat> {
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 1;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off25616{7-4};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-9} = off25616{3-0};
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_LDQA_S8_128_IP: ESP_LDQA_S8_128_IP_Base<(outs QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   []> {
+  let Constraints = "$rs1r = $rs1";
+}
+
+def ESP_LDQA_S8_128_IP_MC: ESP_LDQA_S8_128_IP_Base<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_LDQA_S8_128_XP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.ldqa.s8.128.xp\t $rs1, $rs2", pat> {
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_LDQA_S8_128_XP: ESP_LDQA_S8_128_XP_Base<(outs QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   []> {
+  let Constraints = "$rs1r = $rs1";
+}
+
+def ESP_LDQA_S8_128_XP_MC: ESP_LDQA_S8_128_XP_Base<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_LDQA_U16_128_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.ldqa.u16.128.ip\t $rs1, $off25616", pat> {
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 1;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off25616{7-4};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-9} = off25616{3-0};
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_LDQA_U16_128_IP: ESP_LDQA_U16_128_IP_Base<(outs QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   []> {
+  let Constraints = "$rs1r = $rs1";
+}
+
+def ESP_LDQA_U16_128_IP_MC: ESP_LDQA_U16_128_IP_Base<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_LDQA_U16_128_XP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.ldqa.u16.128.xp\t $rs1, $rs2", pat> {
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_LDQA_U16_128_XP: ESP_LDQA_U16_128_XP_Base<(outs QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   []> {
+  let Constraints = "$rs1r = $rs1";
+}
+
+def ESP_LDQA_U16_128_XP_MC: ESP_LDQA_U16_128_XP_Base<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_LDQA_U8_128_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.ldqa.u8.128.ip\t $rs1, $off25616", pat> {
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 1;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off25616{7-4};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-9} = off25616{3-0};
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_LDQA_U8_128_IP: ESP_LDQA_U8_128_IP_Base<(outs QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   []> {
+  let Constraints = "$rs1r = $rs1";
+}
+
+def ESP_LDQA_U8_128_IP_MC: ESP_LDQA_U8_128_IP_Base<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_LDQA_U8_128_XP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.ldqa.u8.128.xp\t $rs1, $rs2", pat> {
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Defs = []<Register> , isCodeGenOnly = 1 in
+def ESP_LDQA_U8_128_XP: ESP_LDQA_U8_128_XP_Base<(outs QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   []> {
+  let Constraints = "$rs1r = $rs1";
+}
+
+def ESP_LDQA_U8_128_XP_MC: ESP_LDQA_U8_128_XP_Base<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+def ESP_VLDBC_16_IP: EspVInst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_2:$off2564),
+                   "esp.vldbc.16.ip\t $qu, $rs1, $off2564",
+                   [(set QR:$qu, GPRPIE:$rs1r, (riscv_esp_vldbc_16_ip_m GPRPIE:$rs1, offset_256_2:$off2564))]>
+{
+  bits<5> rs1;
+  bits<8> off2564;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30-28} = off2564{7-5};
+  let Inst{27} = 0;
+  let Inst{26} = 1;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23-20} = off2564{4-1};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off2564{0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDBC_16_IP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_2:$off2564, imm8:$qu),
+				"!esp_vldbc_16_ip_p $qu, $rs1, $off2564",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldbc_16_ip GPRPIE:$rs1, timm:$off2564, timm:$qu))]>;
+
+def ESP_VLDBC_16_XP: EspVInst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.vldbc.16.xp\t $qu, $rs1, $rs2",
+                   [(set QR:$qu, GPRPIE:$rs1r, (riscv_esp_vldbc_16_xp_m GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 1;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDBC_16_XP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1, imm8:$qu),
+				"!esp_vldbc_16_xp_p $qu, $rs1, $rs2",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldbc_16_xp GPRPIE:$rs2, GPRPIE:$rs1, timm:$qu))]>;
+
+def ESP_VLDBC_32_IP: EspVInst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_4:$off2564),
+                   "esp.vldbc.32.ip\t $qu, $rs1, $off2564",
+                   [(set QR:$qu, GPRPIE:$rs1r, (riscv_esp_vldbc_32_ip_m GPRPIE:$rs1, offset_256_4:$off2564))]>
+{
+  bits<5> rs1;
+  bits<8> off2564;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = off2564{7-5};
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = 1;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23-20} = off2564{4-1};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off2564{0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDBC_32_IP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_4:$off2564, imm8:$qu),
+				"!esp_vldbc_32_ip_p $qu, $rs1, $off2564",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldbc_32_ip GPRPIE:$rs1, timm:$off2564, timm:$qu))]>;
+
+def ESP_VLDBC_32_XP: EspVInst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.vldbc.32.xp\t $qu, $rs1, $rs2",
+                   [(set QR:$qu, GPRPIE:$rs1r, (riscv_esp_vldbc_32_xp_m GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = 1;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDBC_32_XP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1, imm8:$qu),
+				"!esp_vldbc_32_xp_p $qu, $rs1, $rs2",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldbc_32_xp GPRPIE:$rs2, GPRPIE:$rs1, timm:$qu))]>;
+
+def ESP_VLDBC_8_IP: EspVInst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs1, imm8:$off2564),
+                   "esp.vldbc.8.ip\t $qu, $rs1, $off2564",
+                   [(set QR:$qu, GPRPIE:$rs1r, (riscv_esp_vldbc_8_ip_m GPRPIE:$rs1, imm8:$off2564))]>
+{
+  bits<5> rs1;
+  bits<8> off2564;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30-28} = off2564{7-5};
+  let Inst{27} = 0;
+  let Inst{26} = 1;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23-20} = off2564{4-1};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off2564{0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDBC_8_IP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, imm8:$off2564, imm8:$qu),
+				"!esp_vldbc_8_ip_p $qu, $rs1, $off2564",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldbc_8_ip GPRPIE:$rs1, timm:$off2564, timm:$qu))]>;
+
+def ESP_VLDBC_8_XP: EspVInst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.vldbc.8.xp\t $qu, $rs1, $rs2",
+                   [(set QR:$qu, GPRPIE:$rs1r, (riscv_esp_vldbc_8_xp_m GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 1;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDBC_8_XP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1, imm8:$qu),
+				"!esp_vldbc_8_xp_p $qu, $rs1, $rs2",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldbc_8_xp GPRPIE:$rs2, GPRPIE:$rs1, timm:$qu))]>;
+
+def ESP_VLDEXT_S16_IP: EspVInst<(outs QR:$qu, QR:$qz, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_16_16:$off1616),
+                   "esp.vldext.s16.ip\t $qu, $qz, $rs1, $off1616",
+                   [(set QR:$qu, QR:$qz, GPRPIE:$rs1r, (riscv_esp_vldext_s16_ip_m GPRPIE:$rs1, offset_16_16:$off1616))]>
+{
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off1616{3-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDEXT_S16_IP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_16_16:$off1616, imm8:$qu, imm8:$qz),
+				"!esp_vldext_s16_ip_p $qu, $qz, $rs1, $off1616",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldext_s16_ip GPRPIE:$rs1, timm:$off1616, timm:$qu, timm:$qz))]>;
+
+def ESP_VLDEXT_S16_XP: EspVInst<(outs QR:$qu, QR:$qz, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.vldext.s16.xp\t $qu, $qz, $rs1, $rs2",
+                   [(set QR:$qu, QR:$qz, GPRPIE:$rs1r, (riscv_esp_vldext_s16_xp_m GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 1;
+  let Inst{29} = 1;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDEXT_S16_XP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1, imm8:$qu, imm8:$qz),
+				"!esp_vldext_s16_xp_p $qu, $qz, $rs1, $rs2",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldext_s16_xp GPRPIE:$rs2, GPRPIE:$rs1, timm:$qu, timm:$qz))]>;
+
+def ESP_VLDEXT_S8_IP: EspVInst<(outs QR:$qu, QR:$qz, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_16_16:$off1616),
+                   "esp.vldext.s8.ip\t $qu, $qz, $rs1, $off1616",
+                   [(set QR:$qu, QR:$qz, GPRPIE:$rs1r, (riscv_esp_vldext_s8_ip_m GPRPIE:$rs1, offset_16_16:$off1616))]>
+{
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off1616{3-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDEXT_S8_IP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_16_16:$off1616, imm8:$qu, imm8:$qz),
+				"!esp_vldext_s8_ip_p $qu, $qz, $rs1, $off1616",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldext_s8_ip GPRPIE:$rs1, timm:$off1616, timm:$qu, timm:$qz))]>;
+
+def ESP_VLDEXT_S8_XP: EspVInst<(outs QR:$qu, QR:$qz, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.vldext.s8.xp\t $qu, $qz, $rs1, $rs2",
+                   [(set QR:$qu, QR:$qz, GPRPIE:$rs1r, (riscv_esp_vldext_s8_xp_m GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 1;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDEXT_S8_XP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1, imm8:$qu, imm8:$qz),
+				"!esp_vldext_s8_xp_p $qu, $qz, $rs1, $rs2",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldext_s8_xp GPRPIE:$rs2, GPRPIE:$rs1, timm:$qu, timm:$qz))]>;
+
+def ESP_VLDEXT_U16_IP: EspVInst<(outs QR:$qu, QR:$qz, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_16_16:$off1616),
+                   "esp.vldext.u16.ip\t $qu, $qz, $rs1, $off1616",
+                   [(set QR:$qu, QR:$qz, GPRPIE:$rs1r, (riscv_esp_vldext_u16_ip_m GPRPIE:$rs1, offset_16_16:$off1616))]>
+{
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off1616{3-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDEXT_U16_IP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_16_16:$off1616, imm8:$qu, imm8:$qz),
+				"!esp_vldext_u16_ip_p $qu, $qz, $rs1, $off1616",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldext_u16_ip GPRPIE:$rs1, timm:$off1616, timm:$qu, timm:$qz))]>;
+
+def ESP_VLDEXT_U16_XP: EspVInst<(outs QR:$qu, QR:$qz, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.vldext.u16.xp\t $qu, $qz, $rs1, $rs2",
+                   [(set QR:$qu, QR:$qz, GPRPIE:$rs1r, (riscv_esp_vldext_u16_xp_m GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 1;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDEXT_U16_XP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1, imm8:$qu, imm8:$qz),
+				"!esp_vldext_u16_xp_p $qu, $qz, $rs1, $rs2",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldext_u16_xp GPRPIE:$rs2, GPRPIE:$rs1, timm:$qu, timm:$qz))]>;
+
+def ESP_VLDEXT_U8_IP: EspVInst<(outs QR:$qu, QR:$qz, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_16_16:$off1616),
+                   "esp.vldext.u8.ip\t $qu, $qz, $rs1, $off1616",
+                   [(set QR:$qu, QR:$qz, GPRPIE:$rs1r, (riscv_esp_vldext_u8_ip_m GPRPIE:$rs1, offset_16_16:$off1616))]>
+{
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off1616{3-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDEXT_U8_IP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_16_16:$off1616, imm8:$qu, imm8:$qz),
+				"!esp_vldext_u8_ip_p $qu, $qz, $rs1, $off1616",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldext_u8_ip GPRPIE:$rs1, timm:$off1616, timm:$qu, timm:$qz))]>;
+
+def ESP_VLDEXT_U8_XP: EspVInst<(outs QR:$qu, QR:$qz, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.vldext.u8.xp\t $qu, $qz, $rs1, $rs2",
+                   [(set QR:$qu, QR:$qz, GPRPIE:$rs1r, (riscv_esp_vldext_u8_xp_m GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 1;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDEXT_U8_XP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1, imm8:$qu, imm8:$qz),
+				"!esp_vldext_u8_xp_p $qu, $qz, $rs1, $rs2",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldext_u8_xp GPRPIE:$rs2, GPRPIE:$rs1, timm:$qu, timm:$qz))]>;
+
+def ESP_VLDHBC_16_INCP: EspVInst<(outs QR:$qu, QR:$qz, GPRPIE:$rs1r), (ins GPRPIE:$rs1),
+                   "esp.vldhbc.16.incp\t $qu, $qz, $rs1",
+                   [(set QR:$qu, QR:$qz, GPRPIE:$rs1r, (int_riscv_esp_vldhbc_16_incp_m GPRPIE:$rs1))]>
+{
+  bits<5> rs1;
+  bits<3> qu;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 1;
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDHBC_16_INCP_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, imm8:$qu, imm8:$qz),
+				"!esp_vldhbc_16_incp_p $qu, $qz, $rs1",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldhbc_16_incp GPRPIE:$rs1, timm:$qu, timm:$qz))]>;
+
+class ESP_LD_QACC_H_H_128_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.ld.qacc.h.h.128.ip\t $rs1, $off25616", pat> {
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off25616{7-4};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-9} = off25616{3-0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_LD_QACC_H_H_128_IP: ESP_LD_QACC_H_H_128_IP_Base<(outs QACC_H_HIGH:$qacc_h_out, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   [(set QACC_H_HIGH:$qacc_h_out, GPRPIE:$rs1r, (riscv_esp_ld_qacc_h_h_128_ip_m GPRPIE:$rs1, offset_256_16:$off25616))]> {
+  let Constraints = "$rs1r = $rs1";
+}
+
+def ESP_LD_QACC_H_H_128_IP_MC: ESP_LD_QACC_H_H_128_IP_Base<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_LD_QACC_H_L_128_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.ld.qacc.h.l.128.ip\t $rs1, $off25616", pat> {
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 1;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off25616{7-4};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-9} = off25616{3-0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_LD_QACC_H_L_128_IP: ESP_LD_QACC_H_L_128_IP_Base<(outs QACC_H_LOW:$qacc_h_out, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   [(set QACC_H_LOW:$qacc_h_out, GPRPIE:$rs1r, (riscv_esp_ld_qacc_h_l_128_ip_m GPRPIE:$rs1, offset_256_16:$off25616))]> {
+  let Constraints = "$rs1r = $rs1";
+}
+
+def ESP_LD_QACC_H_L_128_IP_MC: ESP_LD_QACC_H_L_128_IP_Base<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_LD_QACC_L_H_128_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.ld.qacc.l.h.128.ip\t $rs1, $off25616", pat> {
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off25616{7-4};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-9} = off25616{3-0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_LD_QACC_L_H_128_IP: ESP_LD_QACC_L_H_128_IP_Base<(outs QACC_L_HIGH:$qacc_l_out, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   [(set QACC_L_HIGH:$qacc_l_out, GPRPIE:$rs1r, (riscv_esp_ld_qacc_l_h_128_ip_m GPRPIE:$rs1, offset_256_16:$off25616))]> {
+  let Constraints = "$rs1r = $rs1";
+}
+
+def ESP_LD_QACC_L_H_128_IP_MC: ESP_LD_QACC_L_H_128_IP_Base<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_LD_QACC_L_L_128_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.ld.qacc.l.l.128.ip\t $rs1, $off25616", pat> {
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 1;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off25616{7-4};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-9} = off25616{3-0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_LD_QACC_L_L_128_IP: ESP_LD_QACC_L_L_128_IP_Base<(outs QACC_L_LOW:$qacc_l_out, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   [(set QACC_L_LOW:$qacc_l_out, GPRPIE:$rs1r, (riscv_esp_ld_qacc_l_l_128_ip_m GPRPIE:$rs1, offset_256_16:$off25616))]> {
+  let Constraints = "$rs1r = $rs1";
+}
+
+def ESP_LD_QACC_L_L_128_IP_MC: ESP_LD_QACC_L_L_128_IP_Base<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+def ESP_LD_UA_STATE_IP: EspVInst<(outs UA_STATEReg:$ua_state_out, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616, UA_STATEReg:$ua_state_in),
+                   "esp.ld.ua.state.ip\t $rs1, $off25616",
+                   [(set UA_STATEReg:$ua_state_out, GPRPIE:$rs1r, (riscv_esp_ld_ua_state_ip_m GPRPIE:$rs1, offset_256_16:$off25616, UA_STATEReg:$ua_state_in))]>
+{
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  // Tied constraints: rs1r = rs1 (pointer update)
+  // UA_STATE tied constraints: Input and output must use same physical register
+  // This is critical for singleton register classes (only one physical register)
+  let Constraints = "$rs1r = $rs1, $ua_state_out = $ua_state_in";
+
+  let Inst{31} = 0;
+  let Inst{30} = off25616{7};
+  let Inst{29} = 1;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off25616{6-3};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = off25616{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_LDXQ_32: EspVInst<(outs QR:$qu), (ins GPRPIE:$rs1, QR:$qw, select_4:$sel4, select_8:$sel8),
+                   "esp.ldxq.32\t $qu, $qw, $rs1, $sel4, $sel8",
+                   []>
+{
+  bits<5> rs1;
+  bits<3> qw;
+  bits<2> sel4;
+  bits<3> sel8;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 0;
+  let Inst{30-29} = sel4{1-0};
+  let Inst{28-26} = sel8{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+class ESP_ST_QACC_H_H_128_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.st.qacc.h.h.128.ip\t $rs1, $off25616", pat> {
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31} = 1;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off25616{7-4};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-9} = off25616{3-0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Uses = []<Register> , isCodeGenOnly = 1 in
+def ESP_ST_QACC_H_H_128_IP: ESP_ST_QACC_H_H_128_IP_Base<(outs GPRPIE:$rs1r), (ins QACC_H_HIGH:$src, GPRPIE:$rs1, offset_256_16:$off25616),
+                   [(set GPRPIE:$rs1r, (riscv_esp_st_qacc_h_h_128_ip_m QACC_H_HIGH:$src, GPRPIE:$rs1, offset_256_16:$off25616))]> {
+  let Constraints = "$rs1r = $rs1";
+}
+
+def ESP_ST_QACC_H_H_128_IP_MC: ESP_ST_QACC_H_H_128_IP_Base<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_ST_QACC_H_L_128_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.st.qacc.h.l.128.ip\t $rs1, $off25616", pat> {
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31} = 1;
+  let Inst{30} = 1;
+  let Inst{29} = 1;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off25616{7-4};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-9} = off25616{3-0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Uses = []<Register> , isCodeGenOnly = 1 in
+def ESP_ST_QACC_H_L_128_IP: ESP_ST_QACC_H_L_128_IP_Base<(outs GPRPIE:$rs1r), (ins QACC_H_LOW:$src, GPRPIE:$rs1, offset_256_16:$off25616),
+                   [(set GPRPIE:$rs1r, (riscv_esp_st_qacc_h_l_128_ip_m QACC_H_LOW:$src, GPRPIE:$rs1, offset_256_16:$off25616))]> {
+  let Constraints = "$rs1r = $rs1";
+}
+
+def ESP_ST_QACC_H_L_128_IP_MC: ESP_ST_QACC_H_L_128_IP_Base<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_ST_QACC_L_H_128_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.st.qacc.l.h.128.ip\t $rs1, $off25616", pat> {
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off25616{7-4};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-9} = off25616{3-0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Uses = []<Register> , isCodeGenOnly = 1 in
+def ESP_ST_QACC_L_H_128_IP: ESP_ST_QACC_L_H_128_IP_Base<(outs GPRPIE:$rs1r), (ins QACC_L_HIGH:$src, GPRPIE:$rs1, offset_256_16:$off25616),
+                   [(set GPRPIE:$rs1r, (riscv_esp_st_qacc_l_h_128_ip_m QACC_L_HIGH:$src, GPRPIE:$rs1, offset_256_16:$off25616))]> {
+  let Constraints = "$rs1r = $rs1";
+}
+
+def ESP_ST_QACC_L_H_128_IP_MC: ESP_ST_QACC_L_H_128_IP_Base<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_ST_QACC_L_L_128_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.st.qacc.l.l.128.ip\t $rs1, $off25616", pat> {
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 1;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off25616{7-4};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-9} = off25616{3-0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Uses = []<Register> , isCodeGenOnly = 1 in
+def ESP_ST_QACC_L_L_128_IP: ESP_ST_QACC_L_L_128_IP_Base<(outs GPRPIE:$rs1r), (ins QACC_L_LOW:$src, GPRPIE:$rs1, offset_256_16:$off25616),
+                   [(set GPRPIE:$rs1r, (riscv_esp_st_qacc_l_l_128_ip_m QACC_L_LOW:$src, GPRPIE:$rs1, offset_256_16:$off25616))]> {
+  let Constraints = "$rs1r = $rs1";
+}
+
+def ESP_ST_QACC_L_L_128_IP_MC: ESP_ST_QACC_L_L_128_IP_Base<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+def ESP_ST_UA_STATE_IP: EspVInst<(outs UA_STATEReg:$ua_state_out, GPRPIE:$rs1r), (ins UA_STATEReg:$ua_state_in, GPRPIE:$rs1, offset_256_16:$off25616),
+                   "esp.st.ua.state.ip\t $rs1, $off25616",
+                   [(set UA_STATEReg:$ua_state_out, GPRPIE:$rs1r, (riscv_esp_st_ua_state_ip_m UA_STATEReg:$ua_state_in, GPRPIE:$rs1, offset_256_16:$off25616))]>
+{
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  // Tied constraints: rs1r = rs1 (pointer update)
+  // UA_STATE tied constraints: Output equals input (passthru), must use same physical register
+  // This is critical for singleton register classes (only one physical register)
+  let Constraints = "$rs1r = $rs1, $ua_state_out = $ua_state_in";
+
+  let Inst{31} = 1;
+  let Inst{30} = off25616{7};
+  let Inst{29} = 1;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off25616{6-3};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = off25616{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_STXQ_32: EspVInst<(outs), (ins GPRPIE:$rs1, QR:$qw, QR:$qu, select_4:$sel4, select_8:$sel8),
+                   "esp.stxq.32\t $qu, $qw, $rs1, $sel4, $sel8",
+                   [(int_riscv_esp_stxq_32 GPRPIE:$rs1, QR:$qw, QR:$qu, timm:$sel4, timm:$sel8)]>
+{
+  bits<5> rs1;
+  bits<3> qw;
+  bits<3> qu;
+  bits<2> sel4;
+  bits<3> sel8;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30-29} = sel4{1-0};
+  let Inst{28-26} = sel8{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VLD_128_IP: EspVInst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   "esp.vld.128.ip\t $qu, $rs1r, $off25616",
+                   [(set QR:$qu, GPRPIE:$rs1r, (riscv_esp_vld_128_ip_m GPRPIE:$rs1, offset_256_16:$off25616))]>
+{
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30-28} = off25616{7-5};
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23-20} = off25616{4-1};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off25616{0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VLD_128_XP: EspVInst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.vld.128.xp\t $qu, $rs1, $rs2",
+                   [(set QR:$qu, GPRPIE:$rs1r, (riscv_esp_vld_128_xp_m GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VLD_H_64_IP: EspVInst<(outs QR_64:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_8:$off2568),
+                   "esp.vld.h.64.ip\t $qu, $rs1, $off2568",
+                   [(set QR_64:$qu, GPRPIE:$rs1r, (riscv_esp_vld_h_64_ip_m GPRPIE:$rs1, offset_256_8:$off2568))]>
+{
+  bits<5> rs1;
+  bits<8> off2568;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29-27} = off2568{7-5};
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off2568{4-1};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off2568{0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VLD_H_64_XP: EspVInst<(outs QR_64:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.vld.h.64.xp\t $qu, $rs1, $rs2",
+                   [(set QR_64:$qu, GPRPIE:$rs1r, (riscv_esp_vld_h_64_xp_m GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VLD_L_64_IP: EspVInst<(outs QR_64:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_8:$off2568),
+"esp.vld.l.64.ip\t $qu, $rs1, $off2568",
+                   [(set QR_64:$qu, GPRPIE:$rs1r, (riscv_esp_vld_l_64_ip_m GPRPIE:$rs1, offset_256_8:$off2568))]>
+{
+  bits<5> rs1;
+  bits<8> off2568;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29-27} = off2568{7-5};
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off2568{4-1};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off2568{0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VLD_L_64_XP: EspVInst<(outs QR_64:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.vld.l.64.xp\t $qu, $rs1, $rs2",
+                   [(set QR_64:$qu, GPRPIE:$rs1r, (riscv_esp_vld_l_64_xp_m GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VST_128_IP: EspVInst<(outs GPRPIE:$rs1r), (ins QR:$qu, GPRPIE:$rs1, offset_256_16:$off25616),
+                   "esp.vst.128.ip\t $qu, $rs1r, $off25616",
+                   [(set GPRPIE:$rs1r, (riscv_esp_vst_128_ip_m QR:$qu, GPRPIE:$rs1, offset_256_16:$off25616))]>
+{
+  bits<3> qu;
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30-28} = off25616{7-5};
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23-20} = off25616{4-1};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off25616{0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VST_128_XP: EspVInst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qu, GPRPIE:$rs1),
+                   "esp.vst.128.xp\t $qu, $rs1, $rs2",
+                   [(set GPRPIE:$rs1r, (riscv_esp_vst_128_xp_m QR:$qu, GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs2;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VST_H_64_IP: EspVInst<(outs GPRPIE:$rs1r), (ins QR_64:$qu, GPRPIE:$rs1, offset_256_8:$off2568),
+                   "esp.vst.h.64.ip\t $qu, $rs1, $off2568",
+                   [(set GPRPIE:$rs1r, (riscv_esp_vst_h_64_ip_m QR_64:$qu, GPRPIE:$rs1, offset_256_8:$off2568))]>
+{
+  bits<3> qu;
+  bits<5> rs1;
+  bits<8> off2568;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 1;
+  let Inst{29-27} = off2568{7-5};
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off2568{4-1};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off2568{0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VST_H_64_XP: EspVInst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR_64:$qu, GPRPIE:$rs1),
+                   "esp.vst.h.64.xp\t $qu, $rs1, $rs2",
+                   [(set GPRPIE:$rs1r, (riscv_esp_vst_h_64_xp_m QR_64:$qu, GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs2;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VST_L_64_IP: EspVInst<(outs GPRPIE:$rs1r), (ins QR_64:$qu, GPRPIE:$rs1, offset_256_8:$off2568),
+                   "esp.vst.l.64.ip\t $qu, $rs1, $off2568",
+                   [(set GPRPIE:$rs1r, (riscv_esp_vst_l_64_ip_m QR_64:$qu, GPRPIE:$rs1, offset_256_8:$off2568))]>
+{
+  bits<3> qu;
+  bits<5> rs1;
+  bits<8> off2568;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29-27} = off2568{7-5};
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off2568{4-1};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off2568{0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VST_L_64_XP: EspVInst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR_64:$qu, GPRPIE:$rs1),
+                   "esp.vst.l.64.xp\t $qu, $rs1, $rs2",
+                   [(set GPRPIE:$rs1r, (riscv_esp_vst_l_64_xp_m QR_64:$qu, GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs2;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isAsmParserOnly = 1, hasSideEffects = 0 in {
+
+  // 1. esp.vld.h.64.ip
+  def ESP_VLD_H_64_IP_ASM : EspVInst<
+      (outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_8:$off2568),
+      "esp.vld.h.64.ip\t $qu, $rs1, $off2568", [], NoItinerary> {
+    bits<5> rs1;
+    bits<8> off2568;
+    bits<3> qu;
+    bits<5> rs1r;
+    let mayLoad = 1; let mayStore = 0;
+    let Constraints = "$rs1r = $rs1";
+
+    // copy from ESP_VLD_H_64_IP
+    let Inst{31} = 0;
+    let Inst{30} = 1;
+    let Inst{29-27} = off2568{7-5};
+    let Inst{26} = 1;
+    let Inst{25} = 0;
+    let Inst{24} = 0;
+    let Inst{23-20} = off2568{4-1};
+    let Inst{19} = 0;
+    let Inst{18} = rs1{4};
+    let Inst{17-15} = rs1{2-0};
+    let Inst{14} = 0;
+    let Inst{13} = 1;
+    let Inst{12-10} = qu{2-0};
+    let Inst{9} = off2568{0};
+    let Inst{8} = 0;
+    let Inst{7} = 0;
+    let Inst{6} = 0;
+    let Inst{5} = 1;
+    let Inst{4} = 1;
+    let Inst{3} = 1;
+    let Inst{2} = 0;
+    let Inst{1} = 1;
+    let Inst{0} = 1;
+  }
+
+  // 2. esp.vld.h.64.xp
+  def ESP_VLD_H_64_XP_ASM : EspVInst<
+      (outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+      "esp.vld.h.64.xp\t $qu, $rs1, $rs2", [], NoItinerary> {
+    bits<5> rs2;
+    bits<5> rs1;
+    bits<3> qu;
+    bits<5> rs1r;
+    let mayLoad = 1; let mayStore = 0;
+    let Constraints = "$rs1r = $rs1";
+
+    // copy from ESP_VLD_H_64_XP
+    let Inst{31} = 1;
+    let Inst{30} = 0;
+    let Inst{29} = 0;
+    let Inst{28} = 0;
+    let Inst{27} = 1;
+    let Inst{26} = 1;
+    let Inst{25} = 0;
+    let Inst{24} = 0;
+    let Inst{23} = rs2{4};
+    let Inst{22-20} = rs2{2-0};
+    let Inst{19} = 0;
+    let Inst{18} = rs1{4};
+    let Inst{17-15} = rs1{2-0};
+    let Inst{14} = 1;
+    let Inst{13} = 0;
+    let Inst{12-10} = qu{2-0};
+    let Inst{9} = 0;
+    let Inst{8} = 0;
+    let Inst{7} = 0;
+    let Inst{6} = 1;
+    let Inst{5} = 0;
+    let Inst{4} = 1;
+    let Inst{3} = 1;
+    let Inst{2} = 1;
+    let Inst{1} = 1;
+    let Inst{0} = 1;
+  }
+
+  // 3. esp.vld.l.64.ip
+  def ESP_VLD_L_64_IP_ASM : EspVInst<
+      (outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_8:$off2568),
+      "esp.vld.l.64.ip\t $qu, $rs1, $off2568", [], NoItinerary> {
+    bits<5> rs1;
+    bits<8> off2568;
+    bits<3> qu;
+    bits<5> rs1r;
+    let mayLoad = 1; let mayStore = 0;
+    let Constraints = "$rs1r = $rs1";
+
+    // copy from ESP_VLD_L_64_IP
+    let Inst{31} = 0;
+    let Inst{30} = 0;
+    let Inst{29-27} = off2568{7-5};
+    let Inst{26} = 1;
+    let Inst{25} = 0;
+    let Inst{24} = 0;
+    let Inst{23-20} = off2568{4-1};
+    let Inst{19} = 0;
+    let Inst{18} = rs1{4};
+    let Inst{17-15} = rs1{2-0};
+    let Inst{14} = 0;
+    let Inst{13} = 1;
+    let Inst{12-10} = qu{2-0};
+    let Inst{9} = off2568{0};
+    let Inst{8} = 0;
+    let Inst{7} = 0;
+    let Inst{6} = 0;
+    let Inst{5} = 1;
+    let Inst{4} = 1;
+    let Inst{3} = 1;
+    let Inst{2} = 0;
+    let Inst{1} = 1;
+    let Inst{0} = 1;
+  }
+
+  // 4. esp.vld.l.64.xp
+  def ESP_VLD_L_64_XP_ASM : EspVInst<
+      (outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+      "esp.vld.l.64.xp\t $qu, $rs1, $rs2", [], NoItinerary> {
+    bits<5> rs2;
+    bits<5> rs1;
+    bits<3> qu;
+    bits<5> rs1r;
+    let mayLoad = 1; let mayStore = 0;
+    let Constraints = "$rs1r = $rs1";
+
+    // copy from ESP_VLD_L_64_XP
+    let Inst{31} = 1;
+    let Inst{30} = 0;
+    let Inst{29} = 0;
+    let Inst{28} = 0;
+    let Inst{27} = 0;
+    let Inst{26} = 1;
+    let Inst{25} = 0;
+    let Inst{24} = 0;
+    let Inst{23} = rs2{4};
+    let Inst{22-20} = rs2{2-0};
+    let Inst{19} = 0;
+    let Inst{18} = rs1{4};
+    let Inst{17-15} = rs1{2-0};
+    let Inst{14} = 1;
+    let Inst{13} = 0;
+    let Inst{12-10} = qu{2-0};
+    let Inst{9} = 0;
+    let Inst{8} = 0;
+    let Inst{7} = 0;
+    let Inst{6} = 1;
+    let Inst{5} = 0;
+    let Inst{4} = 1;
+    let Inst{3} = 1;
+    let Inst{2} = 1;
+    let Inst{1} = 1;
+    let Inst{0} = 1;
+  }
+
+  // 5. esp.vst.h.64.ip
+  def ESP_VST_H_64_IP_ASM : EspVInst<
+      (outs GPRPIE:$rs1r), (ins QR:$qu, GPRPIE:$rs1, offset_256_8:$off2568),
+      "esp.vst.h.64.ip\t $qu, $rs1, $off2568", [], NoItinerary> {
+    bits<3> qu;
+    bits<5> rs1;
+    bits<8> off2568;
+    bits<5> rs1r;
+    let mayLoad = 0; let mayStore = 1;
+    let Constraints = "$rs1r = $rs1";
+
+    // copy from ESP_VST_H_64_IP
+    let Inst{31} = 1;
+    let Inst{30} = 1;
+    let Inst{29-27} = off2568{7-5};
+    let Inst{26} = 1;
+    let Inst{25} = 0;
+    let Inst{24} = 0;
+    let Inst{23-20} = off2568{4-1};
+    let Inst{19} = 0;
+    let Inst{18} = rs1{4};
+    let Inst{17-15} = rs1{2-0};
+    let Inst{14} = 0;
+    let Inst{13} = 1;
+    let Inst{12-10} = qu{2-0};
+    let Inst{9} = off2568{0};
+    let Inst{8} = 0;
+    let Inst{7} = 0;
+    let Inst{6} = 0;
+    let Inst{5} = 1;
+    let Inst{4} = 1;
+    let Inst{3} = 1;
+    let Inst{2} = 0;
+    let Inst{1} = 1;
+    let Inst{0} = 1;
+  }
+
+  // 6. esp.vst.h.64.xp
+  def ESP_VST_H_64_XP_ASM : EspVInst<
+      (outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qu, GPRPIE:$rs1),
+      "esp.vst.h.64.xp\t $qu, $rs1, $rs2", [], NoItinerary> {
+    bits<5> rs2;
+    bits<3> qu;
+    bits<5> rs1;
+    bits<5> rs1r;
+    let mayLoad = 0; let mayStore = 1;
+    let Constraints = "$rs1r = $rs1";
+
+    // copy from ESP_VST_H_64_XP
+    let Inst{31} = 1;
+    let Inst{30} = 0;
+    let Inst{29} = 0;
+    let Inst{28} = 1;
+    let Inst{27} = 1;
+    let Inst{26} = 1;
+    let Inst{25} = 0;
+    let Inst{24} = 0;
+    let Inst{23} = rs2{4};
+    let Inst{22-20} = rs2{2-0};
+    let Inst{19} = 0;
+    let Inst{18} = rs1{4};
+    let Inst{17-15} = rs1{2-0};
+    let Inst{14} = 1;
+    let Inst{13} = 0;
+    let Inst{12-10} = qu{2-0};
+    let Inst{9} = 0;
+    let Inst{8} = 0;
+    let Inst{7} = 0;
+    let Inst{6} = 1;
+    let Inst{5} = 0;
+    let Inst{4} = 1;
+    let Inst{3} = 1;
+    let Inst{2} = 1;
+    let Inst{1} = 1;
+    let Inst{0} = 1;
+  }
+
+  // 7. esp.vst.l.64.ip
+  def ESP_VST_L_64_IP_ASM : EspVInst<
+      (outs GPRPIE:$rs1r), (ins QR:$qu, GPRPIE:$rs1, offset_256_8:$off2568),
+      "esp.vst.l.64.ip\t $qu, $rs1, $off2568", [], NoItinerary> {
+    bits<3> qu;
+    bits<5> rs1;
+    bits<8> off2568;
+    bits<5> rs1r;
+    let mayLoad = 0; let mayStore = 1;
+    let Constraints = "$rs1r = $rs1";
+
+    // copy from ESP_VST_L_64_IP
+    let Inst{31} = 1;
+    let Inst{30} = 0;
+    let Inst{29-27} = off2568{7-5};
+    let Inst{26} = 1;
+    let Inst{25} = 0;
+    let Inst{24} = 0;
+    let Inst{23-20} = off2568{4-1};
+    let Inst{19} = 0;
+    let Inst{18} = rs1{4};
+    let Inst{17-15} = rs1{2-0};
+    let Inst{14} = 0;
+    let Inst{13} = 1;
+    let Inst{12-10} = qu{2-0};
+    let Inst{9} = off2568{0};
+    let Inst{8} = 0;
+    let Inst{7} = 0;
+    let Inst{6} = 0;
+    let Inst{5} = 1;
+    let Inst{4} = 1;
+    let Inst{3} = 1;
+    let Inst{2} = 0;
+    let Inst{1} = 1;
+    let Inst{0} = 1;
+  }
+
+  // 8. esp.vst.l.64.xp
+  def ESP_VST_L_64_XP_ASM : EspVInst<
+      (outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qu, GPRPIE:$rs1),
+      "esp.vst.l.64.xp\t $qu, $rs1, $rs2", [], NoItinerary> {
+    bits<5> rs2;
+    bits<3> qu;
+    bits<5> rs1;
+    bits<5> rs1r;
+    let mayLoad = 0; let mayStore = 1;
+    let Constraints = "$rs1r = $rs1";
+
+    // copy from ESP_VST_L_64_XP
+    let Inst{31} = 1;
+    let Inst{30} = 0;
+    let Inst{29} = 0;
+    let Inst{28} = 1;
+    let Inst{27} = 0;
+    let Inst{26} = 1;
+    let Inst{25} = 0;
+    let Inst{24} = 0;
+    let Inst{23} = rs2{4};
+    let Inst{22-20} = rs2{2-0};
+    let Inst{19} = 0;
+    let Inst{18} = rs1{4};
+    let Inst{17-15} = rs1{2-0};
+    let Inst{14} = 1;
+    let Inst{13} = 0;
+    let Inst{12-10} = qu{2-0};
+    let Inst{9} = 0;
+    let Inst{8} = 0;
+    let Inst{7} = 0;
+    let Inst{6} = 1;
+    let Inst{5} = 0;
+    let Inst{4} = 1;
+    let Inst{3} = 1;
+    let Inst{2} = 1;
+    let Inst{1} = 1;
+    let Inst{0} = 1;
+  }
+}
+
+def ESP_SLCI_2Q: EspVInst<(outs QR:$qyr, QR:$qwr), (ins QR:$qy, QR:$qw, select_16:$sel16),
+                   "esp.slci.2q\t $qy, $qw, $sel16",
+                   [(set QR:$qyr, QR:$qwr,
+                      (int_riscv_esp_slci_2q QR:$qy, QR:$qw, timm:$sel16))]>
+{
+  bits<3> qy;
+  bits<3> qw;
+  bits<4> sel16;
+  bits<3> qyr;
+  bits<3> qwr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$qyr = $qy, $qwr = $qw";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = sel16{3};
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9-7} = sel16{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SLCXXP_2Q: EspVInst<(outs QR:$qyr, QR:$qwr, GPRPIE:$rs1r), (ins GPRPIE:$rs1, GPRPIE:$rs2, QR:$qy, QR:$qw),
+                   "esp.slcxxp.2q\t $qy, $qw, $rs1, $rs2",
+                   [(set QR:$qyr, QR:$qwr, GPRPIE:$rs1r, (riscv_esp_slcxxp_2q_m QR:$qy, QR:$qw, GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<3> qy;
+  bits<3> qw;
+  bits<3> qyr;
+  bits<3> qwr;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;  // Explicit state passing: all outputs visible in IR
+
+  // Tied constraints: input and output registers use same physical register
+  // This models hardware's in-place update behavior
+  let Constraints = "$qyr = $qy, $qwr = $qw, $rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SRC_Q: EspVInst<(outs QR:$qz), (ins SAR_BYTESReg:$sar_bytes_in, QR:$qy, QR:$qw),
+                   "esp.src.q\t $qz, $qw, $qy",
+                   // Note: Shift amount is SAR_BYTES[3:0] << 3 (hardware automatically uses only low 4 bits)
+                   [(set QR:$qz, (int_riscv_esp_src_q SAR_BYTESReg:$sar_bytes_in, QR:$qy, QR:$qw))]>
+{
+  bits<3> qy;
+  bits<3> qw;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SRC_Q_LD_IP: EspVInst<(outs QR:$qu, GPRPIE:$rs1r, QR:$qwr), (ins SAR_BYTESReg:$sar_bytes_in, QR:$qy, GPRPIE:$rs1, QR:$qw, offset_256_16:$off25616),
+                   "esp.src.q.ld.ip\t $qu, $rs1, $off25616, $qw, $qy",
+                   // Note: Shift amount is SAR_BYTES[3:0] << 3 (hardware automatically uses only low 4 bits)
+                   [(set QR:$qu, GPRPIE:$rs1r, QR:$qwr, (riscv_esp_src_q_ld_ip_m SAR_BYTESReg:$sar_bytes_in, QR:$qy, QR:$qw, GPRPIE:$rs1, offset_256_16:$off25616))]>
+{
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qw;
+  bits<8> off25616;
+  bits<3> qu;
+  bits<5> rs1r;
+  bits<3> qwr;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1, $qwr = $qw";
+
+  let Inst{31-29} = off25616{7-5};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23-20} = off25616{4-1};
+  let Inst{19} = qw{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off25616{0};
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SRC_Q_LD_XP: EspVInst<(outs QR:$qu, GPRPIE:$rs1r, QR:$qwr), (ins SAR_BYTESReg:$sar_bytes_in, QR:$qy, QR:$qw, GPRPIE:$rs1, GPRPIE:$rs2),
+                   "esp.src.q.ld.xp\t $qu, $rs1, $rs2, $qw, $qy",
+                   // Note: Shift amount is SAR_BYTES[3:0] << 3 (hardware automatically uses only low 4 bits)
+                   // SDNode operand order matches SDTypeProfile: SAR_BYTES, qy, qw, ptr, offset_reg
+                   [(set QR:$qu, GPRPIE:$rs1r, QR:$qwr, (riscv_esp_src_q_ld_xp_m SAR_BYTESReg:$sar_bytes_in, QR:$qy, QR:$qw, GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs2;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qw;
+  bits<3> qu;
+  bits<5> rs1r;
+  bits<3> qwr;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1, $qwr = $qw";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SRC_Q_QUP: EspVInst<(outs QR:$qz, QR:$qwr), (ins SAR_BYTESReg:$sar_bytes_in, QR:$qy, QR:$qw),
+                   "esp.src.q.qup\t $qz, $qw, $qy",
+                   // Note: Shift amount is SAR_BYTES[3:0] << 3 (hardware automatically uses only low 4 bits)
+                   [(set QR:$qz, QR:$qwr, (int_riscv_esp_src_q_qup SAR_BYTESReg:$sar_bytes_in, QR:$qy, QR:$qw))]>
+{
+  bits<3> qy;
+  bits<3> qw;
+  bits<3> qz;
+  bits<3> qwr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$qwr = $qw";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SRCI_2Q: EspVInst<(outs QR:$qyr, QR:$qwr), (ins QR:$qy, QR:$qw, select_16:$sel16),
+                   "esp.srci.2q\t $qy, $qw, $sel16",
+                   [(set QR:$qyr, QR:$qwr,
+                      (int_riscv_esp_srci_2q QR:$qy, QR:$qw, timm:$sel16))]>
+{
+  bits<3> qy;
+  bits<3> qw;
+  bits<4> sel16;
+  bits<3> qyr;
+  bits<3> qwr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$qyr = $qy, $qwr = $qw";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 1;
+  let Inst{22} = sel16{3};
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9-7} = sel16{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+class ESP_SRCMB_S16_Q_QACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.srcmb.s16.q.qacc\t $qu, $qw, $sel2", pat> {
+  bits<3> qw;
+  bits<1> sel2;
+  bits<3> qu;
+  let isPseudo = 0;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = sel2{0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_SRCMB_S16_Q_QACC: ESP_SRCMB_S16_Q_QACC_Base<(outs QR:$qu), (ins QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h, QR:$qw, select_2:$sel2),
+                   [(set QR:$qu, (riscv_esp_srcmb_s16_q_qacc_m QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h, QR:$qw, select_2:$sel2))]>;
+
+def ESP_SRCMB_S16_Q_QACC_MC: ESP_SRCMB_S16_Q_QACC_Base<(outs QR:$qu), (ins QR:$qw, select_2:$sel2), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_SRCMB_S16_QACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.srcmb.s16.qacc\t $qu, $rs1, $sel2", pat> {
+  bits<5> rs1;
+  bits<1> sel2;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+  let Inst{31} = 1;
+  let Inst{30} = 1;
+  let Inst{29} = sel2{0};
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_SRCMB_S16_QACC: ESP_SRCMB_S16_QACC_Base<(outs QR:$qu), (ins QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h, GPRPIE:$rs1, select_2:$sel2),
+                   [(set QR:$qu, (riscv_esp_srcmb_s16_qacc_m QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h, GPRPIE:$rs1, select_2:$sel2))]>;
+
+def ESP_SRCMB_S16_QACC_MC: ESP_SRCMB_S16_QACC_Base<(outs QR:$qu), (ins GPRPIE:$rs1, select_2:$sel2), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_SRCMB_S8_Q_QACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.srcmb.s8.q.qacc\t $qu, $qw, $sel2", pat> {
+  bits<3> qw;
+  bits<1> sel2;
+  bits<3> qu;
+  let isPseudo = 0;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = sel2{0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_SRCMB_S8_Q_QACC: ESP_SRCMB_S8_Q_QACC_Base<(outs QR:$qu), (ins QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h, QR:$qw, select_2:$sel2),
+                   [(set QR:$qu, (riscv_esp_srcmb_s8_q_qacc_m QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h, QR:$qw, select_2:$sel2))]>;
+
+def ESP_SRCMB_S8_Q_QACC_MC: ESP_SRCMB_S8_Q_QACC_Base<(outs QR:$qu), (ins QR:$qw, select_2:$sel2), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_SRCMB_S8_QACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.srcmb.s8.qacc\t $qu, $rs1, $sel2", pat> {
+  bits<5> rs1;
+  bits<1> sel2;
+  bits<3> qu;
+  let isPseudo = 0;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = sel2{0};
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_SRCMB_S8_QACC: ESP_SRCMB_S8_QACC_Base<(outs QR:$qu), (ins QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h, GPRPIE:$rs1, select_2:$sel2),
+                   []>;
+
+def ESP_SRCMB_S8_QACC_MC: ESP_SRCMB_S8_QACC_Base<(outs QR:$qu), (ins GPRPIE:$rs1, select_2:$sel2), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_SRCMB_U16_Q_QACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.srcmb.u16.q.qacc\t $qu, $qw, $sel2", pat> {
+  bits<3> qw;
+  bits<1> sel2;
+  bits<3> qu;
+  let isPseudo = 0;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = sel2{0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_SRCMB_U16_Q_QACC: ESP_SRCMB_U16_Q_QACC_Base<(outs QR:$qu), (ins QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h, QR:$qw, select_2:$sel2),
+                   [(set QR:$qu, (riscv_esp_srcmb_u16_q_qacc_m QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h, QR:$qw, select_2:$sel2))]>;
+
+def ESP_SRCMB_U16_Q_QACC_MC: ESP_SRCMB_U16_Q_QACC_Base<(outs QR:$qu), (ins QR:$qw, select_2:$sel2), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_SRCMB_U16_QACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.srcmb.u16.qacc\t $qu, $rs1, $sel2", pat> {
+  bits<5> rs1;
+  bits<1> sel2;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = sel2{0};
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_SRCMB_U16_QACC: ESP_SRCMB_U16_QACC_Base<(outs QR:$qu), (ins QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h, GPRPIE:$rs1, select_2:$sel2),
+                   [(set QR:$qu, (riscv_esp_srcmb_u16_qacc_m QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h, GPRPIE:$rs1, select_2:$sel2))]>;
+
+def ESP_SRCMB_U16_QACC_MC: ESP_SRCMB_U16_QACC_Base<(outs QR:$qu), (ins GPRPIE:$rs1, select_2:$sel2), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_SRCMB_U8_Q_QACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.srcmb.u8.q.qacc\t $qu, $qw, $sel2", pat> {
+  bits<3> qw;
+  bits<1> sel2;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = sel2{0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_SRCMB_U8_Q_QACC: ESP_SRCMB_U8_Q_QACC_Base<(outs QR:$qu), (ins QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h, QR:$qw, select_2:$sel2),
+                   [(set QR:$qu, (riscv_esp_srcmb_u8_q_qacc_m QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h, QR:$qw, select_2:$sel2))]>;
+
+def ESP_SRCMB_U8_Q_QACC_MC: ESP_SRCMB_U8_Q_QACC_Base<(outs QR:$qu), (ins QR:$qw, select_2:$sel2), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_SRCMB_U8_QACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.srcmb.u8.qacc\t $qu, $rs1, $sel2", pat> {
+  bits<5> rs1;
+  bits<1> sel2;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = sel2{0};
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_SRCMB_U8_QACC: ESP_SRCMB_U8_QACC_Base<(outs QR:$qu), (ins QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h, GPRPIE:$rs1, select_2:$sel2),
+                   [(set QR:$qu, (riscv_esp_srcmb_u8_qacc_m QACC_L_LOW:$qacc_l_l, QACC_L_HIGH:$qacc_l_h, QACC_H_LOW:$qacc_h_l, QACC_H_HIGH:$qacc_h_h, GPRPIE:$rs1, select_2:$sel2))]>;
+
+def ESP_SRCMB_U8_QACC_MC: ESP_SRCMB_U8_QACC_Base<(outs QR:$qu), (ins GPRPIE:$rs1, select_2:$sel2), []> {
+  let hasSideEffects = 1;
+}
+
+
+def ESP_SRCQ_128_ST_INCP: EspVInst<(outs GPRPIE:$rs1r), (ins SAR_BYTESReg:$sar_bytes_in, QR:$qy, QR:$qw, GPRPIE:$rs1),
+                   "esp.srcq.128.st.incp\t $qw, $qy, $rs1",
+                   // Note: Shift amount is SAR_BYTES[3:0] << 3 (hardware automatically uses only low 4 bits)
+                   [(set GPRPIE:$rs1r, (riscv_esp_srcq_128_st_incp_m SAR_BYTESReg:$sar_bytes_in, QR:$qy, QR:$qw, GPRPIE:$rs1))]>
+{
+  bits<3> qy;
+  bits<3> qw;
+  bits<5> rs1;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SRCXXP_2Q: EspVInst<(outs QR:$qyr, QR:$qwr, GPRPIE:$rs1r), (ins GPRPIE:$rs1, GPRPIE:$rs2, QR:$qy, QR:$qw),
+                   "esp.srcxxp.2q\t $qy, $qw, $rs1, $rs2",
+                   [(set QR:$qyr, QR:$qwr, GPRPIE:$rs1r, (riscv_esp_srcxxp_2q_m QR:$qy, QR:$qw, GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<3> qy;
+  bits<3> qw;
+  bits<3> qyr;
+  bits<3> qwr;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;  // Explicit state passing: all outputs visible in IR
+
+  // Tied constraints: input and output registers use same physical register
+  // This models hardware's in-place update behavior
+  let Constraints = "$qyr = $qy, $qwr = $qw, $rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+class ESP_SRS_S_XACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.srs.s.xacc\t $rd, $rs1", pat> {
+  bits<5> rs1;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_SRS_S_XACC: ESP_SRS_S_XACC_Base<(outs GPRPIE:$rd, XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out), (ins XACC_LOW:$xacc_low_in, XACC_HIGH:$xacc_high_in, GPRPIE:$rs1),
+                   // Mixed model: XACC as {i32 low, i32 high}
+                   // XACC is explicit in intrinsic (takes XACC as {i32 low, i32 high} input, returns new XACC as {i32 low, i32 high})
+                   // Instruction performs arithmetic right shift on XACC, saturates to 32-bit signed, writes back to XACC
+                   // Return value: saturated 32-bit signed value + new XACC {i32 low, i32 high}
+                   // Pattern matches SDNode which returns {i32, i32, i32} to instruction outputs {GPRPIE:$rd, XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out}
+                   []>;
+
+def ESP_SRS_S_XACC_MC: ESP_SRS_S_XACC_Base<(outs GPRPIE:$rd), (ins GPRPIE:$rs1), []> {
+  let hasSideEffects = 1;
+}
+
+
+class ESP_SRS_U_XACC_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.srs.u.xacc\t $rd, $rs1", pat> {
+  bits<5> rs1;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_SRS_U_XACC: ESP_SRS_U_XACC_Base<(outs GPRPIE:$rd, XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out), (ins XACC_LOW:$xacc_low_in, XACC_HIGH:$xacc_high_in, GPRPIE:$rs1),
+                   // Mixed model: XACC as {i32 low, i32 high}
+                   // XACC is explicit in intrinsic (takes XACC as {i32 low, i32 high} input, returns new XACC as {i32 low, i32 high})
+                   // Instruction performs arithmetic right shift on XACC, saturates to 32-bit unsigned, writes back to XACC
+                   // Return value: saturated 32-bit unsigned value + new XACC {i32 low, i32 high}
+                   // Pattern matches SDNode which returns {i32, i32, i32} to instruction outputs {GPRPIE:$rd, XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out}
+                   []>;
+
+def ESP_SRS_U_XACC_MC: ESP_SRS_U_XACC_Base<(outs GPRPIE:$rd), (ins GPRPIE:$rs1), []> {
+  let hasSideEffects = 1;
+}
+
+
+def ESP_VSL_32: EspVInst<(outs QR:$qu), (ins QR:$qy, SARReg:$sar_in),
+                   "esp.vsl.32\t $qu, $qy",
+                   // SAR is explicit in intrinsic (SAR is input parameter, i32)
+                   // Hardware automatically extracts SAR[5:0] for shift amount
+                   [(set QR:$qu, (int_riscv_esp_vsl_32 QR:$qy, (i32 0), SARReg:$sar_in))]>
+{
+  bits<3> qy;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSLD_16: EspVInst<(outs QR:$qu), (ins QR:$qy, QR:$qw),
+                   "esp.vsld.16\t $qu, $qy, $qw",
+                   [(set QR:$qu, (int_riscv_esp_vsld_16 QR:$qy, QR:$qw, (i32 0), (i32 7)))]>
+{
+  bits<3> qy;
+  bits<3> qw;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSLD_32: EspVInst<(outs QR:$qu), (ins QR:$qy, QR:$qw),
+                   "esp.vsld.32\t $qu, $qy, $qw",
+                   [(set QR:$qu, (int_riscv_esp_vsld_32 QR:$qy, QR:$qw, (i32 0), (i32 7)))]>
+{
+  bits<3> qy;
+  bits<3> qw;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSLD_8: EspVInst<(outs QR:$qu), (ins QR:$qy, QR:$qw),
+                   "esp.vsld.8\t $qu, $qy, $qw",
+                   [(set QR:$qu, (int_riscv_esp_vsld_8 QR:$qy, QR:$qw, (i32 0), (i32 7)))]>
+{
+  bits<3> qy;
+  bits<3> qw;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSR_S32: EspVInst<(outs QR:$qu), (ins QR:$qy, SARReg:$sar_in),
+                   "esp.vsr.s32\t $qu, $qy",
+                   // SAR is explicit in intrinsic (SAR is input parameter, i32)
+                   // Hardware automatically extracts SAR[5:0] for shift amount
+                   [(set QR:$qu, (int_riscv_esp_vsr_s32 QR:$qy, SARReg:$sar_in, (i32 7)))]>
+{
+  bits<3> qy;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSR_U32: EspVInst<(outs QR:$qu), (ins QR:$qy, SARReg:$sar_in),
+                   "esp.vsr.u32\t $qu, $qy",
+                   // SAR is explicit in intrinsic (SAR is input parameter, i32)
+                   // Hardware automatically extracts SAR[5:0] for shift amount
+                   [(set QR:$qu, (int_riscv_esp_vsr_u32 QR:$qy, SARReg:$sar_in, (i32 7)))]>
+{
+  bits<3> qy;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSRD_16: EspVInst<(outs QR:$qu), (ins QR:$qy, QR:$qw),
+                   "esp.vsrd.16\t $qu, $qy, $qw",
+                   [(set QR:$qu, (int_riscv_esp_vsrd_16 QR:$qy, QR:$qw, (i32 0), (i32 7)))]>
+{
+  bits<3> qy;
+  bits<3> qw;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSRD_32: EspVInst<(outs QR:$qu), (ins QR:$qy, QR:$qw),
+                   "esp.vsrd.32\t $qu, $qy, $qw",
+                   [(set QR:$qu, (int_riscv_esp_vsrd_32 QR:$qy, QR:$qw, (i32 0), (i32 7)))]>
+{
+  bits<3> qy;
+  bits<3> qw;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSRD_8: EspVInst<(outs QR:$qu), (ins QR:$qy, QR:$qw),
+                   "esp.vsrd.8\t $qu, $qy, $qw",
+                   [(set QR:$qu, (int_riscv_esp_vsrd_8 QR:$qy, QR:$qw, (i32 0), (i32 7)))]>
+{
+  bits<3> qy;
+  bits<3> qw;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+class ESP_ST_S_XACC_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.st.s.xacc.ip\t $rs1, $off2568", pat> {
+  bits<5> rs1;
+  bits<8> off2568;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31} = 1;
+  let Inst{30} = off2568{7};
+  let Inst{29} = 1;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off2568{6-3};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = off2568{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_ST_S_XACC_IP: ESP_ST_S_XACC_IP_Base<(outs GPRPIE:$rs1r, XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out), (ins XACC_LOW:$xacc_low_in, XACC_HIGH:$xacc_high_in, GPRPIE:$rs1, offset_256_8:$off2568),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $xacc_low_out = $xacc_low_in, $xacc_high_out = $xacc_high_in";
+}
+
+def ESP_ST_S_XACC_IP_MC: ESP_ST_S_XACC_IP_Base<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_8:$off2568), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+class ESP_ST_U_XACC_IP_Base<dag outs, dag ins, list<dag> pat>
+    : EspVInst<outs, ins, "esp.st.u.xacc.ip\t $rs1, $off2568", pat> {
+  bits<5> rs1;
+  bits<8> off2568;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 0;
+  let Inst{31} = 0;
+  let Inst{30} = off2568{7};
+  let Inst{29} = 1;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-20} = off2568{6-3};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = off2568{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let isCodeGenOnly = 1 in
+def ESP_ST_U_XACC_IP: ESP_ST_U_XACC_IP_Base<(outs GPRPIE:$rs1r, XACC_LOW:$xacc_low_out, XACC_HIGH:$xacc_high_out), (ins XACC_LOW:$xacc_low_in, XACC_HIGH:$xacc_high_in, GPRPIE:$rs1, offset_256_8:$off2568),
+                   []> {
+  let Constraints = "$rs1r = $rs1, $xacc_low_out = $xacc_low_in, $xacc_high_out = $xacc_high_in";
+}
+
+def ESP_ST_U_XACC_IP_MC: ESP_ST_U_XACC_IP_Base<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_8:$off2568), []> {
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+
+def ESP_VCMULAS_S16_QACC_H_2P2: Esp32V2P2Inst<(outs), (ins QR:$qx, QR:$qy, sat:$sat),
+                   "esp.vcmulas.s16.qacc.h\t $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 1;
+  let Inst{16} = sat{0};
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMULAS_S16_QACC_H_LD_IP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, offset_16_16:$off1616),
+                   "esp.vcmulas.s16.qacc.h.ld.ip\t $qu, $rs1, $off1616, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = sat{0};
+  let Inst{22-19} = off1616{3-0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMULAS_S16_QACC_H_LD_XP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vcmulas.s16.qacc.h.ld.xp\t $qu, $rs1, $rs2, $qx, $qy$sat", []>
+{
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMULAS_S16_QACC_L_2P2: Esp32V2P2Inst<(outs), (ins QR:$qx, QR:$qy, sat:$sat),
+                   "esp.vcmulas.s16.qacc.l\t $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = sat{0};
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMULAS_S16_QACC_L_LD_IP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, offset_16_16:$off1616),
+                   "esp.vcmulas.s16.qacc.l.ld.ip\t $qu, $rs1, $off1616, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = sat{0};
+  let Inst{22-19} = off1616{3-0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMULAS_S16_QACC_L_LD_XP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vcmulas.s16.qacc.l.ld.xp\t $qu, $rs1, $rs2, $qx, $qy$sat", []>
+{
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMULAS_S8_QACC_H_2P2: Esp32V2P2Inst<(outs), (ins QR:$qx, QR:$qy, sat:$sat),
+                   "esp.vcmulas.s8.qacc.h\t $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = sat{0};
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMULAS_S8_QACC_H_LD_IP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, offset_16_16:$off1616),
+                   "esp.vcmulas.s8.qacc.h.ld.ip\t $qu, $rs1, $off1616, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = sat{0};
+  let Inst{22-19} = off1616{3-0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMULAS_S8_QACC_H_LD_XP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vcmulas.s8.qacc.h.ld.xp\t $qu, $rs1, $rs2, $qx, $qy$sat", []>
+{
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMULAS_S8_QACC_L_2P2: Esp32V2P2Inst<(outs), (ins QR:$qx, QR:$qy, sat:$sat),
+                   "esp.vcmulas.s8.qacc.l\t $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = sat{0};
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMULAS_S8_QACC_L_LD_IP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, offset_16_16:$off1616),
+                   "esp.vcmulas.s8.qacc.l.ld.ip\t $qu, $rs1, $off1616, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = sat{0};
+  let Inst{22-19} = off1616{3-0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMULAS_S8_QACC_L_LD_XP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vcmulas.s8.qacc.l.ld.xp\t $qu, $rs1, $rs2, $qx, $qy$sat", []>
+{
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_S16_QACC_2P2: Esp32V2P2Inst<(outs), (ins QR:$qx, QR:$qy, sat:$sat),
+                   "esp.vmulas.s16.qacc\t $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 1;
+  let Inst{16} = 1;
+  let Inst{15} = sat{0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_S16_QACC_LD_IP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, offset_16_16:$off1616),
+                   "esp.vmulas.s16.qacc.ld.ip\t $qu, $rs1, $off1616, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = sat{0};
+  let Inst{20-19} = off1616{3-2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-8} = off1616{1-0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_S16_QACC_LD_XP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vmulas.s16.qacc.ld.xp\t $qu, $rs1, $rs2, $qx, $qy$sat", []>
+{
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = sat{0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_S16_QACC_ST_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat, offset_16_16:$off1616),
+                   "esp.vmulas.s16.qacc.st.ip\t $qu, $rs1, $off1616, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<4> off1616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = sat{0};
+  let Inst{20-19} = off1616{3-2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-8} = off1616{1-0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_S16_QACC_ST_XP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat),
+                   "esp.vmulas.s16.qacc.st.xp\t $qu, $rs1, $rs2, $qx, $qy$sat", []>
+{
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = sat{0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_S16_XACC_2P2: Esp32V2P2Inst<(outs), (ins QR:$qx, QR:$qy, sat:$sat),
+                   "esp.vmulas.s16.xacc\t $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 1;
+  let Inst{15} = sat{0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_S16_XACC_LD_IP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, offset_16_16:$off1616),
+                   "esp.vmulas.s16.xacc.ld.ip\t $qu, $rs1, $off1616, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = sat{0};
+  let Inst{20-19} = off1616{3-2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-8} = off1616{1-0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_S16_XACC_LD_XP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vmulas.s16.xacc.ld.xp\t $qu, $rs1, $rs2, $qx, $qy$sat", []>
+{
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = sat{0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_S16_XACC_ST_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat, offset_16_16:$off1616),
+                   "esp.vmulas.s16.xacc.st.ip\t $qu, $rs1, $off1616, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<4> off1616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = sat{0};
+  let Inst{20-19} = off1616{3-2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-8} = off1616{1-0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_S16_XACC_ST_XP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat),
+                   "esp.vmulas.s16.xacc.st.xp\t $qu, $rs1, $rs2, $qx, $qy$sat", []>
+{
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = sat{0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_S8_QACC_2P2: Esp32V2P2Inst<(outs), (ins QR:$qx, QR:$qy, sat:$sat),
+                   "esp.vmulas.s8.qacc\t $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = sat{0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_S8_QACC_LD_IP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, offset_16_16:$off1616),
+                   "esp.vmulas.s8.qacc.ld.ip\t $qu, $rs1, $off1616, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = sat{0};
+  let Inst{20-19} = off1616{3-2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-8} = off1616{1-0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_S8_QACC_LD_XP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vmulas.s8.qacc.ld.xp\t $qu, $rs1, $rs2, $qx, $qy$sat", []>
+{
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = sat{0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_S8_QACC_ST_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat, offset_16_16:$off1616),
+                   "esp.vmulas.s8.qacc.st.ip\t $qu, $rs1, $off1616, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<4> off1616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = sat{0};
+  let Inst{20-19} = off1616{3-2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-8} = off1616{1-0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_S8_QACC_ST_XP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat),
+                   "esp.vmulas.s8.qacc.st.xp\t $qu, $rs1, $rs2, $qx, $qy$sat", []>
+{
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = sat{0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_S8_XACC_2P2: Esp32V2P2Inst<(outs), (ins QR:$qx, QR:$qy, sat:$sat),
+                   "esp.vmulas.s8.xacc\t $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = sat{0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_S8_XACC_LD_IP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, offset_16_16:$off1616),
+                   "esp.vmulas.s8.xacc.ld.ip\t $qu, $rs1, $off1616, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = sat{0};
+  let Inst{20-19} = off1616{3-2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-8} = off1616{1-0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_S8_XACC_LD_XP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vmulas.s8.xacc.ld.xp\t $qu, $rs1, $rs2, $qx, $qy$sat", []>
+{
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = sat{0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_S8_XACC_ST_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat, offset_16_16:$off1616),
+                   "esp.vmulas.s8.xacc.st.ip\t $qu, $rs1, $off1616, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<4> off1616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = sat{0};
+  let Inst{20-19} = off1616{3-2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-8} = off1616{1-0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_S8_XACC_ST_XP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat),
+                   "esp.vmulas.s8.xacc.st.xp\t $qu, $rs1, $rs2, $qx, $qy$sat", []>
+{
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = sat{0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_U16_QACC_2P2: Esp32V2P2Inst<(outs), (ins QR:$qx, QR:$qy, sat:$sat),
+                   "esp.vmulas.u16.qacc\t $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = sat{0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_U16_QACC_LD_IP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, offset_16_16:$off1616),
+                   "esp.vmulas.u16.qacc.ld.ip\t $qu, $rs1, $off1616, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = sat{0};
+  let Inst{20-19} = off1616{3-2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-8} = off1616{1-0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_U16_QACC_LD_XP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vmulas.u16.qacc.ld.xp\t $qu, $rs1, $rs2, $qx, $qy$sat", []>
+{
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = sat{0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_U16_QACC_ST_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat, offset_16_16:$off1616),
+                   "esp.vmulas.u16.qacc.st.ip\t $qu, $rs1, $off1616, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<4> off1616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = sat{0};
+  let Inst{20-19} = off1616{3-2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-8} = off1616{1-0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_U16_QACC_ST_XP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat),
+                   "esp.vmulas.u16.qacc.st.xp\t $qu, $rs1, $rs2, $qx, $qy$sat", []>
+{
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = sat{0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_U16_XACC_2P2: Esp32V2P2Inst<(outs), (ins QR:$qx, QR:$qy, sat:$sat),
+                   "esp.vmulas.u16.xacc\t $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = sat{0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_U16_XACC_LD_IP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, offset_16_16:$off1616),
+                   "esp.vmulas.u16.xacc.ld.ip\t $qu, $rs1, $off1616, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = sat{0};
+  let Inst{20-19} = off1616{3-2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-8} = off1616{1-0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_U16_XACC_LD_XP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vmulas.u16.xacc.ld.xp\t $qu, $rs1, $rs2, $qx, $qy$sat", []>
+{
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = sat{0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_U16_XACC_ST_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat, offset_16_16:$off1616),
+                   "esp.vmulas.u16.xacc.st.ip\t $qu, $rs1, $off1616, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<4> off1616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = sat{0};
+  let Inst{20-19} = off1616{3-2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-8} = off1616{1-0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_U16_XACC_ST_XP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat),
+                   "esp.vmulas.u16.xacc.st.xp\t $qu, $rs1, $rs2, $qx, $qy$sat", []>
+{
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = sat{0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_U8_QACC_2P2: Esp32V2P2Inst<(outs), (ins QR:$qx, QR:$qy, sat:$sat),
+                   "esp.vmulas.u8.qacc\t $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = sat{0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_U8_QACC_LD_IP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, offset_16_16:$off1616),
+                   "esp.vmulas.u8.qacc.ld.ip\t $qu, $rs1, $off1616, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = sat{0};
+  let Inst{20-19} = off1616{3-2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-8} = off1616{1-0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_U8_QACC_LD_XP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vmulas.u8.qacc.ld.xp\t $qu, $rs1, $rs2, $qx, $qy$sat", []>
+{
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = sat{0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_U8_QACC_ST_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat, offset_16_16:$off1616),
+                   "esp.vmulas.u8.qacc.st.ip\t $qu, $rs1, $off1616, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<4> off1616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = sat{0};
+  let Inst{20-19} = off1616{3-2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-8} = off1616{1-0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_U8_QACC_ST_XP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat),
+                   "esp.vmulas.u8.qacc.st.xp\t $qu, $rs1, $rs2, $qx, $qy$sat", []>
+{
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = sat{0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_U8_XACC_2P2: Esp32V2P2Inst<(outs), (ins QR:$qx, QR:$qy, sat:$sat),
+                   "esp.vmulas.u8.xacc\t $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = sat{0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_U8_XACC_LD_IP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, offset_16_16:$off1616),
+                   "esp.vmulas.u8.xacc.ld.ip\t $qu, $rs1, $off1616, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = sat{0};
+  let Inst{20-19} = off1616{3-2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-8} = off1616{1-0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_U8_XACC_LD_XP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vmulas.u8.xacc.ld.xp\t $qu, $rs1, $rs2, $qx, $qy$sat", []>
+{
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = sat{0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_U8_XACC_ST_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat, offset_16_16:$off1616),
+                   "esp.vmulas.u8.xacc.st.ip\t $qu, $rs1, $off1616, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<4> off1616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = sat{0};
+  let Inst{20-19} = off1616{3-2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-8} = off1616{1-0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_U8_XACC_ST_XP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat),
+                   "esp.vmulas.u8.xacc.st.xp\t $qu, $rs1, $rs2, $qx, $qy$sat", []>
+{
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = sat{0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_S16_QACC_LDBC_INCP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vmulas.s16.qacc.ldbc.incp\t $qu, $rs1, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = sat{0};
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_S8_QACC_LDBC_INCP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vmulas.s8.qacc.ldbc.incp\t $qu, $rs1, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = sat{0};
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_U16_QACC_LDBC_INCP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vmulas.u16.qacc.ldbc.incp\t $qu, $rs1, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = sat{0};
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMULAS_U8_QACC_LDBC_INCP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vmulas.u8.qacc.ldbc.incp\t $qu, $rs1, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = sat{0};
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSMULAS_S16_QACC_2P2: Esp32V2P2Inst<(outs), (ins QR:$qx, QR:$qy, sat:$sat, select_16:$sel16),
+                   "esp.vsmulas.s16.qacc\t $qx, $qy, $sel16$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<4> sel16;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = sat{0};
+  let Inst{19} = 0;
+  let Inst{18-15} = sel16{3-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSMULAS_S16_QACC_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, select_16:$sel16),
+                   "esp.vsmulas.s16.qacc.ld.incp\t $qu, $rs1, $qx, $qy, $sel16$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<4> sel16;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = sat{0};
+  let Inst{22-19} = sel16{3-0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSMULAS_S8_QACC_2P2: Esp32V2P2Inst<(outs), (ins QR:$qx, QR:$qy, sat:$sat, select_16:$sel16),
+                   "esp.vsmulas.s8.qacc\t $qx, $qy, $sel16$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<4> sel16;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = sat{0};
+  let Inst{19} = 0;
+  let Inst{18-15} = sel16{3-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSMULAS_S8_QACC_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, select_16:$sel16),
+                   "esp.vsmulas.s8.qacc.ld.incp\t $qu, $rs1, $qx, $qy, $sel16$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<4> sel16;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = sat{0};
+  let Inst{22-19} = sel16{3-0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSMULAS_U16_QACC_2P2: Esp32V2P2Inst<(outs), (ins QR:$qx, QR:$qy, sat:$sat, select_16:$sel16),
+                   "esp.vsmulas.u16.qacc\t $qx, $qy, $sel16$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<4> sel16;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = sat{0};
+  let Inst{19} = 0;
+  let Inst{18-15} = sel16{3-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSMULAS_U16_QACC_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, select_16:$sel16),
+                   "esp.vsmulas.u16.qacc.ld.incp\t $qu, $rs1, $qx, $qy, $sel16$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<4> sel16;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = sat{0};
+  let Inst{22-19} = sel16{3-0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSMULAS_U8_QACC_2P2: Esp32V2P2Inst<(outs), (ins QR:$qx, QR:$qy, sat:$sat, select_16:$sel16),
+                   "esp.vsmulas.u8.qacc\t $qx, $qy, $sel16$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<4> sel16;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = sat{0};
+  let Inst{19} = 0;
+  let Inst{18-15} = sel16{3-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSMULAS_U8_QACC_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, select_16:$sel16),
+                   "esp.vsmulas.u8.qacc.ld.incp\t $qu, $rs1, $qx, $qy, $sel16$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<4> sel16;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = sat{0};
+  let Inst{22-19} = sel16{3-0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_CMUL_S16_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy, sat:$sat, select_4:$sel4, rm:$rm),
+                   "esp.cmul.s16\t $qz, $qx, $qy, $sel4$sat$rm", [(set QR:$qz, (riscv_esp_cmul_s16_pie22_m_node QR:$qx, QR:$qy, timm:$sel4, timm:$sat, timm:$rm))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<2> sel4;
+  bits<3> rm;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = sat{0};
+  let Inst{16-15} = sel4{1-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = rm{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_CMUL_S16_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, select_4:$sel4, rm:$rm),
+                   "esp.cmul.s16.ld.incp\t $qu, $rs1, $qz, $qx, $qy, $sel4$sat$rm", [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                     (riscv_esp_cmul_s16_ld_incp_pie22_m QR:$qx, QR:$qy, GPRPIE:$rs1, timm:$sat, timm:$sel4, timm:$rm))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<2> sel4;
+  bits<3> rm;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = sat{0};
+  let Inst{21-20} = sel4{1-0};
+  let Inst{19} = rm{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14-13} = rm{1-0};
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_CMUL_S16_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat, select_4:$sel4, rm:$rm),
+                   "esp.cmul.s16.st.incp\t $qu, $rs1, $qz, $qx, $qy, $sel4$sat$rm", [(set QR:$qz, GPRPIE:$rs1r,
+                     (riscv_esp_cmul_s16_st_incp_pie22_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, timm:$sat, timm:$sel4, timm:$rm))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<2> sel4;
+  bits<3> rm;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = sat{0};
+  let Inst{21-20} = sel4{1-0};
+  let Inst{19} = rm{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14-13} = rm{1-0};
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_CMUL_S8_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy, sat:$sat, select_4:$sel4, rm:$rm),
+                   "esp.cmul.s8\t $qz, $qx, $qy, $sel4$sat$rm", [(set QR:$qz, (riscv_esp_cmul_s8_pie22_m_node QR:$qx, QR:$qy, timm:$sel4, timm:$sat, timm:$rm))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<2> sel4;
+  bits<3> rm;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = sat{0};
+  let Inst{16-15} = sel4{1-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = rm{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_CMUL_S8_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, select_4:$sel4, rm:$rm),
+                   "esp.cmul.s8.ld.incp\t $qu, $rs1, $qz, $qx, $qy, $sel4$sat$rm", [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                     (riscv_esp_cmul_s8_ld_incp_pie22_m QR:$qx, QR:$qy, GPRPIE:$rs1, timm:$sat, timm:$sel4, timm:$rm))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<2> sel4;
+  bits<3> rm;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = sat{0};
+  let Inst{21-20} = sel4{1-0};
+  let Inst{19} = rm{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14-13} = rm{1-0};
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_CMUL_S8_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat, select_4:$sel4, rm:$rm),
+                   "esp.cmul.s8.st.incp\t $qu, $rs1, $qz, $qx, $qy, $sel4$sat$rm", [(set QR:$qz, GPRPIE:$rs1r,
+                     (riscv_esp_cmul_s8_st_incp_pie22_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, timm:$sat, timm:$sel4, timm:$rm))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<2> sel4;
+  bits<3> rm;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = sat{0};
+  let Inst{21-20} = sel4{1-0};
+  let Inst{19} = rm{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14-13} = rm{1-0};
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_CMUL_U16_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy, sat:$sat, select_4:$sel4, rm:$rm),
+                   "esp.cmul.u16\t $qz, $qx, $qy, $sel4$sat$rm", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<2> sel4;
+  bits<3> rm;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = sat{0};
+  let Inst{16-15} = sel4{1-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = rm{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_CMUL_U16_2P2_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, sat:$sat, select_4:$sel4, rm:$rm, imm8:$qz),
+				"!esp_cmul_u16_2p2_p $qz, $qx, $qy, $sel4$sat$rm",
+			[(int_riscv_esp_cmul_u16_2p2 timm:$qx, timm:$qy, timm:$sat, timm:$sel4, timm:$rm, timm:$qz)]>;
+
+def ESP_CMUL_U16_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, select_4:$sel4, rm:$rm),
+                   "esp.cmul.u16.ld.incp\t $qu, $rs1, $qz, $qx, $qy, $sel4$sat$rm", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<2> sel4;
+  bits<3> rm;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = sat{0};
+  let Inst{21-20} = sel4{1-0};
+  let Inst{19} = rm{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14-13} = rm{1-0};
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_CMUL_U16_LD_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, sat:$sat, select_4:$sel4, rm:$rm, imm8:$qz, imm8:$qu),
+				"!esp_cmul_u16_ld_incp_2p2_p $qu, $rs1, $qz, $qx, $qy, $sel4$sat$rm",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_cmul_u16_ld_incp_2p2 timm:$qx, timm:$qy, GPRPIE:$rs1, timm:$sat, timm:$sel4, timm:$rm, timm:$qz, timm:$qu))]>;
+
+def ESP_CMUL_U16_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat, select_4:$sel4, rm:$rm),
+                   "esp.cmul.u16.st.incp\t $qu, $rs1, $qz, $qx, $qy, $sel4$sat$rm", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<2> sel4;
+  bits<3> rm;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = sat{0};
+  let Inst{21-20} = sel4{1-0};
+  let Inst{19} = rm{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14-13} = rm{1-0};
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_CMUL_U16_ST_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, sat:$sat, select_4:$sel4, rm:$rm, imm8:$qz),
+				"!esp_cmul_u16_st_incp_2p2_p $qu, $rs1, $qz, $qx, $qy, $sel4$sat$rm",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_cmul_u16_st_incp_2p2 timm:$qx, timm:$qy, timm:$qu, GPRPIE:$rs1, timm:$sat, timm:$sel4, timm:$rm, timm:$qz))]>;
+
+def ESP_CMUL_U8_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy, sat:$sat, select_4:$sel4, rm:$rm),
+                   "esp.cmul.u8\t $qz, $qx, $qy, $sel4$sat$rm", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<2> sel4;
+  bits<3> rm;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = sat{0};
+  let Inst{16-15} = sel4{1-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = rm{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_CMUL_U8_2P2_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, sat:$sat, select_4:$sel4, rm:$rm, imm8:$qz),
+				"!esp_cmul_u8_2p2_p $qz, $qx, $qy, $sel4$sat$rm",
+			[(int_riscv_esp_cmul_u8_2p2 timm:$qx, timm:$qy, timm:$sat, timm:$sel4, timm:$rm, timm:$qz)]>;
+
+def ESP_CMUL_U8_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, select_4:$sel4, rm:$rm),
+                   "esp.cmul.u8.ld.incp\t $qu, $rs1, $qz, $qx, $qy, $sel4$sat$rm", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<2> sel4;
+  bits<3> rm;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = sat{0};
+  let Inst{21-20} = sel4{1-0};
+  let Inst{19} = rm{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14-13} = rm{1-0};
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_CMUL_U8_LD_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, sat:$sat, select_4:$sel4, rm:$rm, imm8:$qz, imm8:$qu),
+				"!esp_cmul_u8_ld_incp_2p2_p $qu, $rs1, $qz, $qx, $qy, $sel4$sat$rm",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_cmul_u8_ld_incp_2p2 timm:$qx, timm:$qy, GPRPIE:$rs1, timm:$sat, timm:$sel4, timm:$rm, timm:$qz, timm:$qu))]>;
+
+def ESP_CMUL_U8_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat, select_4:$sel4, rm:$rm),
+                   "esp.cmul.u8.st.incp\t $qu, $rs1, $qz, $qx, $qy, $sel4$sat$rm", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<2> sel4;
+  bits<3> rm;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = sat{0};
+  let Inst{21-20} = sel4{1-0};
+  let Inst{19} = rm{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14-13} = rm{1-0};
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_CMUL_U8_ST_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, sat:$sat, select_4:$sel4, rm:$rm, imm8:$qz),
+				"!esp_cmul_u8_st_incp_2p2_p $qu, $rs1, $qz, $qx, $qy, $sel4$sat$rm",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_cmul_u8_st_incp_2p2 timm:$qx, timm:$qy, timm:$qu, GPRPIE:$rs1, timm:$sat, timm:$sel4, timm:$rm, timm:$qz))]>;
+
+def ESP_MAX_S16_A_2P2: Esp32V2P2Inst<(outs GPRPIE:$rd), (ins QR:$qw),
+                   "esp.max.s16.a\t $qw, $rd", []>
+{
+  bits<3> qw;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MAX_S32_A_2P2: Esp32V2P2Inst<(outs GPRPIE:$rd), (ins QR:$qw),
+                   "esp.max.s32.a\t $qw, $rd", []>
+{
+  bits<3> qw;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 1;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MAX_S8_A_2P2: Esp32V2P2Inst<(outs GPRPIE:$rd), (ins QR:$qw),
+                   "esp.max.s8.a\t $qw, $rd", []>
+{
+  bits<3> qw;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MAX_U16_A_2P2: Esp32V2P2Inst<(outs GPRPIE:$rd), (ins QR:$qw),
+                   "esp.max.u16.a\t $qw, $rd", []>
+{
+  bits<3> qw;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MAX_U32_A_2P2: Esp32V2P2Inst<(outs GPRPIE:$rd), (ins QR:$qw),
+                   "esp.max.u32.a\t $qw, $rd", []>
+{
+  bits<3> qw;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 1;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MAX_U8_A_2P2: Esp32V2P2Inst<(outs GPRPIE:$rd), (ins QR:$qw),
+                   "esp.max.u8.a\t $qw, $rd", []>
+{
+  bits<3> qw;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MIN_S16_A_2P2: Esp32V2P2Inst<(outs GPRPIE:$rd), (ins QR:$qw),
+                   "esp.min.s16.a\t $qw, $rd", []>
+{
+  bits<3> qw;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MIN_S32_A_2P2: Esp32V2P2Inst<(outs GPRPIE:$rd), (ins QR:$qw),
+                   "esp.min.s32.a\t $qw, $rd", []>
+{
+  bits<3> qw;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 1;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MIN_S8_A_2P2: Esp32V2P2Inst<(outs GPRPIE:$rd), (ins QR:$qw),
+                   "esp.min.s8.a\t $qw, $rd", []>
+{
+  bits<3> qw;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MIN_U16_A_2P2: Esp32V2P2Inst<(outs GPRPIE:$rd), (ins QR:$qw),
+                   "esp.min.u16.a\t $qw, $rd", []>
+{
+  bits<3> qw;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MIN_U32_A_2P2: Esp32V2P2Inst<(outs GPRPIE:$rd), (ins QR:$qw),
+                   "esp.min.u32.a\t $qw, $rd", []>
+{
+  bits<3> qw;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 1;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MIN_U8_A_2P2: Esp32V2P2Inst<(outs GPRPIE:$rd), (ins QR:$qw),
+                   "esp.min.u8.a\t $qw, $rd", []>
+{
+  bits<3> qw;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VABS_16_2P2: Esp32V2P2Inst<(outs QR:$qv), (ins QR:$qy),
+                   "esp.vabs.16\t $qv, $qy", [(set QR:$qv, (int_riscv_esp_vabs_16 QR:$qy))]>
+{
+  bits<3> qy;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VABS_32_2P2: Esp32V2P2Inst<(outs QR:$qv), (ins QR:$qy),
+                   "esp.vabs.32\t $qv, $qy", [(set QR:$qv, (int_riscv_esp_vabs_32 QR:$qy))]>
+{
+  bits<3> qy;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VABS_8_2P2: Esp32V2P2Inst<(outs QR:$qv), (ins QR:$qy),
+                   "esp.vabs.8\t $qv, $qy", [(set QR:$qv, (int_riscv_esp_vabs_8 QR:$qy))]>
+{
+  bits<3> qy;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_S16_2P2: Esp32V2P2Inst<(outs QR:$qv), (ins QR:$qx, QR:$qy, sat:$sat),
+                   "esp.vadd.s16\t $qv, $qx, $qy$sat", [(set QR:$qv, (riscv_esp_vadd_s16_pie22_m QR:$qx, QR:$qy, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 1;
+  let Inst{16} = sat{0};
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_S16_2P2_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, sat:$sat, imm8:$qv),
+				"!esp_vadd_s16_2p2_p $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VADD_S16_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qv, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vadd.s16.ld.incp\t $qu, $rs1, $qv, $qx, $qy$sat", [(set QR:$qv, QR:$qu, GPRPIE:$rs1r,
+     (riscv_esp_vadd_s16_ld_incp_pie22_m QR:$qx, QR:$qy, GPRPIE:$rs1, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qv;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_S16_LD_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, sat:$sat, imm8:$qv, imm8:$qu),
+				"!esp_vadd_s16_ld_incp_2p2_p $qu, $rs1, $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VADD_S16_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat),
+                   "esp.vadd.s16.st.incp\t $qu, $rs1, $qv, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_S16_ST_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, sat:$sat, imm8:$qv),
+				"!esp_vadd_s16_st_incp_2p2_p $qu, $rs1, $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VADD_S32_2P2: Esp32V2P2Inst<(outs QR:$qv), (ins QR:$qx, QR:$qy, sat:$sat),
+                   "esp.vadd.s32\t $qv, $qx, $qy$sat", [(set QR:$qv, (riscv_esp_vadd_s32_pie22_m QR:$qx, QR:$qy, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = sat{0};
+  let Inst{16} = 0;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_S32_2P2_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, sat:$sat, imm8:$qv),
+				"!esp_vadd_s32_2p2_p $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VADD_S32_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qv, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vadd.s32.ld.incp\t $qu, $rs1, $qv, $qx, $qy$sat", [(set QR:$qv, QR:$qu, GPRPIE:$rs1r,
+     (riscv_esp_vadd_s32_ld_incp_pie22_m QR:$qx, QR:$qy, GPRPIE:$rs1, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qv;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_S32_LD_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, sat:$sat, imm8:$qv, imm8:$qu),
+				"!esp_vadd_s32_ld_incp_2p2_p $qu, $rs1, $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VADD_S32_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat),
+                   "esp.vadd.s32.st.incp\t $qu, $rs1, $qv, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_S32_ST_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, sat:$sat, imm8:$qv),
+				"!esp_vadd_s32_st_incp_2p2_p $qu, $rs1, $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VADD_S8_2P2: Esp32V2P2Inst<(outs QR:$qv), (ins QR:$qx, QR:$qy, sat:$sat),
+                   "esp.vadd.s8\t $qv, $qx, $qy$sat", [(set QR:$qv, (riscv_esp_vadd_s8_pie22_m QR:$qx, QR:$qy, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = sat{0};
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_S8_2P2_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, sat:$sat, imm8:$qv),
+				"!esp_vadd_s8_2p2_p $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VADD_S8_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qv, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vadd.s8.ld.incp\t $qu, $rs1, $qv, $qx, $qy$sat", [(set QR:$qv, QR:$qu, GPRPIE:$rs1r,
+     (riscv_esp_vadd_s8_ld_incp_pie22_m QR:$qx, QR:$qy, GPRPIE:$rs1, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qv;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_S8_LD_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, sat:$sat, imm8:$qv, imm8:$qu),
+				"!esp_vadd_s8_ld_incp_2p2_p $qu, $rs1, $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VADD_S8_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat),
+                   "esp.vadd.s8.st.incp\t $qu, $rs1, $qv, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_S8_ST_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, sat:$sat, imm8:$qv),
+				"!esp_vadd_s8_st_incp_2p2_p $qu, $rs1, $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VADD_U16_2P2: Esp32V2P2Inst<(outs QR:$qv), (ins QR:$qx, QR:$qy, sat:$sat),
+                   "esp.vadd.u16\t $qv, $qx, $qy$sat", [(set QR:$qv, (riscv_esp_vadd_u16_pie22_m QR:$qx, QR:$qy, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = sat{0};
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_U16_2P2_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, sat:$sat, imm8:$qv),
+				"!esp_vadd_u16_2p2_p $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VADD_U16_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qv, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vadd.u16.ld.incp\t $qu, $rs1, $qv, $qx, $qy$sat", [(set QR:$qv, QR:$qu, GPRPIE:$rs1r,
+     (riscv_esp_vadd_u16_ld_incp_pie22_m QR:$qx, QR:$qy, GPRPIE:$rs1, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qv;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_U16_LD_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, sat:$sat, imm8:$qv, imm8:$qu),
+				"!esp_vadd_u16_ld_incp_2p2_p $qu, $rs1, $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VADD_U16_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat),
+                   "esp.vadd.u16.st.incp\t $qu, $rs1, $qv, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_U16_ST_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, sat:$sat, imm8:$qv),
+				"!esp_vadd_u16_st_incp_2p2_p $qu, $rs1, $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VADD_U32_2P2: Esp32V2P2Inst<(outs QR:$qv), (ins QR:$qx, QR:$qy, sat:$sat),
+                   "esp.vadd.u32\t $qv, $qx, $qy$sat", [(set QR:$qv, (riscv_esp_vadd_u32_pie22_m QR:$qx, QR:$qy, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = sat{0};
+  let Inst{16} = 0;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_U32_2P2_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, sat:$sat, imm8:$qv),
+				"!esp_vadd_u32_2p2_p $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VADD_U32_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qv, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vadd.u32.ld.incp\t $qu, $rs1, $qv, $qx, $qy$sat", [(set QR:$qv, QR:$qu, GPRPIE:$rs1r,
+     (riscv_esp_vadd_u32_ld_incp_pie22_m QR:$qx, QR:$qy, GPRPIE:$rs1, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qv;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_U32_LD_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, sat:$sat, imm8:$qv, imm8:$qu),
+				"!esp_vadd_u32_ld_incp_2p2_p $qu, $rs1, $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VADD_U32_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat),
+                   "esp.vadd.u32.st.incp\t $qu, $rs1, $qv, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_U32_ST_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, sat:$sat, imm8:$qv),
+				"!esp_vadd_u32_st_incp_2p2_p $qu, $rs1, $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VADD_U8_2P2: Esp32V2P2Inst<(outs QR:$qv), (ins QR:$qx, QR:$qy, sat:$sat),
+                   "esp.vadd.u8\t $qv, $qx, $qy$sat", [(set QR:$qv, (riscv_esp_vadd_u8_pie22_m QR:$qx, QR:$qy, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = sat{0};
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_U8_2P2_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, sat:$sat, imm8:$qv),
+				"!esp_vadd_u8_2p2_p $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VADD_U8_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qv, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vadd.u8.ld.incp\t $qu, $rs1, $qv, $qx, $qy$sat", [(set QR:$qv, QR:$qu, GPRPIE:$rs1r,
+     (riscv_esp_vadd_u8_ld_incp_pie22_m QR:$qx, QR:$qy, GPRPIE:$rs1, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qv;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_U8_LD_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, sat:$sat, imm8:$qv, imm8:$qu),
+				"!esp_vadd_u8_ld_incp_2p2_p $qu, $rs1, $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VADD_U8_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat),
+                   "esp.vadd.u8.st.incp\t $qu, $rs1, $qv, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VADD_U8_ST_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, sat:$sat, imm8:$qv),
+				"!esp_vadd_u8_st_incp_2p2_p $qu, $rs1, $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VCLAMP_S16_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, select_16:$sel16),
+                   "esp.vclamp.s16\t $qz, $qx, $sel16", [(set QR:$qz, (int_riscv_esp_vclamp_s16 QR:$qx, timm:$sel16))]>
+{
+  bits<3> qx;
+  bits<4> sel16;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18-15} = sel16{3-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_S16_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vmax.s16\t $qz, $qx, $qy", [(set QR:$qz, (int_riscv_esp_vmax_s16 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_S16_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vmax.s16.ld.incp\t $qu, $rs1, $qz, $qx, $qy", [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vmax_s16_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_S16_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vmax.s16.st.incp\t $qu, $rs1, $qz, $qx, $qy", [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmax_s16_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_S32_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vmax.s32\t $qz, $qx, $qy", [(set QR:$qz, (int_riscv_esp_vmax_s32 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_S32_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vmax.s32.ld.incp\t $qu, $rs1, $qz, $qx, $qy", [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vmax_s32_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_S32_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vmax.s32.st.incp\t $qu, $rs1, $qz, $qx, $qy", [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmax_s32_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_S8_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vmax.s8\t $qz, $qx, $qy", [(set QR:$qz, (int_riscv_esp_vmax_s8 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_S8_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vmax.s8.ld.incp\t $qu, $rs1, $qz, $qx, $qy", [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vmax_s8_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_S8_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vmax.s8.st.incp\t $qu, $rs1, $qz, $qx, $qy", [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmax_s8_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_U16_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vmax.u16\t $qz, $qx, $qy", [(set QR:$qz, (int_riscv_esp_vmax_u16 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_U16_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vmax.u16.ld.incp\t $qu, $rs1, $qz, $qx, $qy", [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vmax_u16_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_U16_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vmax.u16.st.incp\t $qu, $rs1, $qz, $qx, $qy", [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmax_u16_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_U32_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vmax.u32\t $qz, $qx, $qy", [(set QR:$qz, (int_riscv_esp_vmax_u32 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_U32_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vmax.u32.ld.incp\t $qu, $rs1, $qz, $qx, $qy", [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vmax_u32_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_U32_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vmax.u32.st.incp\t $qu, $rs1, $qz, $qx, $qy", [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmax_u32_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_U8_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vmax.u8\t $qz, $qx, $qy", [(set QR:$qz, (int_riscv_esp_vmax_u8 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_U8_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vmax.u8.ld.incp\t $qu, $rs1, $qz, $qx, $qy", [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vmax_u8_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMAX_U8_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vmax.u8.st.incp\t $qu, $rs1, $qz, $qx, $qy", [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmax_u8_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_S16_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vmin.s16\t $qz, $qx, $qy", [(set QR:$qz, (int_riscv_esp_vmin_s16 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_S16_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vmin.s16.ld.incp\t $qu, $rs1, $qz, $qx, $qy", [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vmin_s16_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_S16_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vmin.s16.st.incp\t $qu, $rs1, $qz, $qx, $qy", [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmin_s16_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_S32_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vmin.s32\t $qz, $qx, $qy", [(set QR:$qz, (int_riscv_esp_vmin_s32 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_S32_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vmin.s32.ld.incp\t $qu, $rs1, $qz, $qx, $qy", [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vmin_s32_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_S32_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vmin.s32.st.incp\t $qu, $rs1, $qz, $qx, $qy", [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmin_s32_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_S8_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vmin.s8\t $qz, $qx, $qy", [(set QR:$qz, (int_riscv_esp_vmin_s8 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_S8_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vmin.s8.ld.incp\t $qu, $rs1, $qz, $qx, $qy", [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vmin_s8_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_S8_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vmin.s8.st.incp\t $qu, $rs1, $qz, $qx, $qy", [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmin_s8_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_U16_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vmin.u16\t $qz, $qx, $qy", [(set QR:$qz, (int_riscv_esp_vmin_u16 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_U16_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vmin.u16.ld.incp\t $qu, $rs1, $qz, $qx, $qy", [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vmin_u16_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_U16_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vmin.u16.st.incp\t $qu, $rs1, $qz, $qx, $qy", [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmin_u16_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_U32_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vmin.u32\t $qz, $qx, $qy", [(set QR:$qz, (int_riscv_esp_vmin_u32 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_U32_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vmin.u32.ld.incp\t $qu, $rs1, $qz, $qx, $qy", [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vmin_u32_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_U32_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vmin.u32.st.incp\t $qu, $rs1, $qz, $qx, $qy", [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmin_u32_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_U8_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vmin.u8\t $qz, $qx, $qy", [(set QR:$qz, (int_riscv_esp_vmin_u8 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_U8_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1),
+                   "esp.vmin.u8.ld.incp\t $qu, $rs1, $qz, $qx, $qy", [(set QR:$qz, QR:$qu, GPRPIE:$rs1r,
+                      (riscv_esp_vmin_u8_ld_incp_m QR:$qx, QR:$qy, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMIN_U8_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1),
+                   "esp.vmin.u8.st.incp\t $qu, $rs1, $qz, $qx, $qy", [(set QR:$qz, GPRPIE:$rs1r,
+                      (riscv_esp_vmin_u8_st_incp_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_S16_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy, sat:$sat, rm:$rm),
+                   "esp.vmul.s16\t $qz, $qx, $qy$sat$rm", [(set QR:$qz, (riscv_esp_vmul_s16_pie22_m_node QR:$qx, QR:$qy, timm:$sat, timm:$rm))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 1;
+  let Inst{16} = sat{0};
+  let Inst{15} = rm{2};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-11} = rm{1-0};
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_S16_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, rm:$rm),
+                   "esp.vmul.s16.ld.incp\t $qu, $rs1, $qz, $qx, $qy$sat$rm", [(set QR:$qz, QR:$qu, GPRPIE:$rs1r, (riscv_esp_vmul_s16_ld_incp_pie22_m QR:$qx, QR:$qy, GPRPIE:$rs1, timm:$sat, timm:$rm))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = sat{0};
+  let Inst{21-19} = rm{2-0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_S16_S8XS8_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qv), (ins QR:$qx, QR:$qy, rm:$rm),
+                   "esp.vmul.s16.s8xs8\t $qz, $qv, $qx, $qy$rm", [(set QR:$qz, QR:$qv, (riscv_esp_vmul_s16_s8xs8_pie22_m QR:$qx, QR:$qy, (i32 0), timm:$rm))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> rm;
+  bits<3> qz;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18-16} = rm{2-0};
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_S16_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat, rm:$rm),
+                   "esp.vmul.s16.st.incp\t $qu, $rs1, $qz, $qx, $qy$sat$rm", [(set QR:$qz, GPRPIE:$rs1r, (riscv_esp_vmul_s16_st_incp_pie22_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, timm:$sat, timm:$rm))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = sat{0};
+  let Inst{21-19} = rm{2-0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_S32_S16XS16_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qv), (ins QR:$qx, QR:$qy, rm:$rm),
+                   "esp.vmul.s32.s16xs16\t $qz, $qv, $qx, $qy$rm", [(set QR:$qz, QR:$qv, (riscv_esp_vmul_s32_s16xs16_pie22_m QR:$qx, QR:$qy, (i32 0), timm:$rm))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> rm;
+  bits<3> qz;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18-16} = rm{2-0};
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_S8_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy, sat:$sat, rm:$rm),
+                   "esp.vmul.s8\t $qz, $qx, $qy$sat$rm", [(set QR:$qz, (riscv_esp_vmul_s8_pie22_m_node QR:$qx, QR:$qy, timm:$sat, timm:$rm))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = sat{0};
+  let Inst{15} = rm{2};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-11} = rm{1-0};
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_S8_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, rm:$rm),
+                   "esp.vmul.s8.ld.incp\t $qu, $rs1, $qz, $qx, $qy$sat$rm", [(set QR:$qz, QR:$qu, GPRPIE:$rs1r, (riscv_esp_vmul_s8_ld_incp_pie22_m QR:$qx, QR:$qy, GPRPIE:$rs1, timm:$sat, timm:$rm))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = sat{0};
+  let Inst{21-19} = rm{2-0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_S8_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat, rm:$rm),
+                   "esp.vmul.s8.st.incp\t $qu, $rs1, $qz, $qx, $qy$sat$rm", [(set QR:$qz, GPRPIE:$rs1r, (riscv_esp_vmul_s8_st_incp_pie22_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, timm:$sat, timm:$rm))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = sat{0};
+  let Inst{21-19} = rm{2-0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_U16_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy, sat:$sat, rm:$rm),
+                   "esp.vmul.u16\t $qz, $qx, $qy$sat$rm", [(set QR:$qz, (riscv_esp_vmul_u16_pie22_m_node QR:$qx, QR:$qy, timm:$sat, timm:$rm))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = sat{0};
+  let Inst{15} = rm{2};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-11} = rm{1-0};
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_U16_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, rm:$rm),
+                   "esp.vmul.u16.ld.incp\t $qu, $rs1, $qz, $qx, $qy$sat$rm", [(set QR:$qz, QR:$qu, GPRPIE:$rs1r, (riscv_esp_vmul_u16_ld_incp_pie22_m QR:$qx, QR:$qy, GPRPIE:$rs1, timm:$sat, timm:$rm))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = sat{0};
+  let Inst{21-19} = rm{2-0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_U16_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat, rm:$rm),
+                   "esp.vmul.u16.st.incp\t $qu, $rs1, $qz, $qx, $qy$sat$rm", [(set QR:$qz, GPRPIE:$rs1r, (riscv_esp_vmul_u16_st_incp_pie22_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, timm:$sat, timm:$rm))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = sat{0};
+  let Inst{21-19} = rm{2-0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_U8_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy, sat:$sat, rm:$rm),
+                   "esp.vmul.u8\t $qz, $qx, $qy$sat$rm", [(set QR:$qz, (riscv_esp_vmul_u8_pie22_m_node QR:$qx, QR:$qy, timm:$sat, timm:$rm))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = sat{0};
+  let Inst{15} = rm{2};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-11} = rm{1-0};
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_U8_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, rm:$rm),
+                   "esp.vmul.u8.ld.incp\t $qu, $rs1, $qz, $qx, $qy$sat$rm", [(set QR:$qz, QR:$qu, GPRPIE:$rs1r, (riscv_esp_vmul_u8_ld_incp_pie22_m QR:$qx, QR:$qy, GPRPIE:$rs1, timm:$sat, timm:$rm))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = sat{0};
+  let Inst{21-19} = rm{2-0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VMUL_U8_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat, rm:$rm),
+                   "esp.vmul.u8.st.incp\t $qu, $rs1, $qz, $qx, $qy$sat$rm", [(set QR:$qz, GPRPIE:$rs1r, (riscv_esp_vmul_u8_st_incp_pie22_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, timm:$sat, timm:$rm))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = sat{0};
+  let Inst{21-19} = rm{2-0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VPRELU_S16_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins GPRPIE:$rs1, QR:$qx, QR:$qy, sat:$sat, rm:$rm),
+                   "esp.vprelu.s16\t $qz, $qy, $qx, $rs1$sat$rm", [(set QR:$qz, (riscv_esp_vprelu_s16_pie22_m QR:$qx, QR:$qy, GPRPIE:$rs1, timm:$sat, timm:$rm))]>
+{
+  bits<5> rs1;
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = sat{0};
+  let Inst{21} = 1;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = rm{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VPRELU_S8_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins GPRPIE:$rs1, QR:$qx, QR:$qy, sat:$sat, rm:$rm),
+                   "esp.vprelu.s8\t $qz, $qy, $qx, $rs1$sat$rm", [(set QR:$qz, (riscv_esp_vprelu_s8_pie22_m QR:$qx, QR:$qy, GPRPIE:$rs1, timm:$sat, timm:$rm))]>
+{
+  bits<5> rs1;
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = sat{0};
+  let Inst{21} = 1;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = rm{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VRELU_S16_2P2: Esp32V2P2Inst<(outs QR:$qyr), (ins GPRPIE:$rs1, GPRPIE:$rs2, QR:$qy, sat:$sat, rm:$rm),
+                   "esp.vrelu.s16\t $qy, $rs2, $rs1$sat$rm", [(set QR:$qyr, (riscv_esp_vrelu_s16_pie22_m QR:$qy, GPRPIE:$rs1, GPRPIE:$rs2, timm:$sat, timm:$rm))]>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<3> qy;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qyr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$qyr = $qy";
+
+  let Inst{31} = 1;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = sat{0};
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = rm{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VRELU_S8_2P2: Esp32V2P2Inst<(outs QR:$qyr), (ins GPRPIE:$rs1, GPRPIE:$rs2, QR:$qy, sat:$sat, rm:$rm),
+                   "esp.vrelu.s8\t $qy, $rs2, $rs1$sat$rm", [(set QR:$qyr, (riscv_esp_vrelu_s8_pie22_m QR:$qy, GPRPIE:$rs1, GPRPIE:$rs2, timm:$sat, timm:$rm))]>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<3> qy;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qyr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$qyr = $qy";
+
+  let Inst{31} = 1;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = sat{0};
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = rm{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSADDS_S16_2P2: Esp32V2P2Inst<(outs QR:$qv), (ins GPRPIE:$rs1, QR:$qx, sat:$sat),
+                   "esp.vsadds.s16\t $qv, $qx, $rs1$sat", [(set QR:$qv, (riscv_esp_vsadds_s16_pie22_m QR:$qx, GPRPIE:$rs1, timm:$sat))]>
+{
+  bits<5> rs1;
+  bits<3> qx;
+  bits<1> sat;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = sat{0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_VSADDS_S16_2P2_P : PseudoEsp<(outs), (ins GPRPIE:$rs1, imm8:$qx, sat:$sat, imm8:$qv),
+				"!esp_vsadds_s16_2p2_p $qv, $qx, $rs1$sat",
+			[]>;
+
+def ESP_VSADDS_S8_2P2: Esp32V2P2Inst<(outs QR:$qv), (ins GPRPIE:$rs1, QR:$qx, sat:$sat),
+                   "esp.vsadds.s8\t $qv, $qx, $rs1$sat", [(set QR:$qv, (riscv_esp_vsadds_s8_pie22_m QR:$qx, GPRPIE:$rs1, timm:$sat))]>
+{
+  bits<5> rs1;
+  bits<3> qx;
+  bits<1> sat;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = sat{0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_VSADDS_S8_2P2_P : PseudoEsp<(outs), (ins GPRPIE:$rs1, imm8:$qx, sat:$sat, imm8:$qv),
+				"!esp_vsadds_s8_2p2_p $qv, $qx, $rs1$sat",
+			[]>;
+
+def ESP_VSADDS_U16_2P2: Esp32V2P2Inst<(outs QR:$qv), (ins GPRPIE:$rs1, QR:$qx, sat:$sat),
+                   "esp.vsadds.u16\t $qv, $qx, $rs1$sat", [(set QR:$qv, (riscv_esp_vsadds_u16_pie22_m QR:$qx, GPRPIE:$rs1, timm:$sat))]>
+{
+  bits<5> rs1;
+  bits<3> qx;
+  bits<1> sat;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = sat{0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_VSADDS_U16_2P2_P : PseudoEsp<(outs), (ins GPRPIE:$rs1, imm8:$qx, sat:$sat, imm8:$qv),
+				"!esp_vsadds_u16_2p2_p $qv, $qx, $rs1$sat",
+			[]>;
+
+def ESP_VSADDS_U8_2P2: Esp32V2P2Inst<(outs QR:$qv), (ins GPRPIE:$rs1, QR:$qx, sat:$sat),
+                   "esp.vsadds.u8\t $qv, $qx, $rs1$sat", [(set QR:$qv, (riscv_esp_vsadds_u8_pie22_m QR:$qx, GPRPIE:$rs1, timm:$sat))]>
+{
+  bits<5> rs1;
+  bits<3> qx;
+  bits<1> sat;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = sat{0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_VSADDS_U8_2P2_P : PseudoEsp<(outs), (ins GPRPIE:$rs1, imm8:$qx, sat:$sat, imm8:$qv),
+				"!esp_vsadds_u8_2p2_p $qv, $qx, $rs1$sat",
+			[]>;
+
+def ESP_VSAT_S16_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins GPRPIE:$rs1, GPRPIE:$rs2, QR:$qx),
+                   "esp.vsat.s16\t $qz, $qx, $rs1, $rs2", [(set QR:$qz,
+                      (int_riscv_esp_vsat_s16 QR:$qx, GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSAT_S32_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins GPRPIE:$rs1, GPRPIE:$rs2, QR:$qx),
+                   "esp.vsat.s32\t $qz, $qx, $rs1, $rs2", [(set QR:$qz,
+                      (int_riscv_esp_vsat_s32 QR:$qx, GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 1;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSAT_S8_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins GPRPIE:$rs1, GPRPIE:$rs2, QR:$qx),
+                   "esp.vsat.s8\t $qz, $qx, $rs1, $rs2", [(set QR:$qz, (int_riscv_esp_vsat_s8 QR:$qx, GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSAT_U16_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins GPRPIE:$rs1, GPRPIE:$rs2, QR:$qx),
+                   "esp.vsat.u16\t $qz, $qx, $rs1, $rs2", [(set QR:$qz,
+                      (int_riscv_esp_vsat_u16 QR:$qx, GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSAT_U32_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins GPRPIE:$rs1, GPRPIE:$rs2, QR:$qx),
+                   "esp.vsat.u32\t $qz, $qx, $rs1, $rs2", [(set QR:$qz,
+                      (int_riscv_esp_vsat_u32 QR:$qx, GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 1;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSAT_U8_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins GPRPIE:$rs1, GPRPIE:$rs2, QR:$qx),
+                   "esp.vsat.u8\t $qz, $qx, $rs1, $rs2", [(set QR:$qz, (int_riscv_esp_vsat_u8 QR:$qx, GPRPIE:$rs1, GPRPIE:$rs2))]>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSSUBS_S16_2P2: Esp32V2P2Inst<(outs QR:$qv), (ins GPRPIE:$rs1, QR:$qx, sat:$sat),
+                   "esp.vssubs.s16\t $qv, $qx, $rs1$sat", [(set QR:$qv, (riscv_esp_vssubs_s16_pie22_m QR:$qx, GPRPIE:$rs1, timm:$sat))]>
+{
+  bits<5> rs1;
+  bits<3> qx;
+  bits<1> sat;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = sat{0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_VSSUBS_S16_2P2_P : PseudoEsp<(outs), (ins GPRPIE:$rs1, imm8:$qx, sat:$sat, imm8:$qv),
+				"!esp_vssubs_s16_2p2_p $qv, $qx, $rs1$sat",
+			[]>;
+
+def ESP_VSSUBS_S8_2P2: Esp32V2P2Inst<(outs QR:$qv), (ins GPRPIE:$rs1, QR:$qx, sat:$sat),
+                   "esp.vssubs.s8\t $qv, $qx, $rs1$sat", [(set QR:$qv, (riscv_esp_vssubs_s8_pie22_m QR:$qx, GPRPIE:$rs1, timm:$sat))]>
+{
+  bits<5> rs1;
+  bits<3> qx;
+  bits<1> sat;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = sat{0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_VSSUBS_S8_2P2_P : PseudoEsp<(outs), (ins GPRPIE:$rs1, imm8:$qx, sat:$sat, imm8:$qv),
+				"!esp_vssubs_s8_2p2_p $qv, $qx, $rs1$sat",
+			[]>;
+
+def ESP_VSSUBS_U16_2P2: Esp32V2P2Inst<(outs QR:$qv), (ins GPRPIE:$rs1, QR:$qx, sat:$sat),
+                   "esp.vssubs.u16\t $qv, $qx, $rs1$sat", [(set QR:$qv, (riscv_esp_vssubs_u16_pie22_m QR:$qx, GPRPIE:$rs1, timm:$sat))]>
+{
+  bits<5> rs1;
+  bits<3> qx;
+  bits<1> sat;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = sat{0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_VSSUBS_U16_2P2_P : PseudoEsp<(outs), (ins GPRPIE:$rs1, imm8:$qx, sat:$sat, imm8:$qv),
+				"!esp_vssubs_u16_2p2_p $qv, $qx, $rs1$sat",
+			[]>;
+
+def ESP_VSSUBS_U8_2P2: Esp32V2P2Inst<(outs QR:$qv), (ins GPRPIE:$rs1, QR:$qx, sat:$sat),
+                   "esp.vssubs.u8\t $qv, $qx, $rs1$sat", [(set QR:$qv, (riscv_esp_vssubs_u8_pie22_m QR:$qx, GPRPIE:$rs1, timm:$sat))]>
+{
+  bits<5> rs1;
+  bits<3> qx;
+  bits<1> sat;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = sat{0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_VSSUBS_U8_2P2_P : PseudoEsp<(outs), (ins GPRPIE:$rs1, imm8:$qx, sat:$sat, imm8:$qv),
+				"!esp_vssubs_u8_2p2_p $qv, $qx, $rs1$sat",
+			[]>;
+
+def ESP_VSUB_S16_2P2: Esp32V2P2Inst<(outs QR:$qv), (ins QR:$qx, QR:$qy, sat:$sat),
+                   "esp.vsub.s16\t $qv, $qx, $qy$sat", [(set QR:$qv, (riscv_esp_vsub_s16_pie22_m QR:$qx, QR:$qy, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 1;
+  let Inst{16} = sat{0};
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_S16_2P2_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, sat:$sat, imm8:$qv),
+				"!esp_vsub_s16_2p2_p $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VSUB_S16_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qv, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vsub.s16.ld.incp\t $qu, $rs1, $qv, $qx, $qy$sat", [(set QR:$qv, QR:$qu, GPRPIE:$rs1r,
+     (riscv_esp_vsub_s16_ld_incp_pie22_m QR:$qx, QR:$qy, GPRPIE:$rs1, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qv;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_S16_LD_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, sat:$sat, imm8:$qv, imm8:$qu),
+				"!esp_vsub_s16_ld_incp_2p2_p $qu, $rs1, $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VSUB_S16_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat),
+                   "esp.vsub.s16.st.incp\t $qu, $rs1, $qv, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_S16_ST_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, sat:$sat, imm8:$qv),
+				"!esp_vsub_s16_st_incp_2p2_p $qu, $rs1, $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VSUB_S32_2P2: Esp32V2P2Inst<(outs QR:$qv), (ins QR:$qx, QR:$qy, sat:$sat),
+                   "esp.vsub.s32\t $qv, $qx, $qy$sat", [(set QR:$qv, (riscv_esp_vsub_s32_pie22_m QR:$qx, QR:$qy, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = sat{0};
+  let Inst{16} = 0;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_S32_2P2_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, sat:$sat, imm8:$qv),
+				"!esp_vsub_s32_2p2_p $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VSUB_S32_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qv, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vsub.s32.ld.incp\t $qu, $rs1, $qv, $qx, $qy$sat", [(set QR:$qv, QR:$qu, GPRPIE:$rs1r,
+     (riscv_esp_vsub_s32_ld_incp_pie22_m QR:$qx, QR:$qy, GPRPIE:$rs1, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qv;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_S32_LD_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, sat:$sat, imm8:$qv, imm8:$qu),
+				"!esp_vsub_s32_ld_incp_2p2_p $qu, $rs1, $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VSUB_S32_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat),
+                   "esp.vsub.s32.st.incp\t $qu, $rs1, $qv, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_S32_ST_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, sat:$sat, imm8:$qv),
+				"!esp_vsub_s32_st_incp_2p2_p $qu, $rs1, $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VSUB_S8_2P2: Esp32V2P2Inst<(outs QR:$qv), (ins QR:$qx, QR:$qy, sat:$sat),
+                   "esp.vsub.s8\t $qv, $qx, $qy$sat", [(set QR:$qv, (riscv_esp_vsub_s8_pie22_m QR:$qx, QR:$qy, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = sat{0};
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_S8_2P2_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, sat:$sat, imm8:$qv),
+				"!esp_vsub_s8_2p2_p $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VSUB_S8_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qv, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vsub.s8.ld.incp\t $qu, $rs1, $qv, $qx, $qy$sat", [(set QR:$qv, QR:$qu, GPRPIE:$rs1r,
+     (riscv_esp_vsub_s8_ld_incp_pie22_m QR:$qx, QR:$qy, GPRPIE:$rs1, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qv;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_S8_LD_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, sat:$sat, imm8:$qv, imm8:$qu),
+				"!esp_vsub_s8_ld_incp_2p2_p $qu, $rs1, $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VSUB_S8_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat),
+                   "esp.vsub.s8.st.incp\t $qu, $rs1, $qv, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_S8_ST_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, sat:$sat, imm8:$qv),
+				"!esp_vsub_s8_st_incp_2p2_p $qu, $rs1, $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VSUB_U16_2P2: Esp32V2P2Inst<(outs QR:$qv), (ins QR:$qx, QR:$qy, sat:$sat),
+                   "esp.vsub.u16\t $qv, $qx, $qy$sat", [(set QR:$qv, (riscv_esp_vsub_u16_pie22_m QR:$qx, QR:$qy, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = sat{0};
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_U16_2P2_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, sat:$sat, imm8:$qv),
+				"!esp_vsub_u16_2p2_p $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VSUB_U16_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qv, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vsub.u16.ld.incp\t $qu, $rs1, $qv, $qx, $qy$sat", [(set QR:$qv, QR:$qu, GPRPIE:$rs1r,
+     (riscv_esp_vsub_u16_ld_incp_pie22_m QR:$qx, QR:$qy, GPRPIE:$rs1, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qv;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_U16_LD_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, sat:$sat, imm8:$qv, imm8:$qu),
+				"!esp_vsub_u16_ld_incp_2p2_p $qu, $rs1, $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VSUB_U16_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat),
+                   "esp.vsub.u16.st.incp\t $qu, $rs1, $qv, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_U16_ST_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, sat:$sat, imm8:$qv),
+				"!esp_vsub_u16_st_incp_2p2_p $qu, $rs1, $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VSUB_U32_2P2: Esp32V2P2Inst<(outs QR:$qv), (ins QR:$qx, QR:$qy, sat:$sat),
+                   "esp.vsub.u32\t $qv, $qx, $qy$sat", [(set QR:$qv, (riscv_esp_vsub_u32_pie22_m QR:$qx, QR:$qy, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = sat{0};
+  let Inst{16} = 0;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_U32_2P2_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, sat:$sat, imm8:$qv),
+				"!esp_vsub_u32_2p2_p $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VSUB_U32_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qv, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vsub.u32.ld.incp\t $qu, $rs1, $qv, $qx, $qy$sat", [(set QR:$qv, QR:$qu, GPRPIE:$rs1r,
+     (riscv_esp_vsub_u32_ld_incp_pie22_m QR:$qx, QR:$qy, GPRPIE:$rs1, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qv;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_U32_LD_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, sat:$sat, imm8:$qv, imm8:$qu),
+				"!esp_vsub_u32_ld_incp_2p2_p $qu, $rs1, $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VSUB_U32_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat),
+                   "esp.vsub.u32.st.incp\t $qu, $rs1, $qv, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_U32_ST_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, sat:$sat, imm8:$qv),
+				"!esp_vsub_u32_st_incp_2p2_p $qu, $rs1, $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VSUB_U8_2P2: Esp32V2P2Inst<(outs QR:$qv), (ins QR:$qx, QR:$qy, sat:$sat),
+                   "esp.vsub.u8\t $qv, $qx, $qy$sat", [(set QR:$qv, (riscv_esp_vsub_u8_pie22_m QR:$qx, QR:$qy, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sat;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = sat{0};
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_U8_2P2_P : PseudoEsp<(outs), (ins imm8:$qx, imm8:$qy, sat:$sat, imm8:$qv),
+				"!esp_vsub_u8_2p2_p $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VSUB_U8_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qv, QR:$qu, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat),
+                   "esp.vsub.u8.ld.incp\t $qu, $rs1, $qv, $qx, $qy$sat", [(set QR:$qv, QR:$qu, GPRPIE:$rs1r,
+     (riscv_esp_vsub_u8_ld_incp_pie22_m QR:$qx, QR:$qy, GPRPIE:$rs1, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qv;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_U8_LD_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, GPRPIE:$rs1, sat:$sat, imm8:$qv, imm8:$qu),
+				"!esp_vsub_u8_ld_incp_2p2_p $qu, $rs1, $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_VSUB_U8_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat),
+                   "esp.vsub.u8.st.incp\t $qu, $rs1, $qv, $qx, $qy$sat", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = sat{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSUB_U8_ST_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins imm8:$qx, imm8:$qy, imm8:$qu, GPRPIE:$rs1, sat:$sat, imm8:$qv),
+				"!esp_vsub_u8_st_incp_2p2_p $qu, $rs1, $qv, $qx, $qy$sat",
+			[]>;
+
+def ESP_ADDX2_2P2: Esp32V2P2Inst<(outs GPR:$rd), (ins GPR:$rs1, GPR:$rs2),
+                   "esp.addx2\t $rd, $rs1, $rs2", []>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24-20} = rs2{4-0};
+  let Inst{19-15} = rs1{4-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11-7} = rd{4-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 0;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_ADDX2_2P2_P : PseudoEsp<(outs), (ins GPRPIE:$rs1, GPRPIE:$rs2, GPRPIE:$rd),
+				"!esp_addx2_2p2_p $rd, $rs1, $rs2",
+			[(int_riscv_esp_addx2_2p2 GPRPIE:$rs1, GPRPIE:$rs2, GPRPIE:$rd)]>;
+
+def ESP_ADDX4_2P2: Esp32V2P2Inst<(outs GPR:$rd), (ins GPR:$rs1, GPR:$rs2),
+                   "esp.addx4\t $rd, $rs1, $rs2", []>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24-20} = rs2{4-0};
+  let Inst{19-15} = rs1{4-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11-7} = rd{4-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 0;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_ADDX4_2P2_P : PseudoEsp<(outs), (ins GPRPIE:$rs1, GPRPIE:$rs2, GPRPIE:$rd),
+				"!esp_addx4_2p2_p $rd, $rs1, $rs2",
+			[(int_riscv_esp_addx4_2p2 GPRPIE:$rs1, GPRPIE:$rs2, GPRPIE:$rd)]>;
+
+def ESP_SAT_2P2: Esp32V2P2Inst<(outs GPR:$rs2r), (ins GPR:$rd, GPR:$rs1, GPR:$rs2),
+                   "esp.sat\t $rs2, $rd, $rs1", []>
+{
+  bits<5> rd;
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<5> rs2r;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs2r = $rs2";
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24-20} = rs2{4-0};
+  let Inst{19-15} = rs1{4-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11-7} = rd{4-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 0;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs2r = $rs2" in
+def ESP_SAT_2P2_P : PseudoEsp<(outs GPRPIE:$rs2r), (ins GPRPIE:$rd, GPRPIE:$rs1, GPRPIE:$rs2),
+				"!esp_sat_2p2_p $rs2, $rd, $rs1",
+			[(set GPRPIE:$rs2r, (int_riscv_esp_sat_2p2 GPRPIE:$rd, GPRPIE:$rs1, GPRPIE:$rs2))]>;
+
+def ESP_SUBX2_2P2: Esp32V2P2Inst<(outs GPR:$rd), (ins GPR:$rs1, GPR:$rs2),
+                   "esp.subx2\t $rd, $rs1, $rs2", []>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24-20} = rs2{4-0};
+  let Inst{19-15} = rs1{4-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11-7} = rd{4-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 0;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_SUBX2_2P2_P : PseudoEsp<(outs), (ins GPRPIE:$rs1, GPRPIE:$rs2, GPRPIE:$rd),
+				"!esp_subx2_2p2_p $rd, $rs1, $rs2",
+			[(int_riscv_esp_subx2_2p2 GPRPIE:$rs1, GPRPIE:$rs2, GPRPIE:$rd)]>;
+
+def ESP_SUBX4_2P2: Esp32V2P2Inst<(outs GPR:$rd), (ins GPR:$rs1, GPR:$rs2),
+                   "esp.subx4\t $rd, $rs1, $rs2", []>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24-20} = rs2{4-0};
+  let Inst{19-15} = rs1{4-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11-7} = rd{4-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 0;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_SUBX4_2P2_P : PseudoEsp<(outs), (ins GPRPIE:$rs1, GPRPIE:$rs2, GPRPIE:$rd),
+				"!esp_subx4_2p2_p $rd, $rs1, $rs2",
+			[(int_riscv_esp_subx4_2p2 GPRPIE:$rs1, GPRPIE:$rs2, GPRPIE:$rd)]>;
+
+def ESP_ANDQ_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.andq\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_andq QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_NOTQ_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx),
+                   "esp.notq\t $qz, $qx",
+                   [(set QR:$qz, (int_riscv_esp_notq QR:$qx))]>
+{
+  bits<3> qx;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_ORQ_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.orq\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_orq QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_XORQ_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.xorq\t $qz, $qx, $qy",
+                   [(set QR:$qz, (int_riscv_esp_xorq QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMP_EQ_S16_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.eq.s16\t $qz, $qx, $qy", [(set QR:$qz, (int_riscv_esp_vcmp_eq_s16 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMP_EQ_S32_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.eq.s32\t $qz, $qx, $qy", [(set QR:$qz, (int_riscv_esp_vcmp_eq_s32 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMP_EQ_S8_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.eq.s8\t $qz, $qx, $qy", [(set QR:$qz, (int_riscv_esp_vcmp_eq_s8 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMP_GT_S16_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.gt.s16\t $qz, $qx, $qy", [(set QR:$qz, (int_riscv_esp_vcmp_gt_s16 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMP_GT_S32_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.gt.s32\t $qz, $qx, $qy", [(set QR:$qz, (int_riscv_esp_vcmp_gt_s32 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMP_GT_S8_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.gt.s8\t $qz, $qx, $qy", [(set QR:$qz, (int_riscv_esp_vcmp_gt_s8 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMP_LT_S16_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.lt.s16\t $qz, $qx, $qy", [(set QR:$qz, (int_riscv_esp_vcmp_lt_s16 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 1;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMP_LT_S32_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.lt.s32\t $qz, $qx, $qy", [(set QR:$qz, (int_riscv_esp_vcmp_lt_s32 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 1;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMP_LT_S8_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.lt.s8\t $qz, $qx, $qy", [(set QR:$qz, (int_riscv_esp_vcmp_lt_s8 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = 1;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMP_LT_U16_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.lt.u16\t $qz, $qx, $qy", [(set QR:$qz, (int_riscv_esp_vcmp_lt_u16 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 1;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMP_LT_U32_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.lt.u32\t $qz, $qx, $qy", [(set QR:$qz, (int_riscv_esp_vcmp_lt_u32 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 1;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VCMP_LT_U8_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qx, QR:$qy),
+                   "esp.vcmp.lt.u8\t $qz, $qx, $qy", [(set QR:$qz, (int_riscv_esp_vcmp_lt_u8 QR:$qx, QR:$qy))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOV_S16_QACC_2P2: Esp32V2P2Inst<(outs), (ins QR:$qu),
+                   "esp.mov.s16.qacc\t $qu", []>
+{
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOV_S8_QACC_2P2: Esp32V2P2Inst<(outs), (ins QR:$qu),
+                   "esp.mov.s8.qacc\t $qu", []>
+{
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOV_U16_QACC_2P2: Esp32V2P2Inst<(outs), (ins QR:$qu),
+                   "esp.mov.u16.qacc\t $qu", []>
+{
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOV_U8_QACC_2P2: Esp32V2P2Inst<(outs), (ins QR:$qu),
+                   "esp.mov.u8.qacc\t $qu", []>
+{
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVI_16_A_2P2: Esp32V2P2Inst<(outs GPRPIE:$rd), (ins QR:$qy, select_16:$sel16),
+                   "esp.movi.16.a\t $qy, $rd, $sel16", []>
+{
+  bits<3> qy;
+  bits<4> sel16;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18-15} = sel16{3-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVI_16_Q_2P2: Esp32V2P2Inst<(outs QR:$qy), (ins GPRPIE:$rs1, select_16:$sel16),
+                   "esp.movi.16.q\t $qy, $rs1, $sel16", []>
+{
+  bits<5> rs1;
+  bits<4> sel16;
+  bits<3> qy;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10-7} = sel16{3-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVI_32_A_2P2: Esp32V2P2Inst<(outs GPRPIE:$rd), (ins QR:$qy, select_4:$sel4),
+                   "esp.movi.32.a\t $qy, $rd, $sel4", []>
+{
+  bits<3> qy;
+  bits<2> sel4;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = sel4{1};
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = sel4{0};
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVI_32_Q_2P2: Esp32V2P2Inst<(outs QR:$qy), (ins GPRPIE:$rs1, select_4:$sel4),
+                   "esp.movi.32.q\t $qy, $rs1, $sel4", []>
+{
+  bits<5> rs1;
+  bits<2> sel4;
+  bits<3> qy;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10-9} = sel4{1-0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVI_8_A_2P2: Esp32V2P2Inst<(outs GPRPIE:$rd), (ins QR:$qy, select_16:$sel16),
+                   "esp.movi.8.a\t $qy, $rd, $sel16", []>
+{
+  bits<3> qy;
+  bits<4> sel16;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18-15} = sel16{3-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVI_8_Q_2P2: Esp32V2P2Inst<(outs QR:$qy), (ins GPRPIE:$rs1, select_16:$sel16),
+                   "esp.movi.8.q\t $qy, $rs1, $sel16", []>
+{
+  bits<5> rs1;
+  bits<4> sel16;
+  bits<3> qy;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10-7} = sel16{3-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVX_R_CFG_2P2: Esp32V2P2Inst<(outs GPRPIE:$rd), (ins),
+                   "esp.movx.r.cfg\t $rd", [(set GPRPIE:$rd, (int_riscv_esp_movx_r_cfg))]>
+{
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVX_R_FFT_BIT_WIDTH_2P2: Esp32V2P2Inst<(outs GPRPIE:$rd), (ins),
+                   "esp.movx.r.fft.bit.width\t $rd", []>
+{
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Predicates = [HasESPV2P2Instructions] in
+def ESP_MOVX_R_FFT_BIT_WIDTH_M_2P2_P : PseudoEsp<(outs GPRPIE:$rd), (ins GPRPIE:$token),
+				"!esp_movx_r_fft_bit_width_m_2p2_p $rd, $token",
+			[(set GPRPIE:$rd, (int_riscv_esp_movx_r_fft_bit_width GPRPIE:$token))]>
+{
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+}
+
+def ESP_MOVX_R_PERF_2P2: Esp32V2P2Inst<(outs GPRPIE:$rd), (ins GPRPIE:$rs1),
+                   "esp.movx.r.perf\t $rd, $rs1", []>
+{
+  bits<5> rs1;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVX_R_SAR_2P2: Esp32V2P2Inst<(outs GPRPIE:$rd), (ins),
+                   "esp.movx.r.sar\t $rd", []>
+{
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVX_R_SAR_BYTES_2P2: Esp32V2P2Inst<(outs GPRPIE:$rd), (ins),
+                   "esp.movx.r.sar.bytes\t $rd", []>
+{
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVX_R_XACC_H_2P2: Esp32V2P2Inst<(outs GPRPIE:$rd), (ins),
+                   "esp.movx.r.xacc.h\t $rd", []>
+{
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVX_R_XACC_L_2P2: Esp32V2P2Inst<(outs GPRPIE:$rd), (ins),
+                   "esp.movx.r.xacc.l\t $rd", []>
+{
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVX_W_CFG_2P2: Esp32V2P2Inst<(outs), (ins GPRPIE:$rs1),
+                   "esp.movx.w.cfg\t $rs1", []>
+{
+  bits<5> rs1;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVX_W_FFT_BIT_WIDTH_2P2: Esp32V2P2Inst<(outs), (ins GPRPIE:$rs1),
+                   "esp.movx.w.fft.bit.width\t $rs1", []>
+{
+  bits<5> rs1;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Predicates = [HasESPV2P2Instructions], usesCustomInserter = 1,
+    Constraints = "$rd = $rs1" in
+def ESP_MOVX_W_FFT_BIT_WIDTH_M_2P2_P : PseudoEsp<(outs GPRPIE:$rd), (ins GPRPIE:$rs1),
+				"!esp_movx_w_fft_bit_width_m_2p2_p $rd, $rs1",
+			[(set GPRPIE:$rd, (int_riscv_esp_movx_w_fft_bit_width GPRPIE:$rs1))]>
+{
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+}
+
+def ESP_MOVX_W_PERF_2P2: Esp32V2P2Inst<(outs), (ins GPRPIE:$rs1),
+                   "esp.movx.w.perf\t $rs1", []>
+{
+  bits<5> rs1;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVX_W_SAR_2P2: Esp32V2P2Inst<(outs), (ins GPRPIE:$rs1),
+                   "esp.movx.w.sar\t $rs1", []>
+{
+  bits<5> rs1;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVX_W_SAR_BYTES_2P2: Esp32V2P2Inst<(outs), (ins GPRPIE:$rs1),
+                   "esp.movx.w.sar.bytes\t $rs1", []>
+{
+  bits<5> rs1;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVX_W_XACC_H_2P2: Esp32V2P2Inst<(outs), (ins GPRPIE:$rs1),
+                   "esp.movx.w.xacc.h\t $rs1", []>
+{
+  bits<5> rs1;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_MOVX_W_XACC_L_2P2: Esp32V2P2Inst<(outs), (ins GPRPIE:$rs1),
+                   "esp.movx.w.xacc.l\t $rs1", []>
+{
+  bits<5> rs1;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 1;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VEXT_S16_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qv), (ins QR:$qw),
+                   "esp.vext.s16\t $qz, $qv, $qw", []>
+{
+  bits<3> qw;
+  bits<3> qz;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VEXT_S8_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qv), (ins QR:$qw),
+                   "esp.vext.s8\t $qz, $qv, $qw", []>
+{
+  bits<3> qw;
+  bits<3> qz;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VEXT_U16_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qv), (ins QR:$qw),
+                   "esp.vext.u16\t $qz, $qv, $qw", []>
+{
+  bits<3> qw;
+  bits<3> qz;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VEXT_U8_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qv), (ins QR:$qw),
+                   "esp.vext.u8\t $qz, $qv, $qw", []>
+{
+  bits<3> qw;
+  bits<3> qz;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VUNZIP_16_2P2: Esp32V2P2Inst<(outs QR:$qxr, QR:$qyr), (ins QR:$qx, QR:$qy),
+                   "esp.vunzip.16\t $qx, $qy", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qxr;
+  bits<3> qyr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$qxr = $qx, $qyr = $qy";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VUNZIP_32_2P2: Esp32V2P2Inst<(outs QR:$qxr, QR:$qyr), (ins QR:$qx, QR:$qy),
+                   "esp.vunzip.32\t $qx, $qy", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qxr;
+  bits<3> qyr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$qxr = $qx, $qyr = $qy";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VUNZIP_8_2P2: Esp32V2P2Inst<(outs QR:$qxr, QR:$qyr), (ins QR:$qx, QR:$qy),
+                   "esp.vunzip.8\t $qx, $qy", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qxr;
+  bits<3> qyr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$qxr = $qx, $qyr = $qy";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VUNZIPT_16_2P2: Esp32V2P2Inst<(outs QR:$qxr, QR:$qyr, QR:$qwr), (ins QR:$qx, QR:$qy, QR:$qw),
+                   "esp.vunzipt.16\t $qx, $qy, $qw", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qw;
+  bits<3> qxr;
+  bits<3> qyr;
+  bits<3> qwr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$qxr = $qx, $qyr = $qy, $qwr = $qw";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VUNZIPT_8_2P2: Esp32V2P2Inst<(outs QR:$qxr, QR:$qyr, QR:$qwr), (ins QR:$qx, QR:$qy, QR:$qw),
+                   "esp.vunzipt.8\t $qx, $qy, $qw", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qw;
+  bits<3> qxr;
+  bits<3> qyr;
+  bits<3> qwr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$qxr = $qx, $qyr = $qy, $qwr = $qw";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VZIP_16_2P2: Esp32V2P2Inst<(outs QR:$qxr, QR:$qyr), (ins QR:$qx, QR:$qy),
+                   "esp.vzip.16\t $qx, $qy", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qxr;
+  bits<3> qyr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$qxr = $qx, $qyr = $qy";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 1;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VZIP_32_2P2: Esp32V2P2Inst<(outs QR:$qxr, QR:$qyr), (ins QR:$qx, QR:$qy),
+                   "esp.vzip.32\t $qx, $qy", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qxr;
+  bits<3> qyr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$qxr = $qx, $qyr = $qy";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VZIP_8_2P2: Esp32V2P2Inst<(outs QR:$qxr, QR:$qyr), (ins QR:$qx, QR:$qy),
+                   "esp.vzip.8\t $qx, $qy", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qxr;
+  bits<3> qyr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$qxr = $qx, $qyr = $qy";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VZIPT_16_2P2: Esp32V2P2Inst<(outs QR:$qxr, QR:$qyr, QR:$qwr), (ins QR:$qx, QR:$qy, QR:$qw),
+                   "esp.vzipt.16\t $qx, $qy, $qw", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qw;
+  bits<3> qxr;
+  bits<3> qyr;
+  bits<3> qwr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$qxr = $qx, $qyr = $qy, $qwr = $qw";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VZIPT_8_2P2: Esp32V2P2Inst<(outs QR:$qxr, QR:$qyr, QR:$qwr), (ins QR:$qx, QR:$qy, QR:$qw),
+                   "esp.vzipt.8\t $qx, $qy, $qw", []>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qw;
+  bits<3> qxr;
+  bits<3> qyr;
+  bits<3> qwr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$qxr = $qx, $qyr = $qy, $qwr = $qw";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_ZERO_Q_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins),
+                   "esp.zero.q\t $qz", []>
+{
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_ZERO_QACC_2P2: Esp32V2P2Inst<(outs), (ins),
+                   "esp.zero.qacc\t", []>
+{
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_ZERO_XACC_2P2: Esp32V2P2Inst<(outs), (ins),
+                   "esp.zero.xacc\t", []>
+{
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_FFT_AMS_S16_LD_INCP_2P2: Esp32V2P2Inst<(outs QR:$qu, QR:$qz, QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qw, GPRPIE:$rs1, select_2:$sel2, sat:$sat),
+                   "esp.fft.ams.s16.ld.incp\t $qu, $rs1, $qz, $qv, $qx, $qw, $qy, $sel2$sat", [(set QR:$qu, QR:$qz, QR:$qv, GPRPIE:$rs1r, (riscv_esp_fft_ams_s16_ld_incp_pie22_m QR:$qx, QR:$qy, QR:$qw, GPRPIE:$rs1, timm:$sel2, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qw;
+  bits<5> rs1;
+  bits<1> sel2;
+  bits<1> sat;
+  bits<3> qu;
+  bits<3> qz;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = sel2{0};
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = sat{0};
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_FFT_AMS_S16_LD_INCP_UAUP_2P2: Esp32V2P2Inst<(outs QR:$qu, QR:$qz, QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qw, GPRPIE:$rs1, select_2:$sel2, sat:$sat),
+                   "esp.fft.ams.s16.ld.incp.uaup\t $qu, $rs1, $qz, $qv, $qx, $qw, $qy, $sel2$sat", [(set QR:$qu, QR:$qz, QR:$qv, GPRPIE:$rs1r, (riscv_esp_fft_ams_s16_ld_incp_uaup_pie22_m QR:$qx, QR:$qy, QR:$qw, GPRPIE:$rs1, timm:$sel2, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qw;
+  bits<5> rs1;
+  bits<1> sel2;
+  bits<1> sat;
+  bits<3> qu;
+  bits<3> qz;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = sel2{0};
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = sat{0};
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_FFT_AMS_S16_LD_R32_DECP_2P2: Esp32V2P2Inst<(outs QR:$qu, QR:$qz, QR:$qv, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, QR:$qw, GPRPIE:$rs1, select_2:$sel2, sat:$sat),
+                   "esp.fft.ams.s16.ld.r32.decp\t $qu, $rs1, $qz, $qv, $qx, $qw, $qy, $sel2$sat", [(set QR:$qu, QR:$qz, QR:$qv, GPRPIE:$rs1r, (riscv_esp_fft_ams_s16_ld_r32_decp_pie22_m QR:$qx, QR:$qy, QR:$qw, GPRPIE:$rs1, timm:$sel2, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qw;
+  bits<5> rs1;
+  bits<1> sel2;
+  bits<1> sat;
+  bits<3> qu;
+  bits<3> qz;
+  bits<3> qv;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = sel2{0};
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = sat{0};
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_FFT_AMS_S16_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, GPRPIE:$rs1r, GPRPIE:$rs2r), (ins QR:$qx, QR:$qy, QR:$qw, QR:$qu, GPRPIE:$rs1, GPRPIE:$rs2, select_2:$sel2, sat:$sat),
+                   "esp.fft.ams.s16.st.incp\t $qu, $qz, $rs2, $rs1, $qx, $qw, $qy, $sel2$sat", [(set QR:$qz, GPRPIE:$rs1r, GPRPIE:$rs2r, (riscv_esp_fft_ams_s16_st_incp_pie22_m QR:$qx, QR:$qy, QR:$qw, QR:$qu, GPRPIE:$rs1, GPRPIE:$rs2, timm:$sel2, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qw;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<1> sel2;
+  bits<1> sat;
+  bits<3> qz;
+  bits<5> rs1r;
+  bits<5> rs2r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1, $rs2r = $rs2";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = sel2{0};
+  let Inst{13} = sat{0};
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_FFT_BITREV_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r, QR:$qvr), (ins GPRPIE:$rs1, QR:$qv),
+                   "esp.fft.bitrev\t $qv, $rs1", []>
+{
+  bits<5> rs1;
+  bits<3> qv;
+  bits<5> rs1r;
+  bits<3> qvr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1, $qvr = $qv";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let Predicates = [HasESPV2P2Instructions] in
+def ESP_FFT_BITREV_2P2_M_P : PseudoEsp<(outs GPRPIE:$rs1r, QR:$qvr),
+				(ins GPRPIE:$rs1, GPRPIE:$bit_width),
+				"!esp_fft_bitrev_2p2_m_p $rs1, $bit_width",
+			[(set GPRPIE:$rs1r, QR:$qvr,
+			  (riscv_esp_fft_bitrev_m GPRPIE:$rs1, i32:$bit_width))]>
+{
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+  let Constraints = "$rs1r = $rs1";
+}
+
+def ESP_FFT_CMUL_S16_LD_XP_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, select_8:$sel8),
+                   "esp.fft.cmul.s16.ld.xp\t $qu, $rs1, $rs2, $qz, $qy, $qx, $sel8$sat", [(set QR:$qz, QR:$qu, GPRPIE:$rs1r, (riscv_esp_fft_cmul_s16_ld_xp_pie22_m QR:$qx, QR:$qy, GPRPIE:$rs2, GPRPIE:$rs1, timm:$sat, timm:$sel8))]>
+{
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> sel8;
+  bits<3> qz;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = sat{0};
+  let Inst{24} = sel8{2};
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = sel8{1};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = sel8{0};
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_FFT_CMUL_S16_ST_XP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, sat:$sat, select_4:$sel4, select_4:$upd4, select_8:$sel8),
+                   "esp.fft.cmul.s16.st.xp\t $qy, $qx, $qu, $rs1, $rs2, $sel8, $upd4, $sel4$sat", [(set GPRPIE:$rs1r, (riscv_esp_fft_cmul_s16_st_xp_pie22_m QR:$qx, QR:$qy, QR:$qu, GPRPIE:$rs1, GPRPIE:$rs2, timm:$sat, timm:$sel8, timm:$upd4, timm:$sel4))]>
+{
+  bits<5> rs2;
+  bits<3> qx;
+  bits<3> qy;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<2> sel4;
+  bits<2> upd4;
+  bits<3> sel8;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = sat{0};
+  let Inst{24} = sel4{1};
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = sel4{0};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14-13} = upd4{1-0};
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = sel8{2-0};
+  let Inst{6} = 1;
+  let Inst{5} = 1;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_FFT_R2BF_S16_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qv), (ins QR:$qx, QR:$qy, select_2:$sel2, sat:$sat),
+                   "esp.fft.r2bf.s16\t $qz, $qv, $qx, $qy, $sel2$sat", [(set QR:$qz, QR:$qv, (riscv_esp_fft_r2bf_s16_pie22_m QR:$qx, QR:$qy, timm:$sel2, timm:$sat))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<1> sel2;
+  bits<1> sat;
+  bits<3> qz;
+  bits<3> qv;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22-20} = qv{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = sel2{0};
+  let Inst{17} = sat{0};
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_FFT_R2BF_S16_ST_INCP_2P2: Esp32V2P2Inst<(outs QR:$qz, GPRPIE:$rs1r), (ins QR:$qx, QR:$qy, GPRPIE:$rs1, sat:$sat, select_4:$sel4),
+                   "esp.fft.r2bf.s16.st.incp\t $qz, $qx, $qy, $rs1, $sel4$sat", [(set QR:$qz, GPRPIE:$rs1r, (riscv_esp_fft_r2bf_s16_st_incp_pie22_m QR:$qx, QR:$qy, GPRPIE:$rs1, timm:$sat, timm:$sel4))]>
+{
+  bits<3> qx;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<1> sat;
+  bits<2> sel4;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-29} = qx{2-0};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12} = sat{0};
+  let Inst{11-10} = sel4{1-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_FFT_VST_R32_DECP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins QR:$qu, GPRPIE:$rs1, select_2:$sel2),
+                   "esp.fft.vst.r32.decp\t $qu, $rs1, $sel2",
+                   [(set GPRPIE:$rs1r, (riscv_esp_fft_vst_r32_decp_m QR:$qu, GPRPIE:$rs1, select_2:$sel2))]>
+{
+  bits<3> qu;
+  bits<5> rs1;
+  bits<1> sel2;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = sel2{0};
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_LD_128_USAR_IP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   "esp.ld.128.usar.ip\t $qu, $rs1, $off25616", []>
+{
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-26} = off25616{7-2};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-8} = off25616{1-0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_LD_128_USAR_XP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.ld.128.usar.xp\t $qu, $rs1, $rs2", []>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_LD_XACC_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_8:$off2568),
+                   "esp.ld.xacc.ip\t $rs1, $off2568", []>
+{
+  bits<5> rs1;
+  bits<8> off2568;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = off2568{7-5};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-21} = off2568{4-2};
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-11} = off2568{1-0};
+  let Inst{10} = 0;
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_LDQA_S16_128_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   "esp.ldqa.s16.128.ip\t $rs1, $off25616", []>
+{
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = off25616{7};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-21} = off25616{6-4};
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-9} = off25616{3-0};
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_LDQA_S16_128_XP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.ldqa.s16.128.xp\t $rs1, $rs2", []>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_LDQA_S8_128_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   "esp.ldqa.s8.128.ip\t $rs1, $off25616", []>
+{
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = off25616{7};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-21} = off25616{6-4};
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-9} = off25616{3-0};
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_LDQA_S8_128_XP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.ldqa.s8.128.xp\t $rs1, $rs2", []>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_LDQA_U16_128_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   "esp.ldqa.u16.128.ip\t $rs1, $off25616", []>
+{
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = off25616{7};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-21} = off25616{6-4};
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-9} = off25616{3-0};
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_LDQA_U16_128_XP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.ldqa.u16.128.xp\t $rs1, $rs2", []>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_LDQA_U8_128_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   "esp.ldqa.u8.128.ip\t $rs1, $off25616", []>
+{
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = off25616{7};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-21} = off25616{6-4};
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-9} = off25616{3-0};
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_LDQA_U8_128_XP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.ldqa.u8.128.xp\t $rs1, $rs2", []>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 1;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VLDBC_16_IP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_2:$offset_256_2),
+                   "esp.vldbc.16.ip\t $qu, $rs1, $offset_256_2", []>
+{
+  bits<5> rs1;
+  bits<8> offset_256_2;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-26} = offset_256_2{7-2};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-8} = offset_256_2{1-0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDBC_16_IP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_2:$offset_256_2, imm8:$qu),
+				"!esp_vldbc_16_ip_2p2_p $qu, $rs1, $offset_256_2",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldbc_16_ip_2p2 GPRPIE:$rs1, timm:$offset_256_2, timm:$qu))]>;
+
+def ESP_VLDBC_16_XP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.vldbc.16.xp\t $qu, $rs1, $rs2", []>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDBC_16_XP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1, imm8:$qu),
+				"!esp_vldbc_16_xp_2p2_p $qu, $rs1, $rs2",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldbc_16_xp_2p2 GPRPIE:$rs2, GPRPIE:$rs1, timm:$qu))]>;
+
+def ESP_VLDBC_32_IP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_4:$off2564),
+                   "esp.vldbc.32.ip\t $qu, $rs1, $off2564", []>
+{
+  bits<5> rs1;
+  bits<8> off2564;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-26} = off2564{7-2};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-8} = off2564{1-0};
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDBC_32_IP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_4:$off2564, imm8:$qu),
+				"!esp_vldbc_32_ip_2p2_p $qu, $rs1, $off2564",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldbc_32_ip_2p2 GPRPIE:$rs1, timm:$off2564, timm:$qu))]>;
+
+def ESP_VLDBC_32_XP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.vldbc.32.xp\t $qu, $rs1, $rs2", []>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDBC_32_XP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1, imm8:$qu),
+				"!esp_vldbc_32_xp_2p2_p $qu, $rs1, $rs2",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldbc_32_xp_2p2 GPRPIE:$rs2, GPRPIE:$rs1, timm:$qu))]>;
+
+def ESP_VLDBC_8_IP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_1:$offset_256_1),
+                   "esp.vldbc.8.ip\t $qu, $rs1, $offset_256_1", []>
+{
+  bits<5> rs1;
+  bits<8> offset_256_1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31-26} = offset_256_1{7-2};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-8} = offset_256_1{1-0};
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDBC_8_IP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_1:$offset_256_1, imm8:$qu),
+				"!esp_vldbc_8_ip_2p2_p $qu, $rs1, $offset_256_1",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldbc_8_ip_2p2 GPRPIE:$rs1, timm:$offset_256_1, timm:$qu))]>;
+
+def ESP_VLDBC_8_XP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.vldbc.8.xp\t $qu, $rs1, $rs2", []>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDBC_8_XP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1, imm8:$qu),
+				"!esp_vldbc_8_xp_2p2_p $qu, $rs1, $rs2",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldbc_8_xp_2p2 GPRPIE:$rs2, GPRPIE:$rs1, timm:$qu))]>;
+
+def ESP_VLDEXT_S16_IP_2P2: Esp32V2P2Inst<(outs QR:$qu, QR:$qz, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_16_16:$off1616),
+                   "esp.vldext.s16.ip\t $qu, $qz, $rs1, $off1616", []>
+{
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = off1616{3};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-21} = off1616{2-0};
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDEXT_S16_IP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_16_16:$off1616, imm8:$qu, imm8:$qz),
+				"!esp_vldext_s16_ip_2p2_p $qu, $qz, $rs1, $off1616",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldext_s16_ip_2p2 GPRPIE:$rs1, timm:$off1616, timm:$qu, timm:$qz))]>;
+
+def ESP_VLDEXT_S16_XP_2P2: Esp32V2P2Inst<(outs QR:$qu, QR:$qz, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.vldext.s16.xp\t $qu, $qz, $rs1, $rs2", []>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDEXT_S16_XP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1, imm8:$qu, imm8:$qz),
+				"!esp_vldext_s16_xp_2p2_p $qu, $qz, $rs1, $rs2",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldext_s16_xp_2p2 GPRPIE:$rs2, GPRPIE:$rs1, timm:$qu, timm:$qz))]>;
+
+def ESP_VLDEXT_S8_IP_2P2: Esp32V2P2Inst<(outs QR:$qu, QR:$qz, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_16_16:$off1616),
+                   "esp.vldext.s8.ip\t $qu, $qz, $rs1, $off1616", []>
+{
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = off1616{3};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-21} = off1616{2-0};
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDEXT_S8_IP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_16_16:$off1616, imm8:$qu, imm8:$qz),
+				"!esp_vldext_s8_ip_2p2_p $qu, $qz, $rs1, $off1616",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldext_s8_ip_2p2 GPRPIE:$rs1, timm:$off1616, timm:$qu, timm:$qz))]>;
+
+def ESP_VLDEXT_S8_XP_2P2: Esp32V2P2Inst<(outs QR:$qu, QR:$qz, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.vldext.s8.xp\t $qu, $qz, $rs1, $rs2", []>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDEXT_S8_XP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1, imm8:$qu, imm8:$qz),
+				"!esp_vldext_s8_xp_2p2_p $qu, $qz, $rs1, $rs2",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldext_s8_xp_2p2 GPRPIE:$rs2, GPRPIE:$rs1, timm:$qu, timm:$qz))]>;
+
+def ESP_VLDEXT_U16_IP_2P2: Esp32V2P2Inst<(outs QR:$qu, QR:$qz, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_16_16:$off1616),
+                   "esp.vldext.u16.ip\t $qu, $qz, $rs1, $off1616", []>
+{
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = off1616{3};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-21} = off1616{2-0};
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDEXT_U16_IP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_16_16:$off1616, imm8:$qu, imm8:$qz),
+				"!esp_vldext_u16_ip_2p2_p $qu, $qz, $rs1, $off1616",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldext_u16_ip_2p2 GPRPIE:$rs1, timm:$off1616, timm:$qu, timm:$qz))]>;
+
+def ESP_VLDEXT_U16_XP_2P2: Esp32V2P2Inst<(outs QR:$qu, QR:$qz, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.vldext.u16.xp\t $qu, $qz, $rs1, $rs2", []>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDEXT_U16_XP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1, imm8:$qu, imm8:$qz),
+				"!esp_vldext_u16_xp_2p2_p $qu, $qz, $rs1, $rs2",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldext_u16_xp_2p2 GPRPIE:$rs2, GPRPIE:$rs1, timm:$qu, timm:$qz))]>;
+
+def ESP_VLDEXT_U8_IP_2P2: Esp32V2P2Inst<(outs QR:$qu, QR:$qz, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_16_16:$off1616),
+                   "esp.vldext.u8.ip\t $qu, $qz, $rs1, $off1616", []>
+{
+  bits<5> rs1;
+  bits<4> off1616;
+  bits<3> qu;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = off1616{3};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-21} = off1616{2-0};
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDEXT_U8_IP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_16_16:$off1616, imm8:$qu, imm8:$qz),
+				"!esp_vldext_u8_ip_2p2_p $qu, $qz, $rs1, $off1616",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldext_u8_ip_2p2 GPRPIE:$rs1, timm:$off1616, timm:$qu, timm:$qz))]>;
+
+def ESP_VLDEXT_U8_XP_2P2: Esp32V2P2Inst<(outs QR:$qu, QR:$qz, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.vldext.u8.xp\t $qu, $qz, $rs1, $rs2", []>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDEXT_U8_XP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1, imm8:$qu, imm8:$qz),
+				"!esp_vldext_u8_xp_2p2_p $qu, $qz, $rs1, $rs2",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldext_u8_xp_2p2 GPRPIE:$rs2, GPRPIE:$rs1, timm:$qu, timm:$qz))]>;
+
+def ESP_VLDHBC_16_INCP_2P2: Esp32V2P2Inst<(outs QR:$qu, QR:$qz, GPRPIE:$rs1r), (ins GPRPIE:$rs1),
+                   "esp.vldhbc.16.incp\t $qu, $qz, $rs1", []>
+{
+  bits<5> rs1;
+  bits<3> qu;
+  bits<3> qz;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1, Constraints = "$rs1r = $rs1" in
+def ESP_VLDHBC_16_INCP_2P2_P : PseudoEsp<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, imm8:$qu, imm8:$qz),
+				"!esp_vldhbc_16_incp_2p2_p $qu, $qz, $rs1",
+			[(set GPRPIE:$rs1r, (int_riscv_esp_vldhbc_16_incp_2p2 GPRPIE:$rs1, timm:$qu, timm:$qz))]>;
+
+def ESP_LD_QACC_H_H_128_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   "esp.ld.qacc.h.h.128.ip\t $rs1, $off25616", []>
+{
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = off25616{7};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-21} = off25616{6-4};
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-9} = off25616{3-0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_LD_QACC_H_L_128_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   "esp.ld.qacc.h.l.128.ip\t $rs1, $off25616", []>
+{
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = off25616{7};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-21} = off25616{6-4};
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-9} = off25616{3-0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_LD_QACC_L_H_128_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   "esp.ld.qacc.l.h.128.ip\t $rs1, $off25616", []>
+{
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = off25616{7};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-21} = off25616{6-4};
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-9} = off25616{3-0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_LD_QACC_L_L_128_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   "esp.ld.qacc.l.l.128.ip\t $rs1, $off25616", []>
+{
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = off25616{7};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-21} = off25616{6-4};
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-9} = off25616{3-0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_LD_UA_STATE_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   "esp.ld.ua.state.ip\t $rs1, $off25616", []>
+{
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27-26} = off25616{7-6};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-21} = off25616{5-3};
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = off25616{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_LDXQ_32_2P2: Esp32V2P2Inst<(outs QR:$qu), (ins GPRPIE:$rs1, QR:$qw, select_4:$sel4, select_8:$sel8),
+                   "esp.ldxq.32\t $qu, $qw, $rs1, $sel4, $sel8", []>
+{
+  bits<5> rs1;
+  bits<3> qw;
+  bits<2> sel4;
+  bits<3> sel8;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22-21} = sel4{1-0};
+  let Inst{20} = sel8{2};
+  let Inst{19} = qw{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-8} = sel8{1-0};
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_ST_QACC_H_H_128_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   "esp.st.qacc.h.h.128.ip\t $rs1, $off25616", []>
+{
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = off25616{7};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-21} = off25616{6-4};
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-9} = off25616{3-0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_ST_QACC_H_L_128_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   "esp.st.qacc.h.l.128.ip\t $rs1, $off25616", []>
+{
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = off25616{7};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-21} = off25616{6-4};
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-9} = off25616{3-0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_ST_QACC_L_H_128_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   "esp.st.qacc.l.h.128.ip\t $rs1, $off25616", []>
+{
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = off25616{7};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-21} = off25616{6-4};
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-9} = off25616{3-0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_ST_QACC_L_L_128_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   "esp.st.qacc.l.l.128.ip\t $rs1, $off25616", []>
+{
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = off25616{7};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-21} = off25616{6-4};
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-9} = off25616{3-0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_ST_UA_STATE_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   "esp.st.ua.state.ip\t $rs1, $off25616", []>
+{
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27-26} = off25616{7-6};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-21} = off25616{5-3};
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = off25616{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_STXQ_32_2P2: Esp32V2P2Inst<(outs), (ins GPRPIE:$rs1, QR:$qw, QR:$qu, select_4:$sel4, select_8:$sel8),
+                   "esp.stxq.32\t $qu, $qw, $rs1, $sel4, $sel8", []>
+{
+  bits<5> rs1;
+  bits<3> qw;
+  bits<3> qu;
+  bits<2> sel4;
+  bits<3> sel8;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 1;
+  let Inst{22-21} = sel4{1-0};
+  let Inst{20} = sel8{2};
+  let Inst{19} = qw{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-8} = sel8{1-0};
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VLD_128_IP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_16:$off25616),
+                   "esp.vld.128.ip\t $qu, $rs1, $off25616", []>
+{
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30-26} = off25616{7-3};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = off25616{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VLD_128_XP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.vld.128.xp\t $qu, $rs1, $rs2", []>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VLD_H_64_IP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_8:$off2568),
+                   "esp.vld.h.64.ip\t $qu, $rs1, $off2568", []>
+{
+  bits<5> rs1;
+  bits<8> off2568;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29-26} = off2568{7-4};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = off2568{3};
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = off2568{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VLD_H_64_XP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.vld.h.64.xp\t $qu, $rs1, $rs2", []>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VLD_L_64_IP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_8:$off2568),
+                   "esp.vld.l.64.ip\t $qu, $rs1, $off2568", []>
+{
+  bits<5> rs1;
+  bits<8> off2568;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29-26} = off2568{7-4};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = off2568{3};
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = off2568{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VLD_L_64_XP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r), (ins GPRPIE:$rs2, GPRPIE:$rs1),
+                   "esp.vld.l.64.xp\t $qu, $rs1, $rs2", []>
+{
+  bits<5> rs2;
+  bits<5> rs1;
+  bits<3> qu;
+  bits<5> rs1r;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VST_128_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins QR:$qu, GPRPIE:$rs1, offset_256_16:$off25616),
+                   "esp.vst.128.ip\t $qu, $rs1, $off25616", []>
+{
+  bits<3> qu;
+  bits<5> rs1;
+  bits<8> off25616;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30-26} = off25616{7-3};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = off25616{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VST_128_XP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qu, GPRPIE:$rs1),
+                   "esp.vst.128.xp\t $qu, $rs1, $rs2", []>
+{
+  bits<5> rs2;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VST_H_64_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins QR:$qu, GPRPIE:$rs1, offset_256_8:$off2568),
+                   "esp.vst.h.64.ip\t $qu, $rs1, $off2568", []>
+{
+  bits<3> qu;
+  bits<5> rs1;
+  bits<8> off2568;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 1;
+  let Inst{29-26} = off2568{7-4};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = off2568{3};
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = off2568{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VST_H_64_XP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qu, GPRPIE:$rs1),
+                   "esp.vst.h.64.xp\t $qu, $rs1, $rs2", []>
+{
+  bits<5> rs2;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VST_L_64_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins QR:$qu, GPRPIE:$rs1, offset_256_8:$off2568),
+                   "esp.vst.l.64.ip\t $qu, $rs1, $off2568", []>
+{
+  bits<3> qu;
+  bits<5> rs1;
+  bits<8> off2568;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29-26} = off2568{7-4};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = off2568{3};
+  let Inst{22} = 1;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9-7} = off2568{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VST_L_64_XP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs2, QR:$qu, GPRPIE:$rs1),
+                   "esp.vst.l.64.xp\t $qu, $rs1, $rs2", []>
+{
+  bits<5> rs2;
+  bits<3> qu;
+  bits<5> rs1;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = 0;
+  let Inst{25} = 1;
+  let Inst{24} = 0;
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = 1;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SLCI_2Q_2P2: Esp32V2P2Inst<(outs QR:$qyr, QR:$qwr), (ins QR:$qy, QR:$qw, select_16:$sel16),
+                   "esp.slci.2q\t $qy, $qw, $sel16", []>
+{
+  bits<3> qy;
+  bits<3> qw;
+  bits<4> sel16;
+  bits<3> qyr;
+  bits<3> qwr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$qyr = $qy, $qwr = $qw";
+
+  let Inst{31} = 0;
+  let Inst{30-29} = sel16{3-2};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10-9} = sel16{1-0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SLCXXP_2Q_2P2: Esp32V2P2Inst<(outs QR:$qyr, QR:$qwr), (ins GPRPIE:$rs1, GPRPIE:$rs2, QR:$qy, QR:$qw),
+                   "esp.slcxxp.2q\t $qy, $qw, $rs1, $rs2", []>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<3> qy;
+  bits<3> qw;
+  bits<3> qyr;
+  bits<3> qwr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$qyr = $qy, $qwr = $qw";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SRC_Q_2P2: Esp32V2P2Inst<(outs QR:$qz), (ins QR:$qy, QR:$qw),
+                   "esp.src.q\t $qz, $qw, $qy", []>
+{
+  bits<3> qy;
+  bits<3> qw;
+  bits<3> qz;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SRC_Q_LD_IP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r, QR:$qwr), (ins QR:$qy, GPRPIE:$rs1, QR:$qw, offset_256_16:$off25616),
+                   "esp.src.q.ld.ip\t $qu, $rs1, $off25616, $qw, $qy", []>
+{
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qw;
+  bits<8> off25616;
+  bits<3> qu;
+  bits<5> rs1r;
+  bits<3> qwr;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1, $qwr = $qw";
+
+  let Inst{31-29} = off25616{7-5};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23-20} = off25616{4-1};
+  let Inst{19} = qw{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = off25616{0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SRC_Q_LD_XP_2P2: Esp32V2P2Inst<(outs QR:$qu, GPRPIE:$rs1r, QR:$qwr), (ins GPRPIE:$rs2, QR:$qy, GPRPIE:$rs1, QR:$qw),
+                   "esp.src.q.ld.xp\t $qu, $rs1, $rs2, $qw, $qy", []>
+{
+  bits<5> rs2;
+  bits<3> qy;
+  bits<5> rs1;
+  bits<3> qw;
+  bits<3> qu;
+  bits<5> rs1r;
+  bits<3> qwr;
+  let mayStore = 0;
+  let mayLoad = 1;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1, $qwr = $qw";
+
+  let Inst{31} = 1;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SRC_Q_QUP_2P2: Esp32V2P2Inst<(outs QR:$qz, QR:$qwr), (ins QR:$qy, QR:$qw),
+                   "esp.src.q.qup\t $qz, $qw, $qy", []>
+{
+  bits<3> qy;
+  bits<3> qw;
+  bits<3> qz;
+  bits<3> qwr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$qwr = $qw";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9-7} = qz{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SRCI_2Q_2P2: Esp32V2P2Inst<(outs QR:$qyr, QR:$qwr), (ins QR:$qy, QR:$qw, select_16:$sel16),
+                   "esp.srci.2q\t $qy, $qw, $sel16", []>
+{
+  bits<3> qy;
+  bits<3> qw;
+  bits<4> sel16;
+  bits<3> qyr;
+  bits<3> qwr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$qyr = $qy, $qwr = $qw";
+
+  let Inst{31} = 1;
+  let Inst{30-29} = sel16{3-2};
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = 0;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10-9} = sel16{1-0};
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SRCMB_S16_Q_QACC_2P2: Esp32V2P2Inst<(outs QR:$qu), (ins QR:$qw, sat:$sat, rm:$rm),
+                   "esp.srcmb.s16.q.qacc\t $qu, $qw$sat$rm", [(set QR:$qu, (riscv_esp_srcmb_s16_q_qacc_pie22_m QR:$qw, timm:$sat, timm:$rm))]>
+{
+  bits<3> qw;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 1;
+  let Inst{26} = sat{0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22-20} = rm{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SRCMB_S16_QACC_2P2: Esp32V2P2Inst<(outs QR:$qu), (ins GPRPIE:$rs1, sat:$sat, rm:$rm),
+                   "esp.srcmb.s16.qacc\t $qu, $rs1$sat$rm", [(set QR:$qu, (riscv_esp_srcmb_s16_qacc_pie22_m GPRPIE:$rs1, timm:$sat, timm:$rm))]>
+{
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 1;
+  let Inst{29} = sat{0};
+  let Inst{28-26} = rm{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SRCMB_S8_Q_QACC_2P2: Esp32V2P2Inst<(outs QR:$qu), (ins QR:$qw, sat:$sat, rm:$rm),
+                   "esp.srcmb.s8.q.qacc\t $qu, $qw$sat$rm", [(set QR:$qu, (riscv_esp_srcmb_s8_q_qacc_pie22_m QR:$qw, timm:$sat, timm:$rm))]>
+{
+  bits<3> qw;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 1;
+  let Inst{26} = sat{0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22-20} = rm{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SRCMB_S8_QACC_2P2: Esp32V2P2Inst<(outs QR:$qu), (ins GPRPIE:$rs1, sat:$sat, rm:$rm),
+                   "esp.srcmb.s8.qacc\t $qu, $rs1$sat$rm", [(set QR:$qu, (riscv_esp_srcmb_s8_qacc_pie22_m GPRPIE:$rs1, timm:$sat, timm:$rm))]>
+{
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 1;
+  let Inst{29} = sat{0};
+  let Inst{28-26} = rm{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SRCMB_U16_Q_QACC_2P2: Esp32V2P2Inst<(outs QR:$qu), (ins QR:$qw, sat:$sat, rm:$rm),
+                   "esp.srcmb.u16.q.qacc\t $qu, $qw$sat$rm", [(set QR:$qu, (riscv_esp_srcmb_u16_q_qacc_pie22_m QR:$qw, timm:$sat, timm:$rm))]>
+{
+  bits<3> qw;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = 0;
+  let Inst{26} = sat{0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22-20} = rm{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SRCMB_U16_QACC_2P2: Esp32V2P2Inst<(outs QR:$qu), (ins GPRPIE:$rs1, sat:$sat, rm:$rm),
+                   "esp.srcmb.u16.qacc\t $qu, $rs1$sat$rm", [(set QR:$qu, (riscv_esp_srcmb_u16_qacc_pie22_m GPRPIE:$rs1, timm:$sat, timm:$rm))]>
+{
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = sat{0};
+  let Inst{28-26} = rm{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SRCMB_U8_Q_QACC_2P2: Esp32V2P2Inst<(outs QR:$qu), (ins QR:$qw, sat:$sat, rm:$rm),
+                   "esp.srcmb.u8.q.qacc\t $qu, $qw$sat$rm", [(set QR:$qu, (riscv_esp_srcmb_u8_q_qacc_pie22_m QR:$qw, timm:$sat, timm:$rm))]>
+{
+  bits<3> qw;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = 0;
+  let Inst{26} = sat{0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22-20} = rm{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 1;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SRCMB_U8_QACC_2P2: Esp32V2P2Inst<(outs QR:$qu), (ins GPRPIE:$rs1, sat:$sat, rm:$rm),
+                   "esp.srcmb.u8.qacc\t $qu, $rs1$sat$rm", [(set QR:$qu, (riscv_esp_srcmb_u8_qacc_pie22_m GPRPIE:$rs1, timm:$sat, timm:$rm))]>
+{
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = sat{0};
+  let Inst{28-26} = rm{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = 1;
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = 1;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SRCQ_128_ST_INCP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins QR:$qy, QR:$qw, GPRPIE:$rs1),
+                   "esp.srcq.128.st.incp\t $qw, $qy, $rs1", []>
+{
+  bits<3> qy;
+  bits<3> qw;
+  bits<5> rs1;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = qw{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 0;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 0;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SRCXXP_2Q_2P2: Esp32V2P2Inst<(outs QR:$qyr, QR:$qwr), (ins GPRPIE:$rs1, GPRPIE:$rs2, QR:$qy, QR:$qw),
+                   "esp.srcxxp.2q\t $qy, $qw, $rs1, $rs2", []>
+{
+  bits<5> rs1;
+  bits<5> rs2;
+  bits<3> qy;
+  bits<3> qw;
+  bits<3> qyr;
+  bits<3> qwr;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$qyr = $qy, $qwr = $qw";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = rs2{4};
+  let Inst{22-20} = rs2{2-0};
+  let Inst{19} = qw{2};
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = 1;
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SRS_S_XACC_2P2: Esp32V2P2Inst<(outs GPRPIE:$rd), (ins GPRPIE:$rs1, sat:$sat, rm:$rm),
+                   "esp.srs.s.xacc\t $rd, $rs1$sat$rm", []>
+{
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> rm;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27} = sat{0};
+  let Inst{26} = rm{2};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-21} = rm{1-0};
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_SRS_U_XACC_2P2: Esp32V2P2Inst<(outs GPRPIE:$rd), (ins GPRPIE:$rs1, sat:$sat, rm:$rm),
+                   "esp.srs.u.xacc\t $rd, $rs1$sat$rm", []>
+{
+  bits<5> rs1;
+  bits<1> sat;
+  bits<3> rm;
+  bits<5> rd;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27} = sat{0};
+  let Inst{26} = rm{2};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23} = 1;
+  let Inst{22-21} = rm{1-0};
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12} = 0;
+  let Inst{11} = 0;
+  let Inst{10} = rd{4};
+  let Inst{9-7} = rd{2-0};
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSL_S32_2P2: Esp32V2P2Inst<(outs QR:$qu), (ins QR:$qy, sat:$sat),
+                   "esp.vsl.s32\t $qu, $qy$sat", [(set QR:$qu, (riscv_esp_vsl_32_pie22_m QR:$qy, timm:$sat))]>
+{
+  bits<3> qy;
+  bits<1> sat;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = sat{0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSL_U32_2P2: Esp32V2P2Inst<(outs QR:$qu), (ins QR:$qy, sat:$sat),
+                   "esp.vsl.u32\t $qu, $qy$sat", []>
+{
+  bits<3> qy;
+  bits<1> sat;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = sat{0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = 0;
+  let Inst{20} = 0;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+let usesCustomInserter = 1 in
+def ESP_VSL_U32_2P2_P : PseudoEsp<(outs), (ins imm8:$qy, sat:$sat, imm8:$qu),
+				"!esp_vsl_u32_2p2_p $qu, $qy$sat",
+			[(int_riscv_esp_vsl_u32_2p2 timm:$qy, timm:$sat, timm:$qu)]>;
+
+// esp.vsl.32 was renamed to esp.vsl.u32 in ESPV 2.2; keep the old mnemonic as
+// an alias. Gated on 2.2: under 2.1-only this is inactive, so the real 2.1
+// esp.vsl.32 instruction is used instead.
+def : MnemonicAlias<"esp.vsl.32", "esp.vsl.u32">,
+      Requires<[HasVendorXespv2p2]>;
+
+def ESP_VSLD_16_2P2: Esp32V2P2Inst<(outs QR:$qu), (ins QR:$qy, QR:$qw, sat:$sat, rm:$rm),
+                   "esp.vsld.16\t $qu, $qy, $qw$sat$rm", [(set QR:$qu, (riscv_esp_vsld_16_pie22_m QR:$qy, QR:$qw, timm:$sat, timm:$rm))]>
+{
+  bits<3> qy;
+  bits<3> qw;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 1;
+  let Inst{21} = sat{0};
+  let Inst{20} = rm{2};
+  let Inst{19} = qw{2};
+  let Inst{18-17} = rm{1-0};
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSLD_32_2P2: Esp32V2P2Inst<(outs QR:$qu), (ins QR:$qy, QR:$qw, sat:$sat, rm:$rm),
+                   "esp.vsld.32\t $qu, $qy, $qw$sat$rm", [(set QR:$qu, (riscv_esp_vsld_32_pie22_m QR:$qy, QR:$qw, timm:$sat, timm:$rm))]>
+{
+  bits<3> qy;
+  bits<3> qw;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = sat{0};
+  let Inst{21-20} = rm{2-1};
+  let Inst{19} = qw{2};
+  let Inst{18} = rm{0};
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSLD_8_2P2: Esp32V2P2Inst<(outs QR:$qu), (ins QR:$qy, QR:$qw, sat:$sat, rm:$rm),
+                   "esp.vsld.8\t $qu, $qy, $qw$sat$rm", [(set QR:$qu, (riscv_esp_vsld_8_pie22_m QR:$qy, QR:$qw, timm:$sat, timm:$rm))]>
+{
+  bits<3> qy;
+  bits<3> qw;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 0;
+  let Inst{22} = 0;
+  let Inst{21} = sat{0};
+  let Inst{20} = rm{2};
+  let Inst{19} = qw{2};
+  let Inst{18-17} = rm{1-0};
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSR_S32_2P2: Esp32V2P2Inst<(outs QR:$qu), (ins QR:$qy, rm:$rm),
+                   "esp.vsr.s32\t $qu, $qy$rm", [(set QR:$qu, (riscv_esp_vsr_s32_pie22_m QR:$qy, timm:$rm))]>
+{
+  bits<3> qy;
+  bits<3> rm;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 1;
+  let Inst{24} = rm{2};
+  let Inst{23} = 0;
+  let Inst{22-21} = rm{1-0};
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSR_U32_2P2: Esp32V2P2Inst<(outs QR:$qu), (ins QR:$qy, rm:$rm),
+                   "esp.vsr.u32\t $qu, $qy$rm", [(set QR:$qu, (riscv_esp_vsr_u32_pie22_m QR:$qy, timm:$rm))]>
+{
+  bits<3> qy;
+  bits<3> rm;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25} = 0;
+  let Inst{24} = rm{2};
+  let Inst{23} = 0;
+  let Inst{22-21} = rm{1-0};
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = 1;
+  let Inst{17} = 0;
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 0;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 0;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSRD_16_2P2: Esp32V2P2Inst<(outs QR:$qu), (ins QR:$qy, QR:$qw, sat:$sat, rm:$rm),
+                   "esp.vsrd.16\t $qu, $qy, $qw$sat$rm", [(set QR:$qu, (riscv_esp_vsrd_16_pie22_m QR:$qy, QR:$qw, timm:$sat, timm:$rm))]>
+{
+  bits<3> qy;
+  bits<3> qw;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 1;
+  let Inst{22} = 1;
+  let Inst{21} = sat{0};
+  let Inst{20} = rm{2};
+  let Inst{19} = qw{2};
+  let Inst{18-17} = rm{1-0};
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSRD_32_2P2: Esp32V2P2Inst<(outs QR:$qu), (ins QR:$qy, QR:$qw, sat:$sat, rm:$rm),
+                   "esp.vsrd.32\t $qu, $qy, $qw$sat$rm", [(set QR:$qu, (riscv_esp_vsrd_32_pie22_m QR:$qy, QR:$qw, timm:$sat, timm:$rm))]>
+{
+  bits<3> qy;
+  bits<3> qw;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 1;
+  let Inst{22} = sat{0};
+  let Inst{21-20} = rm{2-1};
+  let Inst{19} = qw{2};
+  let Inst{18} = rm{0};
+  let Inst{17} = 0;
+  let Inst{16} = 1;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_VSRD_8_2P2: Esp32V2P2Inst<(outs QR:$qu), (ins QR:$qy, QR:$qw, sat:$sat, rm:$rm),
+                   "esp.vsrd.8\t $qu, $qy, $qw$sat$rm", [(set QR:$qu, (riscv_esp_vsrd_8_pie22_m QR:$qy, QR:$qw, timm:$sat, timm:$rm))]>
+{
+  bits<3> qy;
+  bits<3> qw;
+  bits<1> sat;
+  bits<3> rm;
+  bits<3> qu;
+  let mayStore = 0;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Inst{31} = 1;
+  let Inst{30} = 1;
+  let Inst{29} = 0;
+  let Inst{28-26} = qy{2-0};
+  let Inst{25-24} = qw{1-0};
+  let Inst{23} = 1;
+  let Inst{22} = 0;
+  let Inst{21} = sat{0};
+  let Inst{20} = rm{2};
+  let Inst{19} = qw{2};
+  let Inst{18-17} = rm{1-0};
+  let Inst{16} = 0;
+  let Inst{15} = 0;
+  let Inst{14} = 1;
+  let Inst{13} = 1;
+  let Inst{12-10} = qu{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 0;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 0;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_ST_S_XACC_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_8:$off2568),
+                   "esp.st.s.xacc.ip\t $rs1, $off2568", []>
+{
+  bits<5> rs1;
+  bits<8> off2568;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 1;
+  let Inst{27-26} = off2568{7-6};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-21} = off2568{5-3};
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = off2568{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+def ESP_ST_U_XACC_IP_2P2: Esp32V2P2Inst<(outs GPRPIE:$rs1r), (ins GPRPIE:$rs1, offset_256_8:$off2568),
+                   "esp.st.u.xacc.ip\t $rs1, $off2568", []>
+{
+  bits<5> rs1;
+  bits<8> off2568;
+  bits<5> rs1r;
+  let mayStore = 1;
+  let mayLoad = 0;
+  let hasSideEffects = 1;
+
+  let Constraints = "$rs1r = $rs1";
+
+  let Inst{31} = 0;
+  let Inst{30} = 0;
+  let Inst{29} = 0;
+  let Inst{28} = 0;
+  let Inst{27-26} = off2568{7-6};
+  let Inst{25} = 0;
+  let Inst{24} = 0;
+  let Inst{23-21} = off2568{5-3};
+  let Inst{20} = 1;
+  let Inst{19} = 0;
+  let Inst{18} = rs1{4};
+  let Inst{17-15} = rs1{2-0};
+  let Inst{14} = 0;
+  let Inst{13} = 0;
+  let Inst{12-10} = off2568{2-0};
+  let Inst{9} = 0;
+  let Inst{8} = 1;
+  let Inst{7} = 1;
+  let Inst{6} = 0;
+  let Inst{5} = 0;
+  let Inst{4} = 1;
+  let Inst{3} = 1;
+  let Inst{2} = 1;
+  let Inst{1} = 1;
+  let Inst{0} = 1;
+}
+
+// pie-unify: Pats restored from tip during release-first merge
+def : Pat<(int_riscv_esp_src_q i32:$sar_bytes, v16i8:$qy, v16i8:$qw),
+          (ESP_SRC_Q SAR_BYTESReg:$sar_bytes, QR:$qy, QR:$qw)>, Requires<[HasVendorXespv]>;
+
+def : Pat<(int_riscv_esp_src_q_qup i32:$sar_bytes, v16i8:$qy, v16i8:$qw),
+          (ESP_SRC_Q_QUP SAR_BYTESReg:$sar_bytes, QR:$qy, QR:$qw)>, Requires<[HasVendorXespv]>;
+
+// Dropped during release-first merge; restores PseudoESP_VSPILL/VRELOAD + ESPV SDNodes/Pats.
+include "RISCVInstrInfoESPVPatterns.td"
