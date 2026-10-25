@@ -177,6 +177,7 @@ TRIPLE_ENV(MTIA, "mtia")
 #define TRIPLE_VENDOR_ALIAS(Enum, AliasName)
 #endif
 
+TRIPLE_VENDOR(Espressif, "esp")
 TRIPLE_VENDOR(AMD, "amd")
 TRIPLE_VENDOR(Apple, "apple")
 TRIPLE_VENDOR(CSR, "csr")

@@ -19,6 +19,7 @@
 #include "Arch/SystemZ.h"
 #include "Arch/VE.h"
 #include "Arch/X86.h"
+#include "Arch/Xtensa.h"
 #include "HIPAMD.h"
 #include "Hexagon.h"
 #include "MSP430.h"
@@ -929,6 +930,9 @@ void tools::getTargetFeatures(const Driver &D, const llvm::Triple &Triple,
   case llvm::Triple::loongarch32:
   case llvm::Triple::loongarch64:
     loongarch::getLoongArchTargetFeatures(D, Triple, Args, Features);
+    break;
+  case llvm::Triple::xtensa:
+    xtensa::getXtensaTargetFeatures(D, Triple, Args, Features);
     break;
   }
 
@@ -2423,7 +2427,8 @@ static LibGccType getLibGccType(const ToolChain &TC, const Driver &D,
   if (Args.hasArg(options::OPT_static_libgcc) ||
       Args.hasArg(options::OPT_static) || Args.hasArg(options::OPT_static_pie) ||
       // The Android NDK only provides libunwind.a, not libunwind.so.
-      TC.getTriple().isAndroid())
+      TC.getTriple().isAndroid() ||
+      TC.getTriple().getVendor() == llvm::Triple::Espressif)
     return LibGccType::StaticLibGcc;
   if (Args.hasArg(options::OPT_shared_libgcc))
     return LibGccType::SharedLibGcc;
@@ -2470,7 +2475,10 @@ static void AddUnwindLibrary(const ToolChain &TC, const Driver &D,
   case ToolChain::UNW_None:
     return;
   case ToolChain::UNW_Libgcc: {
-    if (LGT == LibGccType::StaticLibGcc)
+    // Espressif baremetal toolchain uses static libgcc.a
+    if (TC.getTriple().getVendor() == llvm::Triple::Espressif)
+      CmdArgs.push_back("-lgcc");
+    else if (LGT == LibGccType::StaticLibGcc)
       CmdArgs.push_back("-lgcc_eh");
     else
       CmdArgs.push_back("-lgcc_s");
@@ -3308,6 +3316,19 @@ void tools::addMCModel(const Driver &D, const llvm::opt::ArgList &Args,
       CmdArgs.push_back("-mlarge-data-threshold=0");
     }
   }
+}
+
+void tools::addEspMultilibsPaths(const Driver &D, const MultilibSet &Multilibs,
+                                const Multilib &Multilib,
+                                StringRef CPU,
+                                StringRef InstallPath,
+                                ToolChain::path_list &Paths) {
+    if (const auto &PathsCallback = Multilibs.filePathsCallback())
+        for (const auto &Path : PathsCallback(Multilib)) {
+            SmallString<256> LibPath(D.ResourceDir);
+            llvm::sys::path::append(LibPath, D.getTargetTriple(), CPU, Path, "lib");
+            addPathIfExists(D, LibPath, Paths);
+        }
 }
 
 void tools::handleColorDiagnosticsArgs(const Driver &D, const ArgList &Args,

@@ -137,6 +137,8 @@ bool RISCVPushPopOpt::runOnMachineFunction(MachineFunction &Fn) {
   const RISCVSubtarget *Subtarget = &Fn.getSubtarget<RISCVSubtarget>();
   if (!Subtarget->hasStdExtZcmp() && !Subtarget->hasVendorXqccmp())
     return false;
+  if (!Subtarget->enableCMPopRetWorkaround())
+    return false;
 
   // We don't want any popret[z] instructions when emitting code with shadow
   // stack protection. Note that this pass would actually fail to insert any

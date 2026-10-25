@@ -232,6 +232,8 @@ class RISCVAsmParser : public MCTargetAsmParser {
   ParseStatus parseGPRPair(OperandVector &Operands, bool IsRV64Inst);
   ParseStatus parseFRMArg(OperandVector &Operands);
   ParseStatus parseSMTVType(OperandVector &Operands);
+  ParseStatus parseSATArg(OperandVector &Operands);
+  ParseStatus parseRMArg(OperandVector &Operands);
   ParseStatus parseFenceArg(OperandVector &Operands);
   ParseStatus parseRegList(OperandVector &Operands, bool MustIncludeS0 = false);
   ParseStatus parseRegListS0(OperandVector &Operands) {
@@ -307,6 +309,8 @@ class RISCVAsmParser : public MCTargetAsmParser {
   std::unique_ptr<RISCVOperand> defaultFRMArgOp() const;
   std::unique_ptr<RISCVOperand> defaultFRMArgLegacyOp() const;
   std::unique_ptr<RISCVOperand> defaultSMTVType();
+  std::unique_ptr<RISCVOperand> defaultSATOp() const;
+  std::unique_ptr<RISCVOperand> defaultRMOp() const;
 
 public:
   enum RISCVMatchResultTy : unsigned {
@@ -705,6 +709,18 @@ public:
     return isSMTVType() && SMTVType.SMTVType == XSMTVTypeMode::SMT_I8;
   }
 
+  /// Return true if the operand is a valid ESP saturation mode.
+  bool isSATArg() const {
+    int64_t Imm;
+    return isExpr() && evaluateConstantExpr(getExpr(), Imm) && isUInt<1>(Imm);
+  }
+
+  /// Return true if the operand is a valid ESP rounding mode.
+  bool isRMArg() const {
+    int64_t Imm;
+    return isExpr() && evaluateConstantExpr(getExpr(), Imm) && isUInt<3>(Imm);
+  }
+
   /// Return true if the operand is a valid fli.s floating-point immediate.
   bool isLoadFPImm() const {
     if (isExpr())
@@ -791,7 +807,44 @@ public:
   bool isUImm7() const { return isUImm<7>(); }
   bool isUImm8() const { return isUImm<8>(); }
   bool isUImm9() const { return isUImm<9>(); }
-  bool isUImm10() const { return isUImm<10>(); }
+  bool isUImm10() const {
+    int64_t Imm;
+    bool IsValid;
+    if (!isExpr())
+      return false;
+    bool IsConstantImm = evaluateConstantExpr(getExpr(), Imm);
+    RISCV::Specifier VK = RISCV::S_None;
+    if (!IsConstantImm)
+      IsValid = RISCVAsmParser::classifySymbolRef(getExpr(), VK);
+    else
+      IsValid = isUInt<10>(Imm);
+    return IsValid && VK == RISCV::S_None;
+  }
+  // Espressif hardware-loop byte offsets: a bare symbol, or an even constant in
+  // range. esp.lp.setupi uses [0, 1022] (uimm10_step4);
+  // esp.lp.setup/starti/endi use [0, 8190] (uimm13_step4). The encoded field is
+  // offset/2. Dedicated from isUImm10/isUImm13 (which are shared with Xqci and
+  // allow odd values).
+  bool isUImm10Step2() const {
+    int64_t Imm;
+    if (!isExpr())
+      return false;
+    RISCV::Specifier VK = RISCV::S_None;
+    if (!evaluateConstantExpr(getExpr(), Imm))
+      return RISCVAsmParser::classifySymbolRef(getExpr(), VK) &&
+             VK == RISCV::S_None;
+    return isUInt<10>(Imm) && ((Imm & 1) == 0);
+  }
+  bool isUImm13Step2() const {
+    int64_t Imm;
+    if (!isExpr())
+      return false;
+    RISCV::Specifier VK = RISCV::S_None;
+    if (!evaluateConstantExpr(getExpr(), Imm))
+      return RISCVAsmParser::classifySymbolRef(getExpr(), VK) &&
+             VK == RISCV::S_None;
+    return isUInt<13>(Imm) && ((Imm & 1) == 0);
+  }
   bool isUImm11() const { return isUImm<11>(); }
   bool isUImm16() const { return isUImm<16>(); }
   bool isUImm20() const { return isUImm<20>(); }
@@ -890,6 +943,7 @@ public:
 
   bool isSImm5() const { return isSImm<5>(); }
   bool isSImm6() const { return isSImm<6>(); }
+  bool isSImm8() const { return isSImm<8>(); }
   bool isSImm10() const { return isSImm<10>(); }
   bool isSImm11() const { return isSImm<11>(); }
   bool isSImm12() const { return isSImm<12>(); }
@@ -931,6 +985,84 @@ public:
   bool isUImm10Lsb00NonZero() const {
     return isUImmPred(
         [](int64_t Imm) { return isShiftedUInt<8, 2>(Imm) && (Imm != 0); });
+  }
+
+  bool isUImm12() const {
+    return isUImm<12>();
+  }
+
+  bool isUImm13() const {
+    int64_t Imm;
+    bool IsValid;
+    if (!isExpr())
+      return false;
+    bool IsConstantImm = evaluateConstantExpr(getExpr(), Imm);
+    RISCV::Specifier VK = RISCV::S_None;
+    if (!IsConstantImm)
+      IsValid = RISCVAsmParser::classifySymbolRef(getExpr(), VK);
+    else
+      IsValid = isUInt<13>(Imm);
+    return IsValid && VK == RISCV::S_None;
+  }
+
+  bool isImm8() const {
+    return isSImmPred([](int64_t Imm) {
+      return (Imm >= (-32768 - 128)) && (Imm <= (32512 + 127));
+    });
+  }
+
+  bool isSelect_2() const {
+    return isSImmPred([](int64_t Imm) {
+      return ((Imm == 0) || (Imm == 1));
+    });
+  }
+
+  bool isSelect_4() const  {
+    return isSImmPred([](int64_t Imm) {
+      return ((Imm >= 0) && (Imm <= 3));
+    });
+  }
+
+  bool isSelect_8() const {
+    return isSImmPred([](int64_t Imm) {
+      return ((Imm >= 0) && (Imm <= 7));
+    });
+  }
+
+  bool isSelect_16() const {
+    return isSImmPred([](int64_t Imm) {
+      return ((Imm >= 0) && (Imm <= 16));
+    });
+  }
+
+  bool isOffset_16_16() const {
+    return isSImmPred([](int64_t Imm) {
+      return ((Imm >= -128) && (Imm <= 112) && ((Imm & 0xf) == 0));
+    });
+  }
+
+  bool isOffset_256_8() const {
+    return isSImmPred([](int64_t Imm) {
+      return ((Imm >= -1024) && (Imm <= 1016) && ((Imm & 0x7) == 0));
+    });
+  }
+
+  bool isOffset_256_16() const {
+    return isSImmPred([](int64_t Imm) {
+      return ((Imm >= -2048) && (Imm <= 2032) && ((Imm & 0xf) == 0));
+    });
+  }
+
+  bool isOffset_256_2() const {
+    return isSImmPred([](int64_t Imm) {
+      return ((Imm >= -256) && (Imm <= 254) && ((Imm & 0x1) == 0));
+    });
+  }
+
+  bool isOffset_256_4() const {
+    return isSImmPred([](int64_t Imm) {
+      return ((Imm >= -512) && (Imm <= 508) && ((Imm & 0x3) == 0));
+    });
   }
 
   // If this a RV32 and the immediate is a uimm32, sign extend it to 32 bits.
@@ -1642,6 +1774,16 @@ std::string RISCVAsmParser::getCustomOperandDiag(unsigned MatchError) {
                  "immediate must be a multiple of 2 bytes in the range");
   case Match_InvalidUImm10:
     return Range(0, (1 << 10) - 1);
+  case Match_InvalidUImm10Step2:
+    // esp.lp.setupi loop byte offset: even value in [0, 1022] (uimm10_step4).
+    return Range(0, (1 << 10) - 2,
+        "immediate must be a multiple of 2 bytes in the range");
+  case Match_InvalidUImm13Step2:
+    // esp.lp.setup/starti/endi loop byte offset: even value in [0, 8190]
+    // (uimm13_step4). Without a registered diagnostic an out-of-range constant
+    // reaches the llvm_unreachable fallback and crashes the assembler.
+    return Range(0, (1 << 13) - 2,
+        "immediate must be a multiple of 2 bytes in the range");
   case Match_InvalidUImm11:
     return Range(0, (1 << 11) - 1);
   case Match_InvalidUImm14Lsb00:
@@ -1660,7 +1802,10 @@ std::string RISCVAsmParser::getCustomOperandDiag(unsigned MatchError) {
                  "immediate must be a multiple of 2 bytes in the range");
   case Match_InvalidSImm12Lsb00000:
     return Range(-(1 << 11), (1 << 11) - 32,
-                 "immediate must be a multiple of 32 bytes in the range");
+        "immediate must be a multiple of 32 bytes in the range");
+  case Match_InvalidUImm12:
+    return Range(0, (1 << 12) - 1,
+        "immediate must be in the range");
   case Match_InvalidBareSImm13Lsb0:
     return Range(-(1 << 12), (1 << 12) - 2,
                  "immediate must be a multiple of 2 bytes in the range");
@@ -2830,6 +2975,114 @@ ParseStatus RISCVAsmParser::parseFRMArg(OperandVector &Operands) {
 std::unique_ptr<RISCVOperand> RISCVAsmParser::defaultSMTVType() {
   return RISCVOperand::createSMTVType(XSMTVTypeMode::SMTVTypeMode::SMT_I8,
                                       SMLoc());
+}
+
+static bool parseESPSATMode(StringRef Str, int64_t &Imm) {
+  if (Str == "sat") {
+    Imm = 1;
+    return true;
+  }
+  if (Str == "trunc") {
+    Imm = 0;
+    return true;
+  }
+  return false;
+}
+
+static bool parseESPRoundingMode(StringRef Str, int64_t &Imm) {
+  if (Str == "rdn") {
+    Imm = 0;
+    return true;
+  }
+  if (Str == "rup") {
+    Imm = 1;
+    return true;
+  }
+  if (Str == "raz") {
+    Imm = 2;
+    return true;
+  }
+  if (Str == "rtz") {
+    Imm = 3;
+    return true;
+  }
+  if (Str == "rhaz") {
+    Imm = 4;
+    return true;
+  }
+  if (Str == "rhtz") {
+    Imm = 5;
+    return true;
+  }
+  if (Str == "rne") {
+    Imm = 6;
+    return true;
+  }
+  if (Str == "dyn") {
+    Imm = 7;
+    return true;
+  }
+  return false;
+}
+
+ParseStatus RISCVAsmParser::parseSATArg(OperandVector &Operands) {
+  SMLoc S = getLoc();
+  int64_t Imm = 0;
+
+  if (getLexer().is(AsmToken::Integer)) {
+    Imm = getLexer().getTok().getIntVal();
+    if (!isUInt<1>(Imm))
+      return TokError("operand must be 0 or 1");
+    Operands.push_back(RISCVOperand::createExpr(
+        MCConstantExpr::create(Imm, getContext()), S, getLoc(), isRV64()));
+    Lex();
+    return ParseStatus::Success;
+  }
+
+  if (getLexer().is(AsmToken::Identifier)) {
+    // 'sat' is an optional operand and may be preceded by another optional
+    // operand (e.g. 'rm') that the matcher tries first. Returning NoMatch
+    // (rather than a hard error) lets the matcher fall through to the other
+    // optional operand or to the default value instead of aborting parsing.
+    if (!parseESPSATMode(getLexer().getTok().getIdentifier(), Imm))
+      return ParseStatus::NoMatch;
+    Operands.push_back(RISCVOperand::createExpr(
+        MCConstantExpr::create(Imm, getContext()), S, getLoc(), isRV64()));
+    Lex();
+    return ParseStatus::Success;
+  }
+
+  return ParseStatus::NoMatch;
+}
+
+ParseStatus RISCVAsmParser::parseRMArg(OperandVector &Operands) {
+  SMLoc S = getLoc();
+  int64_t Imm = 0;
+
+  if (getLexer().is(AsmToken::Integer)) {
+    Imm = getLexer().getTok().getIntVal();
+    if (!isUInt<3>(Imm))
+      return TokError("operand must be between 0 and 7");
+    Operands.push_back(RISCVOperand::createExpr(
+        MCConstantExpr::create(Imm, getContext()), S, getLoc(), isRV64()));
+    Lex();
+    return ParseStatus::Success;
+  }
+
+  if (getLexer().is(AsmToken::Identifier)) {
+    // 'rm' is an optional operand; the matcher may try it before another
+    // optional operand (e.g. 'sat'). Returning NoMatch (rather than a hard
+    // error) on a non-rounding-mode token lets the matcher fall through to the
+    // other optional operand or to the default value instead of aborting.
+    if (!parseESPRoundingMode(getLexer().getTok().getIdentifier(), Imm))
+      return ParseStatus::NoMatch;
+    Operands.push_back(RISCVOperand::createExpr(
+        MCConstantExpr::create(Imm, getContext()), S, getLoc(), isRV64()));
+    Lex();
+    return ParseStatus::Success;
+  }
+
+  return ParseStatus::NoMatch;
 }
 
 ParseStatus RISCVAsmParser::parseFenceArg(OperandVector &Operands) {
@@ -4193,6 +4446,19 @@ static bool isZvvfmmScaleOpcode(unsigned Opcode) {
   default:
     return false;
   }
+}
+
+std::unique_ptr<RISCVOperand> RISCVAsmParser::defaultSATOp() const {
+  MCContext &Ctx = const_cast<RISCVAsmParser *>(this)->getContext();
+  // Unified sat operand: 0 = trunc (default), 1 = sat.
+  return RISCVOperand::createExpr(MCConstantExpr::create(0, Ctx), llvm::SMLoc(),
+                                  llvm::SMLoc(), isRV64());
+}
+
+std::unique_ptr<RISCVOperand> RISCVAsmParser::defaultRMOp() const {
+  MCContext &Ctx = const_cast<RISCVAsmParser *>(this)->getContext();
+  return RISCVOperand::createExpr(MCConstantExpr::create(7, Ctx), llvm::SMLoc(),
+                                  llvm::SMLoc(), isRV64());
 }
 
 bool RISCVAsmParser::validateInstruction(MCInst &Inst,

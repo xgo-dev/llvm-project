@@ -659,6 +659,15 @@ void X86FrameLowering::emitZeroCallUsedRegs(BitVector RegsToZero,
       RegsToZero.reset(Reg);
     }
 
+  // Widening AH to EAX must not clobber a live return value in AL. Sibling
+  // subregisters do not overlap in the generic physical-register analysis,
+  // so check the actual clearing width against the terminator operands.
+  for (const MachineInstr &MI : MBB.terminators())
+    for (const MachineOperand &MO : MI.operands())
+      if (MO.isReg() && MO.getReg() &&
+          TRI->isGeneralPurposeRegister(MF, MO.getReg()))
+        GPRsToZero.reset(getX86SubSuperRegister(MO.getReg(), 32));
+
   // Zero out the GPRs first.
   for (MCRegister Reg : GPRsToZero.set_bits())
     TII.buildClearRegister(Reg, MBB, MBBI, DL);

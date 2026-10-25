@@ -119,6 +119,10 @@ enum OperandType : unsigned {
   OPERAND_VEC_RM,
   // Vtype operand for XSfmm extension.
   OPERAND_XSFMM_VTYPE,
+  OPERAND_UIMM10_STEP4,
+  OPERAND_UIMM13_STEP4,
+  OPERAND_SIMM8_NONZERO,
+  OPERAND_SIMM8_UNSIGNED,
   // XSfmm twiden operand.
   OPERAND_XSFMM_TWIDEN,
   OPERAND_LAST_RISCV_IMM = OPERAND_XSFMM_TWIDEN,
@@ -181,6 +185,7 @@ enum : uint64_t {
   InstFormatQC_EJ = 25,
   InstFormatQC_ES = 26,
   InstFormatNDS_BRANCH_10 = 27,
+  InstFormatESPV = 28,
   InstFormatOther = 31,
 
   InstFormatMask = 31,

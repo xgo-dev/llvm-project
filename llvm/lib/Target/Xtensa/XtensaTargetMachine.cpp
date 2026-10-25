@@ -15,6 +15,9 @@
 #include "XtensaTargetMachine.h"
 #include "TargetInfo/XtensaTargetInfo.h"
 #include "XtensaMachineFunctionInfo.h"
+#include "XtensaTargetObjectFile.h"
+#include "XtensaTargetTransformInfo.h"
+#include "llvm/Analysis/TargetTransformInfo.h"
 #include "llvm/CodeGen/Passes.h"
 #include "llvm/CodeGen/TargetLoweringObjectFileImpl.h"
 #include "llvm/CodeGen/TargetPassConfig.h"
@@ -39,6 +42,20 @@ static Reloc::Model getEffectiveRelocModel(bool JIT,
   return *RM;
 }
 
+static std::unique_ptr<TargetLoweringObjectFile> createTLOF() {
+  return std::make_unique<XtensaElfTargetObjectFile>();
+}
+
+static StringRef getCPUName(StringRef CPU) {
+  if (CPU.empty())
+    CPU = "generic";
+  else if (CPU == "esp32-s2")
+    CPU = "esp32s2";
+  else if (CPU == "esp32-s3")
+    CPU = "esp32s3";
+  return CPU;
+}
+
 XtensaTargetMachine::XtensaTargetMachine(const Target &T, const Triple &TT,
                                          StringRef CPU, StringRef FS,
                                          const TargetOptions &Options,
@@ -59,7 +76,7 @@ XtensaTargetMachine::XtensaTargetMachine(const Target &T, const Triple &TT,
                                          std::optional<Reloc::Model> RM,
                                          std::optional<CodeModel::Model> CM,
                                          CodeGenOptLevel OL, bool JIT)
-    : XtensaTargetMachine(T, TT, CPU, FS, Options, RM, CM, OL, JIT, true) {}
+    : XtensaTargetMachine(T, TT, getCPUName(CPU), FS, Options, RM, CM, OL, JIT, true) {}
 
 const XtensaSubtarget *
 XtensaTargetMachine::getSubtargetImpl(const Function &F) const {
@@ -73,6 +90,12 @@ XtensaTargetMachine::getSubtargetImpl(const Function &F) const {
   if (!I)
     I = std::make_unique<XtensaSubtarget>(TargetTriple, CPU, FS, *this);
   return I.get();
+}
+
+TargetTransformInfo
+XtensaTargetMachine::getTargetTransformInfo(const Function &F) const {
+  // return TargetTransformInfo(XtensaTTIImpl(this, F));
+  return TargetTransformInfo(std::make_unique<XtensaTTIImpl>(this, F));
 }
 
 MachineFunctionInfo *XtensaTargetMachine::createMachineFunctionInfo(
@@ -94,10 +117,20 @@ public:
   }
 
   bool addInstSelector() override;
+  bool addPreISel() override;
+  void addPreRegAlloc() override;
   void addIRPasses() override;
   void addPreEmitPass() override;
 };
 } // end anonymous namespace
+
+bool XtensaPassConfig::addPreISel() {
+  if (TM->getOptLevel() != CodeGenOptLevel::None) {
+    addPass(createHardwareLoopsLegacyPass());
+  }
+
+  return false;
+}
 
 bool XtensaPassConfig::addInstSelector() {
   addPass(createXtensaISelDag(getXtensaTargetMachine(), getOptLevel()));
@@ -109,7 +142,18 @@ void XtensaPassConfig::addIRPasses() {
   TargetPassConfig::addIRPasses();
 }
 
-void XtensaPassConfig::addPreEmitPass() { addPass(&BranchRelaxationPassID); }
+void XtensaPassConfig::addPreRegAlloc() {
+  addPass(createXtensaHardwareLoops());
+}
+
+void XtensaPassConfig::addPreEmitPass() {
+  addPass(createXtensaPSRAMCacheFixPass());
+  addPass(createXtensaBRegFixupPass());
+  addPass(createXtensaSizeReductionPass());
+  addPass(createXtensaFixupHwLoops());
+  addPass(&BranchRelaxationPassID);
+  addPass(createXtensaConstantIslandPass());
+}
 
 TargetPassConfig *XtensaTargetMachine::createPassConfig(PassManagerBase &PM) {
   return new XtensaPassConfig(*this, PM);

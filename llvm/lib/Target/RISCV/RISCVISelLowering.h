@@ -29,6 +29,9 @@ struct RISCVRegisterInfo;
 class RISCVTargetLowering : public TargetLowering {
   const RISCVSubtarget &Subtarget;
 
+private:
+  void initializeESPVTargetLowering(const RISCVSubtarget &Subtarget);
+
 public:
   explicit RISCVTargetLowering(const TargetMachine &TM,
                                const RISCVSubtarget &STI);
@@ -91,6 +94,12 @@ public:
   unsigned getNumRegistersForCallingConv(LLVMContext &Context,
                                          CallingConv::ID CC,
                                          EVT VT) const override;
+
+  unsigned getVectorTypeBreakdownForCallingConv(LLVMContext &Context,
+                                                CallingConv::ID CC, EVT VT,
+                                                EVT &IntermediateVT,
+                                                unsigned &NumIntermediates,
+                                                MVT &RegisterVT) const override;
 
   bool shouldFoldSelectWithIdentityConstant(unsigned BinOpcode, EVT VT,
                                             unsigned SelectOpcode, SDValue X,
@@ -174,6 +183,13 @@ public:
 
   MachineMemOperand::Flags
   getTargetMMOFlags(const MemSDNode &Node) const override;
+
+  LegalizeAction getTruncStoreActionForLegalization(EVT ValVT,
+                                                    EVT MemVT, Align Alignment,
+                                                    unsigned AddrSpace) const override;
+
+  SDValue legalizeTruncStoreBeforePromotion(StoreSDNode *ST,
+                                            SelectionDAG &DAG) const override;
 
   bool
   areTwoSDNodeTargetMMOFlagsMergeable(const MemSDNode &NodeX,
@@ -331,6 +347,21 @@ public:
                                           Value *NewVal, Value *Mask,
                                           AtomicOrdering Ord) const override;
 
+  // Bring base overloads (e.g. Context, DL, VT, MMO) into scope; the ESPV
+  // helper below would otherwise hide them (C++ name hiding).
+  using TargetLoweringBase::allowsMemoryAccessForAlignment;
+  bool allowsMemoryAccessForAlignment(
+      LLVMContext &Context, const DataLayout &DL, EVT VT,
+      unsigned AddrSpace = 0, Align Alignment = Align(1),
+      MachineMemOperand::Flags Flags = MachineMemOperand::MONone,
+      unsigned *Fast = nullptr) const;
+
+  bool
+  allowsMemoryAccess(LLVMContext &Context, const DataLayout &DL, EVT VT,
+                     unsigned AddrSpace = 0, Align Alignment = Align(1),
+                     MachineMemOperand::Flags Flags = MachineMemOperand::MONone,
+                     unsigned *Fast = nullptr) const override;
+
   /// Returns true if the target allows unaligned memory accesses of the
   /// specified type.
   bool allowsMisalignedMemoryAccesses(
@@ -465,6 +496,10 @@ public:
                               MachineBasicBlock::instr_iterator &MBBI,
                               const TargetInstrInfo *TII) const override;
 
+  MachineBasicBlock *emitDSPInstrWithCustomInserter(
+      MachineInstr &MI, MachineBasicBlock *MBB, const TargetInstrInfo &TII,
+      MachineFunction *MF, MachineRegisterInfo &MRI, DebugLoc DL) const;
+
   /// True if stack clash protection is enabled for this functions.
   bool hasInlineStackProbe(const MachineFunction &MF) const override;
 
@@ -517,6 +552,8 @@ private:
   SDValue lowerVectorMaskTrunc(SDValue Op, SelectionDAG &DAG) const;
   SDValue lowerVectorTrunc(SDValue Op, SelectionDAG &DAG) const;
   SDValue lowerVectorFPExtendOrRound(SDValue Op, SelectionDAG &DAG) const;
+  SDValue lowerFixedLengthVectorExtendToRVV(SDValue Op, SelectionDAG &DAG,
+                                            unsigned ExtendOpc) const;
   SDValue lowerINSERT_VECTOR_ELT(SDValue Op, SelectionDAG &DAG) const;
   SDValue lowerEXTRACT_VECTOR_ELT(SDValue Op, SelectionDAG &DAG) const;
   SDValue LowerINTRINSIC_WO_CHAIN(SDValue Op, SelectionDAG &DAG) const;
@@ -586,6 +623,8 @@ private:
   SDValue lowerXAndesBfHCvtBFloat16Load(SDValue Op, SelectionDAG &DAG) const;
   SDValue lowerXAndesBfHCvtBFloat16Store(SDValue Op, SelectionDAG &DAG) const;
 
+  SDValue lowerESPVVectorSetcc(SDValue Op, SelectionDAG &DAG) const;
+  SDValue lowerESPVVSelect(SDValue Op, SelectionDAG &DAG) const;
   bool isEligibleForTailCallOptimization(
       CCState &CCInfo, CallLoweringInfo &CLI, MachineFunction &MF,
       const SmallVector<CCValAssign, 16> &ArgLocs) const;
@@ -610,6 +649,11 @@ private:
   /// NOTE: Once BUILD_VECTOR can be custom lowered for all legal vector types,
   /// this override can be removed.
   bool mergeStoresAfterLegalization(EVT VT) const override;
+
+  /// ESPV/ESP32P4: QR is 128-bit only; do not merge two 128-bit load/stores
+  /// into 256-bit (v32i8), which would require unsupported memory ops.
+  bool canMergeStoresTo(unsigned AS, EVT MemVT,
+                        const MachineFunction &MF) const override;
 
   /// Disable normalizing
   /// select(N0&N1, X, Y) => select(N0, select(N1, X, Y), Y) and

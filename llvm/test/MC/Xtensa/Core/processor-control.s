@@ -30,6 +30,10 @@ ill
 # CHECK: encoding: [0xf0,0x20,0x00]
 nop
 
+# CHECK-INST: rer a3, a4
+# CHECK: encoding: [0x30,0x64,0x40]
+rer a3, a4
+
 # Instruction format RSR
 # CHECK-INST: rsr a8, sar
 # CHECK: encoding: [0x80,0x03,0x03]
@@ -47,6 +51,10 @@ rsr a8, 3
 # CHECK-INST: rsync
 # CHECK: encoding: [0x10,0x20,0x00]
 rsync
+
+# CHECK-INST: wer a3, a4
+# CHECK: encoding: [0x30,0x74,0x40]
+wer a3, a4
 
 # Instruction format RSR
 # CHECK-INST: wsr a8, sar
@@ -73,3 +81,7 @@ xsr.sar a8
 # CHECK-INST: xsr a8, sar
 # CHECK: encoding: [0x80,0x03,0x61]
 xsr a8, 3
+
+# CHECK-INST: simcall
+# CHECK: encoding: [0x00,0x51,0x00]
+simcall
